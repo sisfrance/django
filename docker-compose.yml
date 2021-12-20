@@ -1,0 +1,21 @@
+version: '2'
+
+services:
+    db:
+        image: mysql
+        command: --default-authentication-plugin=mysql_native_password
+        ports:
+            - 3306:3306
+        volumes:
+            - "./.data/db:/var/lib/mysql"
+        environment:
+           MYSQL_ROOT_PASSWORD: Sis1ywMYSQL!
+    django:
+        build: ./
+        tty: true
+        ports:
+            - "8000:8000"
+        links:
+           - db:mysqldb
+        volumes:
+            - "./app:/var/app"

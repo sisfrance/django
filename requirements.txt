@@ -1,0 +1,16 @@
+Django==3.0
+cffi
+chardet
+colorama
+configparser
+django-crontab
+html5lib
+mysqlclient
+psycopg2
+pycparser
+pylokit
+requests
+six
+uWSGI
+urllib3
+wheel

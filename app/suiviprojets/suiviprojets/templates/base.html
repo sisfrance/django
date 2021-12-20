@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<!--[if lt IE 9]>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
+<html id="ie" lang="fr">
+<![endif]-->
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Suivi de projets</title>
+<meta name="description" content="Gestion de mes projets" />
+<meta name="keywords" content="projet,travai,agenda,equipe,gestion">
+<style>
+	#wrapper{
+		width:95%;
+		margin:auto;
+	}
+</style>
+
+<!--[if lt IE 9]>
+<meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+<![endif]-->
+{% load bootstrap4 %}
+
+<link rel="icon" type="image/png" href="/static/img/favicon.png" />
+{% bootstrap_css %}
+{% if styles %}
+	{% for style in styles %}
+		<link type="text/css" rel="stylesheet" href="/static/{{style}}"/>
+	{% endfor %}
+{% else %}
+	<p>Pas de styles</p>
+{% endif %}
+
+{% bootstrap_javascript jquery='full' %}
+{% if scripts%}
+	{% for script in scripts %}
+		<script src="/static/js/{{script}}.js"></script>
+	{% endfor %}
+{% endif %}
+		
+
+
+<!--[if lt IE 9]>
+<script src="http//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+{% if tinymce %}
+    {{tinymce}}
+{% endif %}
+
+
+</head>
+<body class="background">
+<div id="wrapper">
+
+    {% include 'header.html' %}
+    {% include 'menu.html' %}
+
+    <div id="container" class="row">
+        {% block content %}
+
+        {% endblock %}
+    </div>
+
+    <footer id="footer" class="row">
+        {% include 'footer.html' %}
+        
+    </footer>
+
+</div>
+<div id="voile" class="voile"></div>
+{% include 'full.html' %}
+</body>
+</html>

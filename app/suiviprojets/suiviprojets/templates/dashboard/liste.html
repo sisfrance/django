@@ -1,0 +1,104 @@
+{% autoescape off %}
+<div id="list-header" class="row">
+    <div id="total-items" class="col-4 top-info">
+            <span id="nb-elts">
+                {{total_elts}}
+            </span>
+            <span>
+                &eacute;l&eacute;ments trouv&eacute;s
+            </span>
+
+    </div>
+    <div id="paginator-over" class="paginator col-4">{{ pagination }}</div>
+    <div id="empty-col" class="col-4">
+        <span id="nb-elts-select" class="top-info">
+                <select id="nb-elts-pages" name="nb_elts_pages">
+                    <option value="10" {% if nb == 10 %} selected {% endif %}>10</option>
+                    <option value="25" {% if nb == 25 %} selected {% endif %}>25</option>
+                    <option value="50" {% if nb == 50 %} selected {% endif %}>50</option>
+                    <option value="100" {% if nb == 100 %} selected {% endif %}>100</option>
+                </select>
+            &eacute;l&eacute;ments par page
+            </span>
+    </div>
+</div>
+{% endautoescape %}
+{% if liste %}
+<div class="row">
+    <div class="col-12">
+<table id="tableau-items" class="table table-bordered">
+    <thead class="table-header">
+    <tr>
+        <td>
+            <div class="header-elt">Id</div>
+            <div data-field="id" data-sens="asc" class="sortarrow sort asc"></span>
+        </td>
+        <td>
+            <div class="header-elt">Nom</div>
+            <div data-field="nom" data-sens="asc" class="sortarrow sort asc"></div>
+        </td>
+        <td>
+            <div class="header-elt">Numéro d'armoire</div>
+             <div data-field="numero_armoire" data-sens="asc" class="sortarrow sort asc"></div>
+        </td>
+        <td>
+            <div class="header-elt">Date début forfait en cours</div>
+            <div data-field="debut_forfait" data-sens="asc" class="sortarrow sort asc"></div>
+        </td>
+        <td>
+            <div class="header-elt">Forfait</div>
+        </td>
+        <td>
+            <div class="header-elt">Tâches en cours</div>
+            <div data-field="current_tasks" data-sens="asc" class="sortarrow sort asc"></div>
+
+        </td>
+        <td>
+            <div class="header-elt">Prochaine prise de contact</div>
+            <div data-field="last_touch" data-sens="asc" class="sortarrow sort asc"></div>
+        </td>
+         <td>
+            <div class="header-elt">Prestations</div>
+            <div data-field="last_touch" data-sens="asc" class="sortarrow sort asc"></div>
+        </td>
+        <td>
+            <div class="header-elt">D&eacute;tails</div>
+        </td>
+    </tr>
+    </thead>
+    <tbody>
+    {% for c in liste %}
+    <tr id="line-{{c.id}}" data-id="{{c.id}}" class="line {% cycle  'odd' 'even' %} client">
+        <td class="cell id" >{{c.id}}</td>
+        <td class="cell nom" >{{c.nom}}</td>
+        <td class="cell numero_armoire">{{c.num_armoire}}</td>
+        <td class="cell debut_forfait">{{c.forfait.date_commande|date:"d/m/Y"}}</td>
+        <td class="cell forfait">{{c.forfait.categorie_forfait}} </td>
+        <td class="cell current_tasks">
+            {% for t in c.taches %}
+                <p>{{t}}</p>
+            {% endfor %}
+        </td>
+        <td class="cell last_touch">
+            {% for e in c.echanges %}
+                <p>{{e}}</p>
+            {% endfor %}
+        </td>
+        <td class="cell prestations">
+            {% for p in c.prestations %}
+                <p>{{p}}</p>
+            {% endfor %}
+        </td>
+        <td class="cell details"><a href="/details/{{c.id}}/">Voir</a></td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+</div>
+{% autoescape off %}
+    <div id="paginator-under" class="paginator" style="text-align:center;">{{ pagination }}</div>
+{% endautoescape %}
+{% else %}
+<p id="message-liste">Aucun(e) item n'a pour le moment &eacute;t&eacute; trouv&eacute;.</p>
+{% endif %}

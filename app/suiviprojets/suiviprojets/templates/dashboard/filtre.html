@@ -1,0 +1,55 @@
+<div class="row">
+    <div class="col-10">
+        <div class="filtre filtre-line-1 row">
+            <div id="line-1-bloc-1" class="col-3">
+                    <div class="d-wrapper">
+						<div class="control-label label-info ">Id </div>
+
+                            <div class="col-12 input-group">        
+                                <input id="filtre-id" class="keyup form-control" type="text" name="id" value="" placeholder="Id de session"/>
+                            </div>
+                        
+                    </div>
+            </div>
+             <div id="line-1-bloc-2" class="col-3">
+                <div class="d-wrapper">
+                    <div class="control-label label-info">Dates : </div>
+	                    <div class="col-12 input-group">
+	                            <div class="input-group-addon ">&nbsp;Du&nbsp; </div>
+	                            <input id="date_debut" type="text" class=" change form-control" name="date_debut" value="" placeholder="01/01/2013"/>
+	                     </div>
+	                     <div class="col-12 input-group">
+	                            <div  class="input-group-addon ">&nbsp;Au&nbsp; </div>
+	                            <input id="date_fin" type="text" class="change form-control " name="date_fin" value="" placeholder="01/01/2022"/>
+	                    </div>
+	               
+                </div>
+
+            </div>
+            <div id="line-1-bloc-3" class="col-3">
+				<div class="control-label label-info">Sports : </div>
+                    <select id="filtre-statut" name="sport_type" class="change form-control" multiple="multiple" >
+                            {% for sport in filtres.sports %}
+                                <option value="{{sport.id}}">{{sport.sport}}</option>
+                            {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div id="line-1-bloc-3" class="col-1">
+		     </div><!--separateur-->
+
+        </div>
+        
+		
+
+    
+    <div class="col-2">
+        <div class="filtre btn-group-vertical">
+            <input id="search" class="btn" type="button" name="search" value="Rechercher"/>
+            <form id="download-form" action="/download/" method="POST">
+                    {% csrf_token %}
+                    <input id="download-button" class="download btn btn-success" type="submit" name="download" value="T&eacute;l&eacute;charger"/>
+            </form>
+        </div><!-- /group-vertical -->
+    </div>
+</div>

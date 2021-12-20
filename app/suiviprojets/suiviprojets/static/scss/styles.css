@@ -1,0 +1,6 @@
+.fc-scrollgrid-sync-table tr:nth-of-type(even){
+	background-color: #CCC;
+}
+.fc-scrollgrid-sync-table tr:nth-of-type(odd){
+	background-color: #FFF;
+}

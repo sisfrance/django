@@ -1,0 +1,123 @@
+
+
+   
+<!-- Page d'index -->
+{% block content %}
+<body>
+<section id="global-content">
+  	<div class="row main-title">
+  		<div class="col-12 text-align-center">
+  				<h2>D&eacute;tails de l'armoire n°{{client.num_armoire}} Client {{client.nom}}</h2>
+  		</div>
+  	</div>
+  	<div class="row">
+		<div class="col-6" id="#resume">
+		<h3>Résumé :</h3>
+		<div id="resume">
+			<p class="ligne"><span id="forfait" class="label">Forfait : </span><span>{{client.forfait.categorie_forfait}}</span></p>
+			<p class="ligne"><span id="date_commande" class="label">Date de commande : </span><span>{{client.forfait.date_commande}}</span></p>
+		</div>
+		</div>
+		<div class="col-6" id="#contacts">
+		<h3>Contacts : </h3>
+		<table id="contacts">
+			<thead>
+				<th>Nom</th>
+				<th>Prénom</th>
+				<th>@mail</th>
+				<th>téléphones</th>
+			</thead>
+			<tbody>
+				{% for contact in client.contacts %}
+				<tr>
+					<td>{{contact.nom}}</td>
+					<td>{{contact.prenom}}</td>
+					<td>{{contact.email}}</td>
+					<td>{{contact.tel}}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		</div>
+  	</div>
+	<div class="row">
+		<div class="col-6">
+			<style>
+	
+			</style>
+			
+			<h3>Prestations & D&eacute;veloppements Sp&eacute;cifiques :</h3>
+			<div id="prestations">
+				<table>
+					<thead>
+						<tr>
+							<th>Type prestation</th>
+							<th>Intervenant</th>
+							<th>Date programmée</th>
+							<th>statut</th>
+							<th>Edition</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for pr in client.prestations %}
+						<tr>
+							<td>{{pr.type_prestation}}</td>
+							<td>{{pr.intervenant}}</td>
+							<td>{{pr.date_programmee|date:"d/m/Y"}}</td>
+							<td>{{pr.statut}}</td>
+							<td><a href='/admin/dashboard/prestation/{{pr.id}}/change/'>Edit</a></td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div><!--fin col-6-->
+		<!-- autre colonne -->
+	    <div class="col-6">
+		    <h3>Etat des tâches :</h3>
+			<div id="taches">
+				<table>
+					<thead>
+						<tr>
+							<th>Nom</th>
+							<th>Date programmée</th>
+							<th>Date échéance</th>
+							<th>Statut</th>
+							<th>Personnes en charge</th>
+							<th>Description</th>
+							<th>Edition</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for ta in client.taches %}
+						<tr>
+							<td>{{ta.nom}}</td>
+							<td>{{ta.date_programmee|date:"d/m/Y"}}</td>
+							<td>{{ta.date_echeance|date:"d/m/Y"}}</td>
+							<td>{{pr.statut}}</td>
+							<td>{{ta.personne_en_charge}}</td>
+							<td>{{ta.description}}</td>
+							<td><a href='/admin/dashboard/tache/{{ta.id}}/change/'>Edit</a></td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+	    </div>
+	</div><!-- fin row interne-->
+	<div class="row">
+		<div class="col-12">
+			<script>
+				var eventsct={{client.eventsct|safe}};
+				var eventscp={{client.eventscp|safe}};
+			</script>
+			<div id="calendar"></div>
+		</div>
+	</div>
+
+		
+
+  </body>
+</section>
+{% endblock %}
+

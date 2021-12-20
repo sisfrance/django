@@ -1,0 +1,73 @@
+<div class="row">
+	<div class="col-10">
+		<ul  id="legend-year" height="30px">
+		
+		</ul>
+		
+	</div>
+</div>
+<div class="row">
+		<div class="col-5">
+			<canvas id="bar-chart-nb-year">
+			
+			</canvas>
+			<script type="text/javascript" language="javascript">
+				var barYearNb = document.getElementById('bar-chart-nb-year');
+				var labels={{labels_year|safe}};
+				var raw_datas={{datas_year |safe }};
+				var myChartYearSport = new Chart(barYearNb, barGraph(labels,raw_datas,'nb','nombre de séances',' '));
+				document.getElementById('legend-year').innerHTML=myChartYearSport.generateLegend();
+			</script>
+		</div>
+		<div class="col-5">
+			<canvas id="bar-chart-duration-year">
+			
+			</canvas>
+			<script type="text/javascript" language="javascript">
+				var barYearDuration = document.getElementById('bar-chart-duration-year');
+				var labels={{labels_year|safe}};
+				var raw_datas={{datas_year|safe}};
+				var myChart = new Chart(barYearDuration, barGraph(labels,raw_datas,'duree','Durées d\'entraînements','h'));
+			</script>
+		</div>
+		<div class="col-2">
+			<h2 class="titre-filtre">Filtre par sport</h2>
+			<form action="javascript:void(0);">
+				<div class="control-label label-info">Sports : </div>
+                    <select id="filtre-stats-sport-year" name="sport_type" class="change form-control" multiple="multiple" >
+                            {% for sport in liste_sports_annees %}
+                                <option value="{{sport.id}}">{{sport.sport}}</option>
+                            {% endfor %}
+                    </select>
+                <div><input id="input-stats-sport-year" style="width:100%" class="btn btn-secondary" type="button" name="input-stats-sport-year" value="Filtrer"/></div>
+                </form>	
+		</div>
+</div>
+<div class="row">
+<div class="col-5">
+			<canvas id="bar-chart-distance-year">
+			
+			</canvas>
+			<script type="text/javascript" language="javascript">
+				var barYearNb = document.getElementById('bar-chart-distance-year');
+				var labels={{labels_year|safe}};
+				var raw_datas={{datas_year |safe }};
+				var myChart = new Chart(barYearNb, barGraph(labels,raw_datas,'distance','Distance','km '));
+			</script>
+		</div>
+		<div class="col-5">
+			<canvas id="bar-chart-denivele-year">
+			
+			</canvas>
+			<script type="text/javascript" language="javascript">
+				var barYearDuration = document.getElementById('bar-chart-denivele-year');
+				var labels={{labels_year|safe}};
+				var raw_datas={{datas_year|safe}};
+				var myChart = new Chart(barYearDuration, barGraph(labels,raw_datas,'denivele','Dénivelé cumulé','m'));
+			</script>
+		</div>
+		<div class="col-2">
+			
+				
+		</div>
+</div>

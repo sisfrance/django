@@ -1,0 +1,30 @@
+<script>
+	var resources = {{resources|safe}};
+	var events = {{events|safe}}; 
+      document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendarAll');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: 'resourceTimelineMonth',
+          aspectRatio:1,
+          headerToolbar:{
+			left:'prev,next',
+			center:'title' 
+		 },
+		 views:{
+			resourceTimelineMonth:{
+	
+				
+			},
+			dayHeaders:false,
+		},
+		 editable:true,
+		 resourceAreaHeaderContent:'Projets',
+		 resources:resources,
+		 events:events,
+        });
+        calendar.render();
+      });
+
+    </script>
+
+    <div id='calendarAll'></div>

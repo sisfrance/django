@@ -1,0 +1,35 @@
+<section id="dashboard-content" class="section">
+    <h1>Importation et filtre des données</h1>
+    <div id="message"
+        {% if not messages %}
+            style="display:none;"
+        {% endif %}
+    >
+        <div id="body-message" class="row">
+            <div id="message-header" class="col-12">Message : <div id="close-message">x</div></div>
+            <ul class="messages">
+                {% autoescape off %}
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+                {% endautoescape %}
+            </ul>
+        </div>
+    </div><!-- /DIV MESSAGE -->
+
+    <hr style="border:none"/>
+    {% csrf_token %}
+    <div id="filtres-row" class="filtres row">
+         <div id="filtres" class="filtres">
+            <p class="p-arrow"><span class="label-arrow">Filtres : </span><span class="arrow dshow">&nbsp;</span></p>
+            <div class="hidden-block" style="height:0;">
+                {% include 'filtre.html' %}
+            </div>
+        </div>
+    </div>
+    <div id="liste-row" class="row">
+        <div id="liste-items" class="col-12">
+            {% include 'liste.html' %}
+        </div>
+    </div>
+</section>

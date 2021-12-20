@@ -1,0 +1,54 @@
+<section id="dashboard-content" class="section">
+    
+<div id="message"
+	{% if not messages %}
+		style="display:none;"
+	{% endif %}
+>
+	<div id="body-message" class="row">
+		<div id="message-header" class="col-12">Message : <div id="close-message">x</div></div>
+		<ul class="messages">
+			{% autoescape off %}
+			{% for message in messages %}
+				<li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+			{% endfor %}
+			{% endautoescape %}
+		</ul>
+	</div>
+</div><!-- /DIV MESSAGE -->
+    
+    <div class="row">
+		<div class="col-3">
+			<h3 class="titre-accueil">Tâches à programmer/en attente</h3>
+			<div id="toprogram_tasks" class="paragraph-accueil">
+				<ul>
+				{% for task in toprogram_tasks %}
+					<li class="li-tache"><a href="/admin/dashboard/tache/{{task.id}}/change">{{task.client__nom}}-{{task.nom}}</a></li>
+				{% endfor %}
+				</ul>
+			</div>
+		</div>
+		<div class="col-3">
+			<h3 class="titre-accueil">Prestations à programmer/en attente</h3>
+			<div id="toprogram_prestations" class="paragraph-accueil">
+				<ul>
+				{% for prestation in toprogram_prestations %}
+					<li class="li-prestation"><a href="/admin/dashboard/prestation/{{prestation.id}}/change">{{prestation.client__nom}}-{{prestation.type_prestation__type_prestation}}</a></li>
+				{% endfor %}
+				</ul>
+			</div>
+		</div>
+		<div class="col-3">
+			<h3 class="titre-accueil">Prochains échanges</h3>
+			<div id="next_conversations" class="paragraph-accueil">
+				<ul>
+				{% for echange in next_echanges %}
+					<li class="li-conversation"><a href="/admin/dashboard/echange/{{echange.id}}/change">{{echange.contact__nom}}-{{echange.date}}:{{echange.heure}}</a></li>
+				{% endfor %}
+				</ul>
+			</div>
+		</div>
+		
+	</div>
+
+ </section>
