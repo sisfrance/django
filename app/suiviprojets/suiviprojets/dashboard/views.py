@@ -55,6 +55,12 @@ def client_compose_index(c):
 	client['prestations']=[str(p.type_prestation)+":"+str(p.statut.statut) for p in prestations]
 	return client
 
+def __add_statut(value,color_statut):
+	flag="<span class=\'statut\' style=\'background-color:#"+color_statut+";\'></span>"
+	value="<span class=\'value\'>"+value+"</span>"
+	return "<p>"+str(" ".join([flag,value]))+"</p>"
+	
+	
 def client_compose_details(id):
 	instance_client=Client.objects.get(pk=id)
 	client=model_to_dict(instance_client)
@@ -79,16 +85,19 @@ def client_compose_details(id):
 		color
 		background-color"""
 	
-	current_tasks=Tache.objects.filter(client_id=id,statut__statut__in=["en cours","en attente"],date_programmee__isnull=False)
-	tasks_current_events={'events':[{'title':t.nom,'start':str(t.date_programmee),'statut':t.statut.statut} for t in current_tasks],'color':'red','textColor':'white'}
-	toprogram_prestations=Prestation.objects.filter(statut__statut__in=["en attente","à programmer"],date_programmee__isnull=True)
-	toprogram_tasks=Tache.objects.filter(statut__statut__in=["en attente","à programmer"],date_programmee__isnull=True)
-
-	current_prestations=Prestation.objects.filter(client_id=id,statut__statut__in=["en attente","en cours"],date_programmee__isnull=False)
-	prestations_current_events={'events':[{'title':t.type_prestation.type_prestation,'start':t.date_programmee,'statut':t.statut.statut} for t in current_prestations],'color':'blue','textColor':'yellow'}
+	tasks=Tache.objects.filter(client_id=id,statut__statut__in=["à programmer","en attente","en cours"])
+	tasks_events={'events':[{'title':t.nom,'start':str(t.date_programmee),'statut':t.statut.color} for t in tasks],'color':'green','textColor':'white'}
 	
-	client['eventsct']=json.dumps(tasks_current_events)
-	client['eventscp']=json.dumps(prestations_current_events)
+	prestations=Prestation.objects.filter(statut__statut__in=["en attente","à programmer","en cours"])
+	prestations_events={'events':[{'title':p.type_prestation.type_prestation,'start':str(p.date_programmee),'statut':p.statut.color} for p in prestations],'color':'green','textColor':'white'}
+
+	echanges=Echange.objects.filter(contact__client_id=id,statut__statut__in=["en attente","à programmer","en cours"])
+	echanges_events={'events':[{'title':e.type_echange.type_echange,'statut':e.statut.color,'start':str(e.date)} for e in echanges],'color':'light-green','textColor': 'white'}
+	
+	client['eventsct']=json.dumps(tasks_events)
+	client['eventscp']=json.dumps(prestations_events)
+	client['eventsce']=json.dumps(echanges_events)
+	
 	return client
 	
 """/*************************

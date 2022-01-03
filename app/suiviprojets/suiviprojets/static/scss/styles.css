@@ -1,6 +1,239 @@
-.fc-scrollgrid-sync-table tr:nth-of-type(even){
-	background-color: #CCC;
+/* ///////////////////////////////////////////////////////////////////// 
+//  02 - RESET
+/////////////////////////////////////////////////////////////////////*/
+/**
+
+ HTML5 & 4 reset stylesheet
+ Adapted from YUI & HTML5 Doctor
+ v1.0
+
+**/
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, img, abbr, acronym, address, big, cite, code, del, dfn, em, font, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, figcaption, figure, hgroup, menu, nav, summary, time, mark, audio, video, header, footer {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-weight: inherit;
+  font-style: inherit;
+  font-size: inherit;
+  font-family: inherit;
+  vertical-align: baseline;
+  background: transparent;
 }
-.fc-scrollgrid-sync-table tr:nth-of-type(odd){
-	background-color: #FFF;
+
+html {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  -webkit-text-size-adjust: none;
+  -ms-text-size-adjust: none;
+  overflow-y: none;
 }
+
+ol, ul {
+  list-style: none;
+}
+
+article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary, img {
+  display: block;
+}
+
+blockquote, q {
+  quotes: none;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
+}
+
+a {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+  background: transparent;
+  text-decoration: none;
+}
+
+ins {
+  background-color: #ff9;
+  color: #000;
+  text-decoration: none;
+}
+
+mark {
+  background-color: #ff9;
+  color: #000;
+  font-style: italic;
+  font-weight: bold;
+}
+
+del {
+  text-decoration: line-through;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+strong {
+  font-weight: bold;
+}
+
+em {
+  font-style: italic;
+}
+
+input,
+select {
+  vertical-align: middle;
+}
+
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+caption,
+th,
+td {
+  text-align: left;
+  font-weight: normal;
+}
+
+input {
+  vertical-align: middle;
+}
+
+::-webkit-input-placeholder {
+  color: #c0;
+  font-family: Ubuntu, Arial;
+}
+
+::-moz-placeholder {
+  color: #c0;
+  font-family: Ubuntu, Arial;
+}
+
+/* firefox 19+ */
+:-ms-input-placeholder {
+  color: #c0;
+  font-family: Ubuntu, Arial;
+}
+
+/* ie */
+input:-moz-placeholder {
+  color: #c0;
+  font-family: Ubuntu, Arial;
+}
+
+img,
+object,
+embed {
+  max-width: 100%;
+}
+
+hr {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+/*$primary:       #78c2ad !default;*/
+body {
+  background-color: #f8f9fa;
+  font-family: system-ui, sans-serif;
+  font-size: 1.1em;
+  height: 1em;
+}
+
+.fc-scrollgrid-sync-table tr:nth-of-type(even) {
+  background-color: #6cc3d5;
+}
+
+.fc-scrollgrid-sync-table tr:nth-of-type(odd) {
+  background-color: #FFF;
+}
+
+#wrapper {
+  width: 98%;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #f8f9fa;
+  padding: 0;
+}
+
+#voile {
+  position: fixed;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.obscur {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  filter: alpha(opacity=85);
+  opacity: 0.75;
+  z-index: 2;
+}
+
+#window {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  background-color: #fff;
+  margin: 50px -340px;
+  -moz-transition: width linear 0.5s, height linear 0.5s;
+  -ms-transition: width linear 0.5s, height linear 0.5s;
+  -webkit-transition: width linear 0.5s, height linear 0.5s;
+  -o-transition: width linear 0.5s, height linear 0.5s;
+  transition: width linear 0.5s, height linear 0.5s;
+  z-index: 6;
+  overflow-y: scroll;
+}
+
+#window p, #window div {
+  overflow: hidden;
+}
+
+#window-content {
+  padding: 0.5em;
+}
+
+#close-window, #close-message {
+  display: block;
+  float: right;
+  width: 20px;
+  height: auto;
+  color: #000;
+}
+
+#close-window:hover, #close-message:hover {
+  cursor: pointer;
+}
+
+#close-message {
+  font-size: 1.5em;
+}
+
+/* DETAILS CLIENT */
+span.statut {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+}
+
+/*# sourceMappingURL=styles.css.map */

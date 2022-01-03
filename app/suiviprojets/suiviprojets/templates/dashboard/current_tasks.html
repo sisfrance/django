@@ -10,13 +10,13 @@
 			left:'prev,next',
 			center:'title' 
 		 },
-		 views:{
-			resourceTimelineMonth:{
-	
-				
-			},
-			dayHeaders:false,
-		},
+		 
+		 dayHeaderFormat:{ weekday: 'long', month: 'numeric', day: 'numeric', omitCommas: true },
+		 slotLabelFormat: [
+		  /*{ month: 'long', year: 'numeric' }, // top level of text*/
+		  { weekday:'short'},
+		  { day:'numeric' } // lower level of text
+		],
 		 editable:true,
 		 resourceAreaHeaderContent:'Projets',
 		 resources:resources,

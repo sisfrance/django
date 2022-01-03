@@ -84,7 +84,7 @@ DATABASES = {
        'NAME': 'suiviprojets',                      # Or path to database file if using sqlite3.
        'USER': 'sis',                      # Not used with sqlite3.
        'PASSWORD': 'Sis1ywMYSQL!',                  # Not used with sqlite3.
-       'HOST': 'django-db-1',                      # Set to empty string for localhost. Not used with sqlite3.
+       'HOST': 'django_db_1',                      # Set to empty string for localhost. Not used with sqlite3.
        'PORT': '3306',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
