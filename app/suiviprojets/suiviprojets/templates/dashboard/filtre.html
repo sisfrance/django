@@ -3,34 +3,28 @@
         <div class="filtre filtre-line-1 row">
             <div id="line-1-bloc-1" class="col-3">
                     <div class="d-wrapper">
-						<div class="control-label label-info ">Id </div>
+						<div class="control-label label-info ">Numéro d'armoire :</div>
 
                             <div class="col-12 input-group">        
-                                <input id="filtre-id" class="keyup form-control" type="text" name="id" value="" placeholder="Id de session"/>
+                                <input id="num_armoire" class="keyup form-control" type="text" name="num_armoire" value="" placeholder="Numéro d'armoire"/>
                             </div>
                         
                     </div>
             </div>
              <div id="line-1-bloc-2" class="col-3">
                 <div class="d-wrapper">
-                    <div class="control-label label-info">Dates : </div>
+                    <div class="control-label label-info">Client : </div>
 	                    <div class="col-12 input-group">
-	                            <div class="input-group-addon ">&nbsp;Du&nbsp; </div>
-	                            <input id="date_debut" type="text" class=" change form-control" name="date_debut" value="" placeholder="01/01/2013"/>
+	                            <input id="nom" type="text" class="keyup form-control" name="nom" value="" placeholder="client"/>
 	                     </div>
-	                     <div class="col-12 input-group">
-	                            <div  class="input-group-addon ">&nbsp;Au&nbsp; </div>
-	                            <input id="date_fin" type="text" class="change form-control " name="date_fin" value="" placeholder="01/01/2022"/>
-	                    </div>
-	               
                 </div>
 
             </div>
             <div id="line-1-bloc-3" class="col-3">
-				<div class="control-label label-info">Sports : </div>
-                    <select id="filtre-statut" name="sport_type" class="change form-control" multiple="multiple" >
-                            {% for sport in filtres.sports %}
-                                <option value="{{sport.id}}">{{sport.sport}}</option>
+				<div class="control-label label-info">Forfaits : </div>
+                    <select id="forfait" name="forfait" class="change form-control" multiple="multiple" >
+                            {% for forfait in filtres.forfaits %}
+                                <option value="{{forfait.id}}">{{forfait.type_forfait}}</option>
                             {% endfor %}
                     </select>
                 </div>

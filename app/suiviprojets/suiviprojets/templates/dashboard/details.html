@@ -6,50 +6,100 @@
 <body>
 <section id="global-content">
   	<div class="row main-title">
-  		<div class="col-12 text-align-center">
+  		<div id="main-title" class="col-12 text-center">
   				<h2>D&eacute;tails de l'armoire n°{{client.num_armoire}} Client {{client.nom}}</h2>
   		</div>
   	</div>
   	<div class="row">
-		<div class="col-6" id="#resume">
+		<div class="col-4" id="resume">
 		<h3>Résumé :</h3>
 		<div id="resume">
-			<p class="ligne"><span id="forfait" class="label">Forfait : </span><span>{{client.forfait.categorie_forfait}}</span></p>
-			<p class="ligne"><span id="date_commande" class="label">Date de commande : </span><span>{{client.forfait.date_commande}}</span></p>
+			<p class="ligne"><label id="forfait" class="label">Forfait : </label><span>{{client.forfait.categorie_forfait}}</span></p>
+			<p class="ligne"><label id="date_commande" class="label">Date de commande : </label><span>{{client.forfait.date_commande}}</span></p>
 		</div>
 		</div>
-		<div class="col-6" id="#contacts">
-		<h3>Contacts : </h3>
-		<table id="contacts">
-			<thead>
-				<th>Nom</th>
-				<th>Prénom</th>
-				<th>@mail</th>
-				<th>téléphones</th>
-			</thead>
-			<tbody>
-				{% for contact in client.contacts %}
-				<tr>
-					<td>{{contact.nom}}</td>
-					<td>{{contact.prenom}}</td>
-					<td>{{contact.email}}</td>
-					<td>{{contact.tel}}</td>
-				</tr>
-				{% endfor %}
-			</tbody>
-		</table>
+		<div class="col-4" id="contacts">
+		<div class="row">
+			<div class="col-8">
+				<h3>Contacts : </h3>
+			</div>
+			<div class="col-4">
+				<a class="btn btn-secondary" href='/admin/dashboard/contact/add/'>Nouveau contact</a>
+			</div>
 		</div>
+		<div class="row">
+			<div class="col-12">
+				<table id="contacts-table"class='table table-light table-striped'>
+					<thead class="thead-light">
+						<th>Nom</th>
+						<th>Prénom</th>
+						<th>@mail</th>
+						<th>téléphones</th>
+						<th>Edition</th>
+					</thead>
+					<tbody>
+						{% for contact in client.contacts %}
+						<tr>
+							<td>{{contact.nom}}</td>
+							<td>{{contact.prenom}}</td>
+							<td>{{contact.email}}</td>
+							<td>{{contact.tel}}</td>
+							<td><a href='/admin/dashboard/contact/{{contact.id}}/change/'>Edit</a></td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+		</div>
+		<div class="col-4" id="echanges">
+		<div class="row">
+			<div class="col-8">
+				<h3>Echanges : </h3>
+			</div>
+			<div clas="col-4">
+				<a class="btn btn-secondary" href='/admin/dashboard/echange/add/'>Nouvel échange</a>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12">
+				<table id="contacts-table" class="table table-striped">
+					<thead class="thead-light">
+						<th>Date</th>
+						<th>Contact</th>
+						<th>Motif</th>
+						<th>Dur&egrave;e</th>
+						<th>Edition</th>
+					</thead>
+					<tbody>
+						{% for echange in client.echanges %}
+						<tr>
+							<td>{{echange.date}}</td>
+							<td>{{echange.contact}}</td>
+							<td>{{echange.type_echange}}</td>
+							<td></td>
+							<td><a href='/admin/dashboard/echange/{{echange.id}}/change/'>Edit</a></td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+  	</div>
   	</div>
 	<div class="row">
 		<div class="col-6">
-			<style>
-	
-			</style>
-			
-			<h3>Prestations & D&eacute;veloppements Sp&eacute;cifiques :</h3>
+			<div class="row">
+				<div class="col-9">
+					<h3>Prestations & D&eacute;veloppements Sp&eacute;cifiques :</h3>
+				</div>
+				<div clas="col-2">
+					<a class="btn btn-secondary" href='/admin/dashboard/prestation/add/'>Nouvelle prestation</a>
+				</div>
+			</div>
 			<div id="prestations">
-				<table>
-					<thead>
+				<table class='table table-striped'>
+					<thead class="thead-light">
 						<tr>
 							<th>Type prestation</th>
 							<th>Intervenant</th>
@@ -74,16 +124,23 @@
 		</div><!--fin col-6-->
 		<!-- autre colonne -->
 	    <div class="col-6">
-		    <h3>Etat des tâches :</h3>
+			<div class="row">
+				<div class="col-10">
+					<h3>Etat des tâches :</h3>
+				</div>
+				<div clas="col-2">
+					<a class="btn btn-secondary" href='/admin/dashboard/tache/add/'>Nouvelle tâche</a>
+				</div>
+			</div>
 			<div id="taches">
-				<table>
-					<thead>
+				<table class='table table-striped'>
+					<thead class='thead-light'>
 						<tr>
 							<th>Nom</th>
-							<th>Date programmée</th>
-							<th>Date échéance</th>
-							<th>Statut</th>
-							<th>Personnes en charge</th>
+							<th>Prévue le</th>
+							<th>Echéance</th>
+							<th >Statut</th>
+							<th>Responsables</th>
 							<th>Description</th>
 							<th>Edition</th>
 						</tr>

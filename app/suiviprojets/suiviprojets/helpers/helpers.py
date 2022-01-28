@@ -89,8 +89,8 @@ def filter_construct(requete,terms):
     filtreQ=[]
     filtres={}
     for key in requete:
-        if key != 'csrfmiddlewaretoken' and key != 'nozeros':
-
+        if key != 'csrfmiddlewaretoken' and key != 'nozeros' and terms[key] != None:
+            print(terms[key])
             if re.match("^(\w+)(\[\])$",key):
                 filtres[terms[key.replace("[]","")]]=requete.getlist(key)
             elif isinstance(terms[key],Q):
@@ -377,8 +377,52 @@ class Pager:
                 liens="<ul class='liste-pages pagination'>"+self.__lien(1,"first",'&#9664;&#9664;')+self.__lien(((indice_groupe-1)*self.nb_groupe_pages+1),"minus-one",'&#9664;')+liens+"</ul>"
             else :
                 liens="<ul class='liste-pages pagination'>"+self.__lien(1,"first",'&#9664;&#9664;')+self.__lien(((indice_groupe-1)*self.nb_groupe_pages+1),"minus-one",'&#9664;')+liens+footer
+           
             return liste_items,liens,nb_items
         except Exception as error:
             print(error)
             print("erreur de pagination")
             return [],[],0
+
+def values_per_intervalle(datas,intervalle):
+	last_distance=max([d.distance for d in datas])
+	tab_tmp=[[] for i in range(0,math.floor(last_distance/(intervalle*1000)+1))]
+	tab=[[] for i in range(0,math.floor(last_distance/(intervalle*1000)+1))]
+	
+	def somme(liste,index,field):
+		return reduce(lambda a,b: a+b,[t[field] for t in liste[index]])
+		
+	def moyenne(liste,index,field):
+		return reduce(lambda a,b: a+b,[t[field] for t in liste[index]])/len(liste[index])
+		
+	def maximum(liste,index,field):
+		return max([v[field] for v in liste[index]])
+		
+	def minimum(liste,index,field):
+		return min([v[field] for v in liste[index]])
+	
+	def ecart(liste,index,field):
+		return maximum(liste,index,field)- minimum(liste,index,field)
+		
+	def timetransf(value):
+		minutes=math.floor(value/6000)
+		secondes=value % 6000
+		return ":".join([str(minutes),str(secondes)])
+		
+	for d in datas:
+		tab_tmp[math.floor(d.distance/(intervalle*1000))].append(model_to_dict(d))
+	""" formatage de tab """
+
+	for ind in range(0,len(tab)):
+		#timetransf(ecart(tab_tmp,ind,'duration'))
+		tab[ind]={'distance':(ind+1)*intervalle,
+			'duration':str(timedelta(seconds=ecart(tab_tmp,ind,'duration'))),
+			'avg_speed':round(divide(ecart(tab_tmp,ind,'distance'),ecart(tab_tmp,ind,'duration'))*3.6,2),
+			'elevation_gain':ecart(tab_tmp,ind,'elevation_gain'),
+			'elevation_loss':ecart(tab_tmp,ind,'elevation_loss')
+			}
+	tab[ind]['distance']=round(last_distance/1000,2)
+	return tab 
+	
+
+

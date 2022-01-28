@@ -22,7 +22,10 @@ urlpatterns = [
     path(r'',views.index),
     path(r'details/<str:id>/',views.details),
     path(r'projects/',views.projets),
+    path(r'projects/page/',views.page),
+    path(r'projects/sort/',views.sort),
     path(r'currents/',views.currents),
     path('admin/', admin.site.urls),
-    path(r'download',views.download),
+    path(r'download/',views.download),
+    path(r'search/',views.search),
 ]

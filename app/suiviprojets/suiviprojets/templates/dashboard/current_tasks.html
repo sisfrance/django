@@ -19,8 +19,22 @@
 		],
 		 editable:true,
 		 resourceAreaHeaderContent:'Projets',
+		 resourceAreaWidth:200,
 		 resources:resources,
 		 events:events,
+		 eventMinWidth:100,
+		 slotMinWidth:100,
+		 eventContent:function(arg){
+			let statut_marker=document.createElement("span");
+			statut_marker.setAttribute("class","statut");
+			statut_marker.setAttribute("style","background-color:#"+arg.event.extendedProps.statut+";");
+			let content=document.createElement("p");
+			content.setAttribute("title",arg.event.extendedProps.description);
+			content.innerHTML=arg.event.title;
+			let arrayofDomNodes=[statut_marker,content];
+			return {domNodes:arrayofDomNodes};
+																					
+																				}
         });
         calendar.render();
       });

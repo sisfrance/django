@@ -1,3 +1,4 @@
+{% include 'filtre.html' %}
 {% autoescape off %}
 <div id="list-header" class="row">
     <div id="total-items" class="col-4 top-info">
@@ -26,44 +27,43 @@
 {% if liste %}
 <div class="row">
     <div class="col-12">
-<table id="tableau-items" class="table table-bordered">
-    <thead class="table-header">
+<table id="tableau-items" class="table table-striped">
+    <thead class="table-header thead-light">
     <tr>
-        <td>
+        <th>
             <div class="header-elt">Id</div>
             <div data-field="id" data-sens="asc" class="sortarrow sort asc"></span>
-        </td>
-        <td>
+        </th>
+        <th>
             <div class="header-elt">Nom</div>
-            <div data-field="nom" data-sens="asc" class="sortarrow sort asc"></div>
-        </td>
-        <td>
+            <div data-field="client" data-sens="asc" class="sortarrow sort asc"></div>
+        </th>
+        <th>
             <div class="header-elt">Numéro d'armoire</div>
              <div data-field="numero_armoire" data-sens="asc" class="sortarrow sort asc"></div>
-        </td>
-        <td>
+        </th>
+        <th>
             <div class="header-elt">Date début forfait en cours</div>
             <div data-field="debut_forfait" data-sens="asc" class="sortarrow sort asc"></div>
-        </td>
-        <td>
+        </th>
+        <th>
             <div class="header-elt">Forfait</div>
-        </td>
-        <td>
-            <div class="header-elt">Tâches en cours</div>
             <div data-field="current_tasks" data-sens="asc" class="sortarrow sort asc"></div>
 
-        </td>
-        <td>
+        </th>
+        <th>
+            <div class="header-elt">Tâches en cours</div>    
+        </th>
+        <th>
             <div class="header-elt">Prochaine prise de contact</div>
             <div data-field="last_touch" data-sens="asc" class="sortarrow sort asc"></div>
-        </td>
-         <td>
+        </th>
+         <th>
             <div class="header-elt">Prestations</div>
-            <div data-field="last_touch" data-sens="asc" class="sortarrow sort asc"></div>
-        </td>
-        <td>
+        </th>
+        <th>
             <div class="header-elt">D&eacute;tails</div>
-        </td>
+        </th>
     </tr>
     </thead>
     <tbody>
@@ -71,15 +71,15 @@
     <tr id="line-{{c.id}}" data-id="{{c.id}}" class="line {% cycle  'odd' 'even' %} client">
         <td class="cell id" >{{c.id}}</td>
         <td class="cell nom" >{{c.nom}}</td>
-        <td class="cell numero_armoire">{{c.num_armoire}}</td>
-        <td class="cell debut_forfait">{{c.forfait.date_commande|date:"d/m/Y"}}</td>
-        <td class="cell forfait">{{c.forfait.categorie_forfait}} </td>
-        <td class="cell current_tasks">
+        <td class="cell num_armoire">{{c.num_armoire}}</td>
+        <td class="cell debut_forfait">{{c.debut_forfait}}</td>
+        <td class="cell categorie_forfait">{{c.forfait.categorie_forfait}} </td>
+        <td class="cell taches">
             {% for t in c.taches %}
                 <p>{{t}}</p>
             {% endfor %}
         </td>
-        <td class="cell last_touch">
+        <td class="cell echanges">
             {% for e in c.echanges %}
                 <p>{{e}}</p>
             {% endfor %}

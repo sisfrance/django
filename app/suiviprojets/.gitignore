@@ -1,1 +1,8 @@
+.data/
+.gitignore
+app/suiviprojets/suiviprojets/migrations/
+app/*.json
+app/suiviprojets/suiviprojets.geany
+app/suiviprojets/settings.py
+app/suiviprojets/media/
 

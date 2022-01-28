@@ -143,6 +143,7 @@ class Echange(models.Model):
     heure=models.TimeField(null=True,blank=True)
     type_echange=models.ForeignKey(TypeEchange,on_delete=models.SET_NULL,null=True,blank=True)
     statut=models.ForeignKey(StatutTache,on_delete=models.SET_NULL,null=True,blank=True,default=1)
+    """temps_passe=models.CharField(max_length=20,null=True,blank=True,default="0")"""
     notes=models.TextField()
     
     def __str__(self):
