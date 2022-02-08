@@ -27,7 +27,7 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=17
+current_page=18
 FILE_NAME_0=0;Python;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ct.melin%5CDocker%5Cdjango%5Capp%5Csuiviprojets%5Csuiviprojets%5Cdashboard%5Capps.py;0;4
 FILE_NAME_1=3566;HTML;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ct.melin%5CDocker%5Cdjango%5Capp%5Csuiviprojets%5Csuiviprojets%5Ctemplates%5Cdashboard%5Cliste.html;0;4
 FILE_NAME_2=1936;HTML;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ct.melin%5CDocker%5Cdjango%5Capp%5Csuiviprojets%5Csuiviprojets%5Ctemplates%5Cdashboard%5Cdetails.html;0;4
@@ -46,3 +46,4 @@ FILE_NAME_14=1462;None;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ct.melin%5CDocker%5Cdjango%5
 FILE_NAME_15=1095;None;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ct.melin%5CDocker%5Cdjango%5Capp%5Csuiviprojets%5Csuiviprojets%5Cstatic%5Cscss%5C_variables.scss;0;4
 FILE_NAME_16=2312;Python;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ct.melin%5CDocker%5Cdjango%5Capp%5Csuiviprojets%5Csuiviprojets%5Chelpers%5Chelpers.py;0;4
 FILE_NAME_17=1080;HTML;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ct.melin%5CDocker%5Cdjango%5Capp%5Csuiviprojets%5Csuiviprojets%5Ctemplates%5Cdashboard%5Cfiltre.html;0;4
+FILE_NAME_18=145;Conf;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ct.melin%5CDocker%5Cdjango%5Capp%5Csuiviprojets%5Cuwsgi.ini;0;4
