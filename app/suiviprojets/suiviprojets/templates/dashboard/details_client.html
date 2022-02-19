@@ -1,0 +1,57 @@
+<!-- Page d'index -->
+{% block content %}
+<body>
+<section id="global-content">
+  	<div class="row main-title">
+  		<div id="main-title" class="col-12 text-center">
+  				<h2>D&eacute;tails du client {{client.nom}}</h2>
+  		</div>
+  	</div>
+  	
+  	<div class="row">
+		<div class="col-5" id="resume">
+			<h3>Adresse :</h3>
+			<div id="resume">
+				<p class="ligne"><h2>{{client.nom}}</h2></p>
+				<p class="ligne"><h2>{{client.adresse1}}</h2></p>
+				<p class="ligne"><h2>{{client.adresse2}}</h2></p>
+				<p class="ligne"><h2>{{client.code_postal}}&nbsp;{{client.ville}}</h2></p>
+			</div>
+		</div>
+		<div class="col-7" id="contacts">
+			<div class="row">
+				<div class="col-8 text-left">
+					<h3>Contacts : </h3>
+				</div>
+				<div class="col-4 text-right">
+					<a class="btn btn-secondary" data-client="{{client.id}}" href='/admin/dashboard/contact/add/'>Ajouter contact</a>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12">
+					<table id="contacts-table"class='table table-light table-striped'>
+						<thead class="thead-light">
+							<th>Nom</th>
+							<th>Prénom</th>
+							<th>@mail</th>
+							<th>téléphones</th>
+							<th>Edition</th>
+						</thead>
+						<tbody>
+							{% for contact in contacts %}
+							<tr>
+								<td class="contact-nom">{{contact.nom}}</td>
+								<td class="contact-prenom">{{contact.prenom}}</td>
+								<td class="contact-email">{{contact.email}}</td>
+								<td class="contact-tel">{{contact.tel}}</td>
+								<td class="contact-edit"><a href='/admin/dashboard/contact/{{contact.id}}/change/'>Edit</a></td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+</section>
+</body>
+{% endblock %}

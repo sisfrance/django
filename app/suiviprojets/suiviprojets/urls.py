@@ -24,8 +24,13 @@ urlpatterns = [
     path(r'projects/',views.projets),
     path(r'projects/page/',views.page),
     path(r'projects/sort/',views.sort),
+    path(r'client/<str:id>/',views.details_client),
+    path(r'clients/',views.clients),
     path(r'currents/',views.currents),
     path('admin/', admin.site.urls),
     path(r'download/',views.download),
     path(r'search/',views.search),
+    path(r'add/',views.add),
+    path(r'edit/',views.edit),
+    path(r'save/',views.save),
 ]

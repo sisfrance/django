@@ -1,0 +1,1827 @@
+[
+{
+  "model": "dashboard.typeprestation",
+  "pk": 1,
+  "fields": {
+    "type_prestation": "Passerelle comptable",
+    "notes": null
+  }
+},
+{
+  "model": "dashboard.typeprestation",
+  "pk": 2,
+  "fields": {
+    "type_prestation": "Personnalisation des emails",
+    "notes": null
+  }
+},
+{
+  "model": "dashboard.typeprestation",
+  "pk": 3,
+  "fields": {
+    "type_prestation": "Pack signature",
+    "notes": null
+  }
+},
+{
+  "model": "dashboard.typeprestation",
+  "pk": 4,
+  "fields": {
+    "type_prestation": "Envoi coffre fort num\u00e9rique",
+    "notes": null
+  }
+},
+{
+  "model": "dashboard.flux",
+  "pk": 2,
+  "fields": {
+    "flux": "flux"
+  }
+},
+{
+  "model": "dashboard.flux",
+  "pk": 3,
+  "fields": {
+    "flux": "documents"
+  }
+},
+{
+  "model": "dashboard.categorieforfait",
+  "pk": 1,
+  "fields": {
+    "categorie_forfait": "flux 3ans 3Go/an",
+    "duree": 3,
+    "flux": 2,
+    "volume": "3.0"
+  }
+},
+{
+  "model": "dashboard.categorieforfait",
+  "pk": 2,
+  "fields": {
+    "categorie_forfait": "flux 5ans 3Go/an",
+    "duree": 5,
+    "flux": 2,
+    "volume": "3.0"
+  }
+},
+{
+  "model": "dashboard.categorieforfait",
+  "pk": 3,
+  "fields": {
+    "categorie_forfait": "flux 5ans 1.5Go/an",
+    "duree": 5,
+    "flux": 2,
+    "volume": "1.5"
+  }
+},
+{
+  "model": "dashboard.categorieforfait",
+  "pk": 4,
+  "fields": {
+    "categorie_forfait": "flux 3ans 0.5Go/an",
+    "duree": 3,
+    "flux": 2,
+    "volume": "0.5"
+  }
+},
+{
+  "model": "dashboard.categorieforfait",
+  "pk": 5,
+  "fields": {
+    "categorie_forfait": "flux 3ans 3000 docs/an",
+    "duree": 3,
+    "flux": 3,
+    "volume": "300.0"
+  }
+},
+{
+  "model": "dashboard.categorieforfait",
+  "pk": 6,
+  "fields": {
+    "categorie_forfait": "flux 5ans 3000 docs/an",
+    "duree": 5,
+    "flux": 3,
+    "volume": "300.0"
+  }
+},
+{
+  "model": "dashboard.categorieforfait",
+  "pk": 7,
+  "fields": {
+    "categorie_forfait": "flux 5 ans 1200 docs/an",
+    "duree": 5,
+    "flux": 3,
+    "volume": "120.0"
+  }
+},
+{
+  "model": "dashboard.categorieforfait",
+  "pk": 8,
+  "fields": {
+    "categorie_forfait": "flux 5ans 5Go/an",
+    "duree": 5,
+    "flux": 2,
+    "volume": "5.0"
+  }
+},
+{
+  "model": "dashboard.categorieforfait",
+  "pk": 9,
+  "fields": {
+    "categorie_forfait": "flux 5ans 0.5Go/an",
+    "duree": 5,
+    "flux": 2,
+    "volume": "0.5"
+  }
+},
+{
+  "model": "dashboard.categorieforfait",
+  "pk": 10,
+  "fields": {
+    "categorie_forfait": "flux 5ans 9Go/an",
+    "duree": 5,
+    "flux": 2,
+    "volume": "9.0"
+  }
+},
+{
+  "model": "dashboard.categorieforfait",
+  "pk": 11,
+  "fields": {
+    "categorie_forfait": "Forfait temporaire",
+    "duree": 0,
+    "flux": 3,
+    "volume": "100.0"
+  }
+},
+{
+  "model": "dashboard.revendeur",
+  "pk": 1,
+  "fields": {
+    "nom": "SoluInfoService",
+    "notes": "soluinfoservice"
+  }
+},
+{
+  "model": "dashboard.revendeur",
+  "pk": 2,
+  "fields": {
+    "nom": "Soludoc",
+    "notes": "soludoc"
+  }
+},
+{
+  "model": "dashboard.client",
+  "pk": 1,
+  "fields": {
+    "nom": "ABLE SAS",
+    "adresse1": "7, rue du THAL",
+    "adresse2": "",
+    "code_postal": "67210",
+    "ville": "OBERNAI"
+  }
+},
+{
+  "model": "dashboard.client",
+  "pk": 2,
+  "fields": {
+    "nom": "BREDOK PRO",
+    "adresse1": "9, rue du Ried",
+    "adresse2": "Z.I du Ried",
+    "code_postal": "67590",
+    "ville": "SCHWEIGHOUSE SUR MODER"
+  }
+},
+{
+  "model": "dashboard.client",
+  "pk": 3,
+  "fields": {
+    "nom": "EUROLOGISTIC FRANCE",
+    "adresse1": "12, rue de CHERBOURG",
+    "adresse2": "",
+    "code_postal": "67100",
+    "ville": "STRASBOURG"
+  }
+},
+{
+  "model": "dashboard.client",
+  "pk": 4,
+  "fields": {
+    "nom": "TPN",
+    "adresse1": "135, rue du Mar\u00e9chal FOCH",
+    "adresse2": "",
+    "code_postal": "67380",
+    "ville": "LINGOLSHEIM"
+  }
+},
+{
+  "model": "dashboard.client",
+  "pk": 5,
+  "fields": {
+    "nom": "TRYAD CONSEIL",
+    "adresse1": "8, rue de l'industrie",
+    "adresse2": "",
+    "code_postal": "67114",
+    "ville": "ESCHAU"
+  }
+},
+{
+  "model": "dashboard.client",
+  "pk": 6,
+  "fields": {
+    "nom": "ENTREPRISE GROSS",
+    "adresse1": "Rue de la vieille Bruche",
+    "adresse2": "",
+    "code_postal": "67130",
+    "ville": "LUTZELHOUSE"
+  }
+},
+{
+  "model": "dashboard.client",
+  "pk": 7,
+  "fields": {
+    "nom": "REHA PLUS",
+    "adresse1": "38, rue du foss\u00e9 Riepberg",
+    "adresse2": "",
+    "code_postal": "67100",
+    "ville": "STRASBOURG"
+  }
+},
+{
+  "model": "dashboard.client",
+  "pk": 8,
+  "fields": {
+    "nom": "ALCA",
+    "adresse1": "4, rue Jean Monnet",
+    "adresse2": "",
+    "code_postal": "67201",
+    "ville": "ECKBOLSHEIM"
+  }
+},
+{
+  "model": "dashboard.client",
+  "pk": 9,
+  "fields": {
+    "nom": "RUFFY JEAN-LUC-SARL",
+    "adresse1": "4, Lieu-dit Breitnacker",
+    "adresse2": "",
+    "code_postal": "67250",
+    "ville": "INGOLSHEIM"
+  }
+},
+{
+  "model": "dashboard.client",
+  "pk": 10,
+  "fields": {
+    "nom": "MCN SARL",
+    "adresse1": "Zone Artisanale \r\n4, rue du Sandholz",
+    "adresse2": "BP 30105",
+    "code_postal": "67110",
+    "ville": "NIEDERBRONN LES BAINS"
+  }
+},
+{
+  "model": "dashboard.client",
+  "pk": 11,
+  "fields": {
+    "nom": "MAISON_WUNSCHEL",
+    "adresse1": "25, rue du G\u00e9n\u00e9ral de Gaulle",
+    "adresse2": "",
+    "code_postal": "67116",
+    "ville": "REICHSTETT"
+  }
+},
+{
+  "model": "dashboard.client",
+  "pk": 12,
+  "fields": {
+    "nom": "ESPACE_CASHER",
+    "adresse1": "20, rue Sellenick",
+    "adresse2": "",
+    "code_postal": "67000",
+    "ville": "STRASBOURG"
+  }
+},
+{
+  "model": "dashboard.client",
+  "pk": 13,
+  "fields": {
+    "nom": "ESPACE PAYSAGERS",
+    "adresse1": "173, rue du Mar\u00e9chal Foch",
+    "adresse2": "",
+    "code_postal": "67380",
+    "ville": "LINGOLSHEIM"
+  }
+},
+{
+  "model": "dashboard.client",
+  "pk": 14,
+  "fields": {
+    "nom": "ASSOCIATION JEAN BAPTISTE THIERY",
+    "adresse1": "13, rue de la r\u00e9publique",
+    "adresse2": "",
+    "code_postal": "54320",
+    "ville": "MAXEVILLE"
+  }
+},
+{
+  "model": "dashboard.client",
+  "pk": 15,
+  "fields": {
+    "nom": "THIERRY MULLER ESPACE VERT",
+    "adresse1": "10, rue du commerce",
+    "adresse2": "",
+    "code_postal": "67118",
+    "ville": "GEISPOLSHEIM"
+  }
+},
+{
+  "model": "dashboard.client",
+  "pk": 16,
+  "fields": {
+    "nom": "SIMSE IMAGERIE MED STRASBOURG",
+    "adresse1": "2, place de l'Eglise",
+    "adresse2": "",
+    "code_postal": "67300",
+    "ville": "SCHILTIGHEIM"
+  }
+},
+{
+  "model": "dashboard.client",
+  "pk": 17,
+  "fields": {
+    "nom": "EHPAD MAISON RETRAITE SAINT JOSEPH",
+    "adresse1": "113, avenue de Strasbourg",
+    "adresse2": "",
+    "code_postal": "54000",
+    "ville": "NANCY"
+  }
+},
+{
+  "model": "dashboard.client",
+  "pk": 18,
+  "fields": {
+    "nom": "LE PIN PARASOL",
+    "adresse1": "2a route de Brumath",
+    "adresse2": "",
+    "code_postal": "67450",
+    "ville": "MUNDOLSHEIM"
+  }
+},
+{
+  "model": "dashboard.client",
+  "pk": 19,
+  "fields": {
+    "nom": "SOC ALSACIENNE DE PARATONNERRES",
+    "adresse1": "21, rue de l'Engelbreit",
+    "adresse2": "",
+    "code_postal": "67200",
+    "ville": "STRASBOURG"
+  }
+},
+{
+  "model": "dashboard.client",
+  "pk": 20,
+  "fields": {
+    "nom": "FEIN FRANCE",
+    "adresse1": "18, rue d'Ottersviller",
+    "adresse2": "",
+    "code_postal": "67700",
+    "ville": "SAVERNE"
+  }
+},
+{
+  "model": "dashboard.client",
+  "pk": 21,
+  "fields": {
+    "nom": "BIOVALLEY FRANCE",
+    "adresse1": "Parc Innovation",
+    "adresse2": "550 bld Gonthier d'Andernach",
+    "code_postal": "67400",
+    "ville": "ILLKIRCH GRAFFENSTADEN"
+  }
+},
+{
+  "model": "dashboard.client",
+  "pk": 22,
+  "fields": {
+    "nom": "LOGIC-SAS",
+    "adresse1": "24, avenue FOCH",
+    "adresse2": "",
+    "code_postal": "54270",
+    "ville": "ESSEY LES NANCY"
+  }
+},
+{
+  "model": "dashboard.client",
+  "pk": 23,
+  "fields": {
+    "nom": "AB SECURITE",
+    "adresse1": "6, all\u00e9e des Erables",
+    "adresse2": "",
+    "code_postal": "88000",
+    "ville": "EPINAL"
+  }
+},
+{
+  "model": "dashboard.projet",
+  "pk": 1,
+  "fields": {
+    "client": 1,
+    "num_armoire": "15218",
+    "type_projet":1,
+    "revendeur": 2
+  }
+},
+{
+  "model": "dashboard.projet",
+  "pk": 2,
+  "fields": {
+    "client":2,
+    "num_armoire": "15242",
+    "type_projet":1,
+    "revendeur": 2
+  }
+},
+{
+  "model": "dashboard.projet",
+  "pk": 3,
+  "fields": {
+    "client":3,
+    "num_armoire": "15243",
+    "type_projet":1,
+    "revendeur": 2
+  }
+},
+{
+  "model": "dashboard.projet",
+  "pk": 4,
+  "fields": {
+    "client":3,
+    "num_armoire": "15454",
+    "type_projet":1,
+    "revendeur": 2
+  }
+},
+{
+  "model": "dashboard.projet",
+  "pk": 5,
+  "fields": {
+    "client":5,
+    "num_armoire": "14793",
+    "type_projet":1,
+    "revendeur": 2
+  }
+},
+{
+  "model": "dashboard.projet",
+  "pk": 6,
+  "fields": {
+    "client":6,
+    "num_armoire": "14008",
+    "type_projet":1,
+    "revendeur": 2
+  }
+},
+{
+  "model": "dashboard.projet",
+  "pk": 7,
+  "fields": {
+    "client":7,
+    "num_armoire": "13511",
+    "type_projet":1,
+    "revendeur": 2
+  }
+},
+{
+  "model": "dashboard.projet",
+  "pk": 8,
+  "fields": {
+    "client":8,
+    "num_armoire": "13386",
+    "type_projet":1,
+    "revendeur": 2
+  }
+},
+{
+  "model": "dashboard.projet",
+  "pk": 9,
+  "fields": {
+    "client":9,
+    "num_armoire": "12407",
+    "type_projet":1,
+    "revendeur": 2
+  }
+},
+{
+  "model": "dashboard.projet",
+  "pk": 10,
+  "fields": {
+    "client":10,
+    "num_armoire": "12404",
+    "type_projet":1,
+    "revendeur": 2
+  }
+},
+{
+  "model": "dashboard.projet",
+  "pk": 11,
+  "fields": {
+    "client":11,
+    "num_armoire": "12216",
+    "type_projet":1,
+    "revendeur": 2
+  }
+},
+{
+  "model": "dashboard.projet",
+  "pk": 12,
+  "fields": {
+    "client":12,
+    "num_armoire": "12041",
+    "type_projet":1,
+    "revendeur": 2
+  }
+},
+{
+  "model": "dashboard.projet",
+  "pk": 13,
+  "fields": {
+    "client":13,
+    "num_armoire": "11240",
+    "type_projet":1,
+    "revendeur": 2
+  }
+},
+{
+  "model": "dashboard.projet",
+  "pk": 14,
+  "fields": {
+    "client":14,
+    "num_armoire": "10752",
+    "type_projet":1,
+    "revendeur": 1
+  }
+},
+{
+  "model": "dashboard.projet",
+  "pk": 15,
+  "fields": {
+    "client":15,
+    "num_armoire": "10667",
+    "type_projet":1,
+    "revendeur": 2
+  }
+},
+{
+  "model": "dashboard.projet",
+  "pk": 16,
+  "fields": {
+    "client":16,
+    "num_armoire": "10554",
+    "type_projet":1,
+    "revendeur": 2
+  }
+},
+{
+  "model": "dashboard.projet",
+  "pk": 17,
+  "fields": {
+    "client":17,
+    "num_armoire": "10511",
+    "type_projet":1,
+    "revendeur": 1
+  }
+},
+{
+  "model": "dashboard.projet",
+  "pk": 18,
+  "fields": {
+    "client":18,
+    "num_armoire": "9177",
+    "type_projet":1,
+    "revendeur": 2
+  }
+},
+{
+  "model": "dashboard.projet",
+  "pk": 19,
+  "fields": {
+    "client":19,
+    "num_armoire": "9176",
+    "type_projet":1,
+    "revendeur": 2
+  }
+},
+{
+  "model": "dashboard.projet",
+  "pk": 20,
+  "fields": {
+    "client":20,
+    "num_armoire": "8887",
+    "type_projet":1,
+    "revendeur": 2
+  }
+},
+{
+  "model": "dashboard.projet",
+  "pk": 21,
+  "fields": {
+    "client":21,
+    "num_armoire": "6997",
+    "type_projet":1,
+    "revendeur": 2
+  }
+},
+{
+  "model": "dashboard.projet",
+  "pk": 22,
+  "fields": {
+    "client":22,
+    "num_armoire": "15514",
+    "type_projet":1,
+    "revendeur": 1
+  }
+},
+{
+  "model": "dashboard.projet",
+  "pk": 23,
+  "fields": {
+    "client":23,
+    "num_armoire": "15557",
+    "type_projet":1,
+    "revendeur": 1
+  }
+},
+
+{
+  "model": "dashboard.typeprojet",
+  "pk": 1,
+  "fields": {
+    "type_projet": "Zeendoc",
+    "icone": ""
+  }
+},
+{
+  "model": "dashboard.typeprojet",
+  "pk": 2,
+  "fields": {
+    "type_projet": "Refonte site internet",
+    "icone": ""
+  }
+},
+{
+  "model": "dashboard.forfait",
+  "pk": 3,
+  "fields": {
+    "date_commande": "2021-12-23",
+    "projet": 3,
+    "categorie_forfait": 4
+  }
+},
+{
+  "model": "dashboard.forfait",
+  "pk": 4,
+  "fields": {
+    "date_commande": "2021-12-23",
+    "projet": 2,
+    "categorie_forfait": 2
+  }
+},
+{
+  "model": "dashboard.forfait",
+  "pk": 5,
+  "fields": {
+    "date_commande": "2021-12-23",
+    "projet": 1,
+    "categorie_forfait": 2
+  }
+},
+{
+  "model": "dashboard.forfait",
+  "pk": 6,
+  "fields": {
+    "date_commande": "2021-12-07",
+    "projet": 4,
+    "categorie_forfait": 3
+  }
+},
+{
+  "model": "dashboard.forfait",
+  "pk": 7,
+  "fields": {
+    "date_commande": "2019-05-28",
+    "projet": 21,
+    "categorie_forfait": 5
+  }
+},
+{
+  "model": "dashboard.forfait",
+  "pk": 8,
+  "fields": {
+    "date_commande": "2020-01-18",
+    "projet": 20,
+    "categorie_forfait": 6
+  }
+},
+{
+  "model": "dashboard.forfait",
+  "pk": 9,
+  "fields": {
+    "date_commande": "2020-02-23",
+    "projet": 19,
+    "categorie_forfait": 7
+  }
+},
+{
+  "model": "dashboard.forfait",
+  "pk": 10,
+  "fields": {
+    "date_commande": "2020-02-23",
+    "projet": 18,
+    "categorie_forfait": 7
+  }
+},
+{
+  "model": "dashboard.forfait",
+  "pk": 11,
+  "fields": {
+    "date_commande": "2020-08-20",
+    "projet": 17,
+    "categorie_forfait": 3
+  }
+},
+{
+  "model": "dashboard.forfait",
+  "pk": 12,
+  "fields": {
+    "date_commande": "2020-08-26",
+    "projet": 16,
+    "categorie_forfait": 3
+  }
+},
+{
+  "model": "dashboard.forfait",
+  "pk": 13,
+  "fields": {
+    "date_commande": "2020-08-25",
+    "projet": 15,
+    "categorie_forfait": 8
+  }
+},
+{
+  "model": "dashboard.forfait",
+  "pk": 14,
+  "fields": {
+    "date_commande": "2021-11-17",
+    "projet": 5,
+    "categorie_forfait": 2
+  }
+},
+{
+  "model": "dashboard.forfait",
+  "pk": 15,
+  "fields": {
+    "date_commande": "2021-08-21",
+    "projet": 6,
+    "categorie_forfait": 3
+  }
+},
+{
+  "model": "dashboard.forfait",
+  "pk": 16,
+  "fields": {
+    "date_commande": "2021-07-07",
+    "projet": 7,
+    "categorie_forfait": 3
+  }
+},
+{
+  "model": "dashboard.forfait",
+  "pk": 17,
+  "fields": {
+    "date_commande": "2021-06-26",
+    "projet": 8,
+    "categorie_forfait": 2
+  }
+},
+{
+  "model": "dashboard.forfait",
+  "pk": 18,
+  "fields": {
+    "date_commande": "2021-03-21",
+    "projet": 9,
+    "categorie_forfait": 9
+  }
+},
+{
+  "model": "dashboard.forfait",
+  "pk": 19,
+  "fields": {
+    "date_commande": "2021-03-21",
+    "projet": 10,
+    "categorie_forfait": 9
+  }
+},
+{
+  "model": "dashboard.forfait",
+  "pk": 20,
+  "fields": {
+    "date_commande": "2021-03-02",
+    "projet": 11,
+    "categorie_forfait": 3
+  }
+},
+{
+  "model": "dashboard.forfait",
+  "pk": 21,
+  "fields": {
+    "date_commande": "2021-02-17",
+    "projet": 12,
+    "categorie_forfait": 3
+  }
+},
+{
+  "model": "dashboard.forfait",
+  "pk": 22,
+  "fields": {
+    "date_commande": "2020-11-22",
+    "projet": 13,
+    "categorie_forfait": 2
+  }
+},
+{
+  "model": "dashboard.forfait",
+  "pk": 23,
+  "fields": {
+    "date_commande": "2020-10-03",
+    "projet": 14,
+    "categorie_forfait": 10
+  }
+},
+{
+  "model": "dashboard.forfait",
+  "pk": 24,
+  "fields": {
+    "date_commande": "2021-12-10",
+    "projet": 22,
+    "categorie_forfait": 11
+  }
+},
+{
+  "model": "dashboard.forfait",
+  "pk": 25,
+  "fields": {
+    "date_commande": "2021-12-15",
+    "projet": 23,
+    "categorie_forfait": 11
+  }
+},
+{
+  "model": "dashboard.statuttache",
+  "pk": 1,
+  "fields": {
+    "statut": "\u00e0 programmer",
+    "color": "EE5A51"
+  }
+},
+{
+  "model": "dashboard.statuttache",
+  "pk": 2,
+  "fields": {
+    "statut": "en attente",
+    "color": "FDBD05"
+  }
+},
+{
+  "model": "dashboard.statuttache",
+  "pk": 3,
+  "fields": {
+    "statut": "en cours",
+    "color": "F2F431"
+  }
+},
+{
+  "model": "dashboard.statuttache",
+  "pk": 4,
+  "fields": {
+    "statut": "r\u00e9alis\u00e9e",
+    "color": "70CE36"
+  }
+},
+{
+  "model": "dashboard.intervenant",
+  "pk": 1,
+  "fields": {
+    "nom": "MELIN",
+    "prenom": "Thomas",
+    "email": "t.melin@sisfrance.eu",
+    "tag": "Tom",
+    "notes": ""
+  }
+},
+{
+  "model": "dashboard.intervenant",
+  "pk": 2,
+  "fields": {
+    "nom": "ZEENDOC",
+    "prenom": "Service Passerelle",
+    "email": null,
+    "tag": "zeendoc passerelle",
+    "notes": ""
+  }
+},
+{
+  "model": "dashboard.intervenant",
+  "pk": 3,
+  "fields": {
+    "nom": "ZEENDOC",
+    "prenom": "D\u00e9veloppements sp\u00e9cifiques",
+    "email": null,
+    "tag": "dev_spe",
+    "notes": "Nicolas CHARRIER"
+  }
+},
+{
+  "model": "dashboard.prestation",
+  "pk": 1,
+  "fields": {
+    "projet": 2,
+    "type_prestation": 1,
+    "intervenant": 2,
+    "date_programmee": "2022-01-12",
+    "date_realisation": null,
+    "statut": 3,
+    "notes": "coordinateur passerelle: l.marey@zeendoc.com"
+  }
+},
+{
+  "model": "dashboard.prestation",
+  "pk": 2,
+  "fields": {
+    "projet": 2,
+    "type_prestation": 2,
+    "intervenant": 3,
+    "date_programmee": null,
+    "date_realisation": null,
+    "statut": 1,
+    "notes": null
+  }
+},
+{
+  "model": "dashboard.prestation",
+  "pk": 4,
+  "fields": {
+    "projet": 2,
+    "type_prestation": 3,
+    "intervenant": 3,
+    "date_programmee": null,
+    "date_realisation": null,
+    "statut": 1,
+    "notes": null
+  }
+},
+{
+  "model": "dashboard.prestation",
+  "pk": 5,
+  "fields": {
+    "projet": 1,
+    "type_prestation": 2,
+    "intervenant": 3,
+    "date_programmee": null,
+    "date_realisation": null,
+    "statut": 1,
+    "notes": null
+  }
+},
+{
+  "model": "dashboard.prestation",
+  "pk": 6,
+  "fields": {
+    "projet": 4,
+    "type_prestation": 2,
+    "intervenant": 3,
+    "date_programmee": null,
+    "date_realisation": null,
+    "statut": 1,
+    "notes": null
+  }
+},
+{
+  "model": "dashboard.prestation",
+  "pk": 7,
+  "fields": {
+    "projet": 22,
+    "type_prestation": 1,
+    "intervenant": 2,
+    "date_programmee": "2022-02-09",
+    "date_realisation": null,
+    "statut": 2,
+    "notes": "logiciel de compta : Comptabilit\u00e9Expert Version 21.0.1.22\r\nplan comptable : ok\r\n\r\nModification des champs label des ventilations\r\n\r\nAttente des comptes tiers.\r\n\r\nresponsable thomas hugon : t.hugon@zeendoc.com"
+  }
+},
+{
+  "model": "dashboard.prestation",
+  "pk": 8,
+  "fields": {
+    "projet": 23,
+    "type_prestation": 4,
+    "intervenant": 3,
+    "date_programmee": null,
+    "date_realisation": null,
+    "statut": 1,
+    "notes": ""
+  }
+},
+{
+  "model": "dashboard.prestation",
+  "pk": 9,
+  "fields": {
+    "projet": 5,
+    "type_prestation": 2,
+    "intervenant": 3,
+    "date_programmee": "2022-01-05",
+    "date_realisation": null,
+    "statut": 3,
+    "notes": "tryad-fr.mail.protection.outlook.com 587\r\nIdent : no-reply@tryad.fr\r\nmdp:Th0m@(67114"
+  }
+},
+{
+  "model": "dashboard.prestation",
+  "pk": 10,
+  "fields": {
+    "projet": 23,
+    "type_prestation": 1,
+    "intervenant": 2,
+    "date_programmee": "2022-02-28",
+    "date_realisation": null,
+    "statut": 2,
+    "notes": "-dossier suivi par monsieur will marey w.marey@zeendoc.com"
+  }
+},
+{
+  "model": "dashboard.prestation",
+  "pk": 11,
+  "fields": {
+    "projet": 23,
+    "type_prestation": 4,
+    "intervenant": 3,
+    "date_programmee": null,
+    "date_realisation": null,
+    "statut": 1,
+    "notes": ""
+  }
+},
+{
+  "model": "dashboard.tache",
+  "pk": 2,
+  "fields": {
+    "projet": 1,
+    "nom": "R\u00e9alisation classeurs + workflow",
+    "date_programmee": "2021-12-08",
+    "date_echeance": "2021-12-29",
+    "date_realisation": null,
+    "statut": 3,
+    "temps_passe": "2",
+    "description": "Cr\u00e9ation classeur Factures fournisseurs\r\nCr\u00e9ation classeur Factures projets\r\nImport utilisateurs et droits\r\nCr\u00e9ation exemple workflow",
+    "personnes_en_charge": [
+      1
+    ]
+  }
+},
+{
+  "model": "dashboard.tache",
+  "pk": 3,
+  "fields": {
+    "projet": 2,
+    "nom": "R\u00e9alisation classeurs + workflow",
+    "date_programmee": "2021-12-07",
+    "date_echeance": "2021-12-07",
+    "date_realisation": null,
+    "statut": 3,
+    "temps_passe": "2",
+    "description": "",
+    "personnes_en_charge": [
+      1
+    ]
+  }
+},
+{
+  "model": "dashboard.tache",
+  "pk": 4,
+  "fields": {
+    "projet": 4,
+    "nom": "R\u00e9alisation classeurs",
+    "date_programmee": "2021-12-07",
+    "date_echeance": "2021-12-24",
+    "date_realisation": null,
+    "statut": 4,
+    "temps_passe": "1h",
+    "description": "Classeur Factures fournisseurs\r\nClasseur Facture projets",
+    "personnes_en_charge": [
+      1
+    ]
+  }
+},
+{
+  "model": "dashboard.tache",
+  "pk": 5,
+  "fields": {
+    "projet": 8,
+    "nom": "Cr\u00e9ation 3 comptes",
+    "date_programmee": "2021-12-14",
+    "date_echeance": null,
+    "date_realisation": "2021-12-20",
+    "statut": 4,
+    "temps_passe": "1",
+    "description": "Creation comptes MO Groupe FOCUS MO MO HAGONDANGE",
+    "personnes_en_charge": [
+      1
+    ]
+  }
+},
+{
+  "model": "dashboard.tache",
+  "pk": 6,
+  "fields": {
+    "projet": 2,
+    "nom": "Importation comptes comptables",
+    "date_programmee": "2021-12-14",
+    "date_echeance": "2021-12-14",
+    "date_realisation": "2021-12-20",
+    "statut": 4,
+    "temps_passe": "1",
+    "description": "Cr\u00e9ation des listes des comptes comptables bredok pro",
+    "personnes_en_charge": [
+      1
+    ]
+  }
+},
+{
+  "model": "dashboard.tache",
+  "pk": 7,
+  "fields": {
+    "projet": 22,
+    "nom": "Cr\u00e9ation classeurs",
+    "date_programmee": "2021-12-14",
+    "date_echeance": "2021-12-14",
+    "date_realisation": "2021-12-14",
+    "statut": 4,
+    "temps_passe": "0",
+    "description": "Cr\u00e9ation classeurs notes de frais et factures fournisseurs.",
+    "personnes_en_charge": [
+      1
+    ]
+  }
+},
+{
+  "model": "dashboard.tache",
+  "pk": 8,
+  "fields": {
+    "projet": 22,
+    "nom": "Importation comptes comptables",
+    "date_programmee": "2021-12-15",
+    "date_echeance": "2021-12-16",
+    "date_realisation": "2021-12-15",
+    "statut": 4,
+    "temps_passe": "0",
+    "description": "Importation des comptes comptables",
+    "personnes_en_charge": [
+      1
+    ]
+  }
+},
+{
+  "model": "dashboard.tache",
+  "pk": 9,
+  "fields": {
+    "projet": 4,
+    "nom": "Modifications \u00e0 apporter classeur fournisseurs",
+    "date_programmee": "2021-12-20",
+    "date_echeance": "2021-12-20",
+    "date_realisation": "2022-01-07",
+    "statut": 4,
+    "temps_passe": "2",
+    "description": "-R\u00e9cup\u00e9rer listes utilisateurs et droits\r\n-Cr\u00e9er adresse email d\u00e9pot factures comptabilite_tpn@zeenmail.com x\r\n-Verif doublon sur options avancees x\r\n-autocompletion nom chantier x\r\n-cr\u00e9er champ adresse mail en fonction du fournisseur x\r\n-Cr\u00e9ation 3 nouvelles recherches\r\n-Factures \u00e0 payer \u00e9ch\u00e9ance non d\u00e9pass\u00e9e x\r\n-Factures \u00e0 payer \u00e0 15 jours x\r\n-Factures \u00e0 payer \u00e9ch\u00e9ance d\u00e9pass\u00e9e x\r\n-Factures refus\u00e9es sans statut d'envoi ok  x",
+    "personnes_en_charge": [
+      1
+    ]
+  }
+},
+{
+  "model": "dashboard.tache",
+  "pk": 10,
+  "fields": {
+    "projet": 5,
+    "nom": "Modification classeurs",
+    "date_programmee": "2022-01-12",
+    "date_echeance": "2022-01-14",
+    "date_realisation": "2022-01-11",
+    "statut": 4,
+    "temps_passe": "2",
+    "description": "S\u00e9paration des factures du classeur dossiers de formations\r\nSuppression de 2 controles de completudes\r\nClasseur factures projets :\r\n\r\nCr\u00e9ation tampon facture acquitt\u00e9e\r\nModifier recherches envoi avec pour les 2 classeurs garder non lus \u00e0 15 et 30j",
+    "personnes_en_charge": [
+      1
+    ]
+  }
+},
+{
+  "model": "dashboard.tache",
+  "pk": 11,
+  "fields": {
+    "projet": 5,
+    "nom": "Cr\u00e9ation Imprimante virtuelles",
+    "date_programmee": "2022-01-12",
+    "date_echeance": "2022-01-14",
+    "date_realisation": null,
+    "statut": 1,
+    "temps_passe": null,
+    "description": "Cr\u00e9ation imprimante virtuelle\r\nCr\u00e9ation agent zeendoc",
+    "personnes_en_charge": [
+      1
+    ]
+  }
+},
+{
+  "model": "dashboard.tache",
+  "pk": 12,
+  "fields": {
+    "projet": 23,
+    "nom": "Cr\u00e9ation classeurs",
+    "date_programmee": "2022-01-10",
+    "date_echeance": "2022-01-13",
+    "date_realisation": null,
+    "statut": 2,
+    "temps_passe": null,
+    "description": "Cr\u00e9ation classeur Fournisseurs\r\nCr\u00e9ation classeur RH\r\nImport utilisateurs\r\nImport plan comptable",
+    "personnes_en_charge": [
+      1
+    ]
+  }
+},
+{
+  "model": "dashboard.tache",
+  "pk": 13,
+  "fields": {
+    "projet": 5,
+    "nom": "Cr\u00e9ation tutoriel utilisateurs",
+    "date_programmee": "2022-01-11",
+    "date_echeance": "2022-01-11",
+    "date_realisation": "2022-01-11",
+    "statut": 4,
+    "temps_passe": "1h",
+    "description": "Cr\u00e9ation tutoriel d'utilisation du classeur Zeendoc dossier formation",
+    "personnes_en_charge": [
+      1
+    ]
+  }
+},
+{
+  "model": "dashboard.tache",
+  "pk": 14,
+  "fields": {
+    "projet": 23,
+    "nom": "Pr\u00e9paration workflow de validation simple",
+    "date_programmee": "2022-01-14",
+    "date_echeance": "2022-01-20",
+    "date_realisation": null,
+    "statut": 2,
+    "temps_passe": null,
+    "description": "Mettre en place workflow de validation simple factures fournisseurs.",
+    "personnes_en_charge": [
+      1
+    ]
+  }
+},
+{
+  "model": "dashboard.tache",
+  "pk": 15,
+  "fields": {
+    "projet": 5,
+    "nom": "Modification classeurs",
+    "date_programmee": "2022-01-21",
+    "date_echeance": "2022-01-25",
+    "date_realisation": null,
+    "statut": 2,
+    "temps_passe": null,
+    "description": "-enlever items dans liste type document (devis, attestation,formation)\r\n-enlever item stagiaire dans type de formation\r\n-ajouter gestion arborescence dans administration\r\n-rajouter recherche suivi envoy\u00e9 et consult\u00e9\r\n-rajouter dans recherche suivi et non consult\u00e9.\r\nVoir avec zeendoc pour lier plusieurs documents dans indexation global\r\nCr\u00e9er mod\u00e8le manuel sur certificats de stage",
+    "personnes_en_charge": [
+      1
+    ]
+  }
+},
+{
+  "model": "dashboard.tache",
+  "pk": 16,
+  "fields": {
+    "projet": 16,
+    "nom": "Modifications classeur factures fournisseurs",
+    "date_programmee": "2022-01-31",
+    "date_echeance": "2022-01-31",
+    "date_realisation": null,
+    "statut": 2,
+    "temps_passe": null,
+    "description": "Modifier requ\u00eates factures \u00e0 payer. ( rajouter crit\u00e8re facture et / ou note de  frais)\r\nEnlever mail psampaio\r\nFiltre pour consultation contrats (cr\u00e9ation nouveau classeur)",
+    "personnes_en_charge": [
+      1
+    ]
+  }
+},
+{
+  "model": "dashboard.contact",
+  "pk": 1,
+  "fields": { 
+	"type_projet": 1,
+    "client": 1,
+    "nom": "ZELAZNICK",
+    "prenom": "David",
+    "email": "david.zelaznick@able.fr",
+    "tel": "03.88.55.57.14/06.20.14.94.76",
+    "notes": "Direction"
+  }
+},
+{
+  "model": "dashboard.contact",
+  "pk": 2,
+  "fields": { 
+	"type_projet": 1,
+    "client": 2,
+    "nom": "AUGUSTINE",
+    "prenom": "Lucie",
+    "email": "laugustine@bredok.com",
+    "tel": "03.88.05.33.11",
+    "notes": null
+  }
+},
+{
+  "model": "dashboard.contact",
+  "pk": 3,
+  "fields": { 
+	"type_projet": 1,
+    "client": 4,
+    "nom": "TAPAN",
+    "prenom": "Guillaume",
+    "email": "g.tapan@tpn-btp.fr",
+    "tel": "06.51.18.40.92",
+    "notes": null
+  }
+},
+{
+  "model": "dashboard.contact",
+  "pk": 4,
+  "fields": {
+	"type_projet": 1,
+    "client": 3,
+    "nom": "HAHN",
+    "prenom": "Richard",
+    "email": "r.hahn@eurologistic-france.fr",
+    "tel": "03.88.79.05.63",
+    "notes": null
+  }
+},
+{
+  "model": "dashboard.contact",
+  "pk": 5,
+  "fields": {
+	"type_projet": 1,
+    "client": 14,
+    "nom": "PHAM-VU",
+    "prenom": "Thu-Huong",
+    "email": "thuhuong.phamvu@jbthiery.asso.fr",
+    "tel": "03.83.17.41.91",
+    "notes": null
+  }
+},
+{
+  "model": "dashboard.contact",
+  "pk": 6,
+  "fields": {
+	"type_projet": 1,
+    "client": 8,
+    "nom": "CRIQUI",
+    "prenom": "Elodie",
+    "email": "ecriqui@alcaexpert.com",
+    "tel": "03.88.78.40.36",
+    "notes": null
+  }
+},
+{
+  "model": "dashboard.contact",
+  "pk": 7,
+  "fields": { 
+	"type_projet": 1,
+    "client": 20,
+    "nom": "SIMON",
+    "prenom": "Christine",
+    "email": "christine.simon@fein.fr",
+    "tel": "03.88.71.56.69/06.30.03.46.84",
+    "notes": "service rh"
+  }
+},
+{
+  "model": "dashboard.contact",
+  "pk": 8,
+  "fields": { 
+	"type_projet": 1,
+    "client": 20,
+    "nom": "BERNHARD",
+    "prenom": "Delphine",
+    "email": "delphine.bernhard@fein.fr",
+    "tel": "03.88.71.56.68",
+    "notes": null
+  }
+},
+{
+  "model": "dashboard.contact",
+  "pk": 9,
+  "fields": { 
+	"type_projet": 1,
+    "client": 13,
+    "nom": "THUET",
+    "prenom": "Fanny",
+    "email": "accueil@espaces-paysagers.fr",
+    "tel": "03.88.78.87.02",
+    "notes": null
+  }
+},
+{
+  "model": "dashboard.contact",
+  "pk": 10,
+  "fields": { 
+	"type_projet": 1,
+    "client": 12,
+    "nom": "KOEHL",
+    "prenom": "Freddy",
+    "email": "freddy.koehl@espacecasher.com",
+    "tel": "03.88.19.98.81",
+    "notes": null
+  }
+},
+{
+  "model": "dashboard.contact",
+  "pk": 11,
+  "fields": { 
+	"type_projet": 1,
+    "client": 5,
+    "nom": "FORESE",
+    "prenom": "Sylvie",
+    "email": "sylvie.forese@tryad.fr",
+    "tel": null,
+    "notes": null
+  }
+},
+{
+  "model": "dashboard.contact",
+  "pk": 12,
+  "fields": { 
+	"type_projet": 1,
+    "client": 5,
+    "nom": "FLICK",
+    "prenom": "Nathalie",
+    "email": "nathalie.flick@tryad.fr",
+    "tel": "03.88.64.43.80",
+    "notes": null
+  }
+},
+{
+  "model": "dashboard.contact",
+  "pk": 13,
+  "fields": { 
+	"type_projet": 1,
+    "client": 5,
+    "nom": "HOLZINGER",
+    "prenom": "Nathalie",
+    "email": "info@tryad.fr",
+    "tel": null,
+    "notes": null
+  }
+},
+{
+  "model": "dashboard.contact",
+  "pk": 14,
+  "fields": { 
+	"type_projet": 1,
+    "client": 22,
+    "nom": "LOUSTAU",
+    "prenom": "Katia",
+    "email": "katia.loustau@logic-sas.com",
+    "tel": "06.43.32.66.83",
+    "notes": "Assistante chef de projet"
+  }
+},
+{
+  "model": "dashboard.contact",
+  "pk": 15,
+  "fields": { 
+	"type_projet": 1,
+    "client": 23,
+    "nom": "THIEBAUT",
+    "prenom": "Virginie",
+    "email": "compta.absecurite@orange.fr",
+    "tel": "03.29.81.14.77",
+    "notes": "Comptable"
+  }
+},
+{
+  "model": "dashboard.typeechange",
+  "pk": 1,
+  "fields": {
+    "type_echange": "R\u00e9cup\u00e9ration informations"
+  }
+},
+{
+  "model": "dashboard.typeechange",
+  "pk": 2,
+  "fields": {
+    "type_echange": "Prise de contact"
+  }
+},
+{
+  "model": "dashboard.typeechange",
+  "pk": 3,
+  "fields": {
+    "type_echange": "Mise en place"
+  }
+},
+{
+  "model": "dashboard.typeechange",
+  "pk": 4,
+  "fields": {
+    "type_echange": "D\u00e9briefing apr\u00e8s test"
+  }
+},
+{
+  "model": "dashboard.typeechange",
+  "pk": 5,
+  "fields": {
+    "type_echange": "Mise au point"
+  }
+},
+{
+  "model": "dashboard.echange",
+  "pk": 5,
+  "fields": {
+    "contact": 1,
+    "projet":1,
+    "date": "2021-12-08",
+    "heure": "09:30:00",
+    "type_echange": 1,
+    "statut": 4,
+    "temps_passe": "0",
+    "notes": "Premi\u00e8re prise de contact, r\u00e9cup\u00e9ration informations.\r\nPb informatique, r\u00e9union report\u00e9e."
+  }
+},
+{
+  "model": "dashboard.echange",
+  "pk": 6,
+  "fields": {
+    "contact": 2,
+    "projet":2,
+    "date": "2021-12-09",
+    "heure": "09:30:00",
+    "type_echange": 2,
+    "statut": 4,
+    "temps_passe": "0",
+    "notes": "Demander infos pour passerelle comptable et personnalisations mails.\r\n\r\nDur\u00e9e : 2h\r\n\r\n- Cr\u00e9ation de 3 classeurs fournisseurs -> avec 3 passerelles comptables\r\nBREDOK BREDOK PRO et TERACOLOR\r\n- Logiciel comptable EBP\r\n- Cr\u00e9ation modele facture client\r\n- Demande cr\u00e9ation passerelle comptable classeur clients E/facture pour bredok-pro"
+  }
+},
+{
+  "model": "dashboard.echange",
+  "pk": 7,
+  "fields": {
+    "contact": 3,
+    "projet":4,
+    "date": "2021-12-08",
+    "heure": "11:00:00",
+    "type_echange": 2,
+    "statut": 4,
+    "temps_passe": "0",
+    "notes": "Prise de contact initiale."
+  }
+},
+{
+  "model": "dashboard.echange",
+  "pk": 8,
+  "fields": {
+    "contact": 3,
+    "projet":4,
+    "date": "2021-12-17",
+    "heure": "10:00:00",
+    "type_echange": 1,
+    "statut": 4,
+    "temps_passe": "0",
+    "notes": "Prise de contact initiale.\r\nR\u00e9cup\u00e9ration infos.\r\n\r\nModifications \u00e0 faire sur l'armoire.\r\n-R\u00e9cup\u00e9rer listes utilisateurs et droits\r\n-Cr\u00e9er adresse email d\u00e9pot factures comptabilite_tpn@zeenmail.com\r\n-Verif doublon sur options avancees\r\n-autocompletion nom chantier\r\n-cr\u00e9er champ adresse mail en fonction du fournisseur\r\n-Cr\u00e9ation 3 nouvelles recherches\r\n-Factures \u00e0 payer \u00e9ch\u00e9ance non d\u00e9pass\u00e9e\r\n-Factures \u00e0 payer \u00e0 15 jours\r\n-Factures \u00e0 payer \u00e9ch\u00e9ance d\u00e9pass\u00e9e\r\n-Factures refus\u00e9es sans statut d'envoi ok"
+  }
+},
+{
+  "model": "dashboard.echange",
+  "pk": 9,
+  "fields": {
+    "contact": 1,
+    "projet":1,
+    "date": "2021-12-16",
+    "heure": "10:00:00",
+    "type_echange": 1,
+    "statut": 4,
+    "temps_passe": "0",
+    "notes": "Pr\u00e9sentation Zoom et r\u00e9cup\u00e9ration informations"
+  }
+},
+{
+  "model": "dashboard.echange",
+  "pk": 10,
+  "fields": {
+    "contact": 14,
+    "projet":22,
+    "date": "2021-12-15",
+    "heure": "10:49:09",
+    "type_echange": 1,
+    "statut": 4,
+    "temps_passe": "0",
+    "notes": "Demande liste utilisateurs\r\nDemande rdv pour r\u00e9union zoom"
+  }
+},
+{
+  "model": "dashboard.echange",
+  "pk": 11,
+  "fields": {
+    "contact": 15,
+    "projet":23,
+    "date": "2021-12-15",
+    "heure": "11:00:08",
+    "type_echange": 2,
+    "statut": 3,
+    "temps_passe": "0",
+    "notes": "Prise de contact pour rdv r\u00e9union de pr\u00e9sentation."
+  }
+},
+{
+  "model": "dashboard.echange",
+  "pk": 12,
+  "fields": {
+    "contact": 14,
+    "projet":22,
+    "date": "2021-12-22",
+    "heure": "14:00:00",
+    "type_echange": 1,
+    "statut": 3,
+    "temps_passe": "0",
+    "notes": "Pr\u00e9sentation zeendoc\r\n\r\n- Classeur Fournisseurs : Pas de workflow de validation.\r\nDisparition des documents apr\u00e8s export vers logiciel comptable.\r\n-Cr\u00e9ation des utilisateurs et droits\r\n-Cr\u00e9ation arborescence par date de facture.\r\n-Classeur notes de frais :\r\nLes utilisateurs d\u00e9posent mais n'indexent pas.\r\nValidation par comptable\r\nEn attente avec ajout de note.\r\nAffecter la note de frais \u00e0 un type de mission."
+  }
+},
+{
+  "model": "dashboard.echange",
+  "pk": 13,
+  "fields": {
+    "contact": 1,
+    "projet":1,
+    "date": "2022-01-06",
+    "heure": "10:00:00",
+    "type_echange": 3,
+    "statut": 2,
+    "temps_passe": "0",
+    "notes": "Mise en place compl\u00e9ments."
+  }
+},
+{
+  "model": "dashboard.echange",
+  "pk": 14,
+  "fields": {
+    "contact": 14,
+    "projet":22,
+    "date": "2022-01-04",
+    "heure": "09:30:00",
+    "type_echange": 3,
+    "statut": 4,
+    "temps_passe": "0",
+    "notes": "D\u00e9finition d'un workflow pour notes de frais\r\n\r\n- D\u00e9p\u00f4t par collaborateur\r\n- Validation par comptable tampon valide\r\n- Demande d'information insertion note\r\n- Refus                                tampon refus\u00e9\r\n\r\nPaiement : tampon r\u00e9gl\u00e9 sortie du workflow\r\n\r\nTraitement comptable :\r\nA compl\u00e9ter\r\nA Exporter\r\nSortie du workflow"
+  }
+},
+{
+  "model": "dashboard.echange",
+  "pk": 15,
+  "fields": {
+    "contact": 3,
+    "projet":4,
+    "date": "2022-01-07",
+    "heure": "15:00:00",
+    "type_echange": 4,
+    "statut": 4,
+    "temps_passe": "0",
+    "notes": "d\u00e9briefing\r\n\r\nSuppression nom de chantier obligatoire\r\nRajout filtre utilisateur\r\nSuppression poids et quantit\u00e9\r\nDroits :\r\nD\u00e9pot -> accueil\r\nModification des indexs -> accueil \r\nFacture \u00e0 valider -> Turkai Kadir Gekay\r\nFactures \u00e0 payer -> Gekay & Accueil"
+  }
+},
+{
+  "model": "dashboard.echange",
+  "pk": 16,
+  "fields": {
+    "contact": 12,
+    "projet":5,
+    "date": "2022-01-05",
+    "heure": "09:00:00",
+    "type_echange": 5,
+    "statut": 4,
+    "temps_passe": "0",
+    "notes": "S\u00e9paration des factures du classeur dossiers de formations\r\nSuppression de 2 controles de completudes\r\nClasseur factures clients :\r\n- Si chorus utilis\u00e9\r\nR\u00e9cup\u00e9rer infos et cr\u00e9er compte technique chorus\r\n\r\nMep imprimante virtuelle\r\nMep agent zeendoc\r\n\r\nCr\u00e9ation tampon facture acquitt\u00e9e\r\nModifier recherches envoi avec pour les 2 classeurs garder non lus \u00e0 15 et 30j"
+  }
+},
+{
+  "model": "dashboard.echange",
+  "pk": 17,
+  "fields": {
+    "contact": 12,
+    "projet":5,
+    "date": "2022-01-12",
+    "heure": "10:00:00",
+    "type_echange": 4,
+    "statut": 4,
+    "temps_passe": "0",
+    "notes": "Prochain contact, relance apr\u00e8s tests.\r\nFactures opco \u00e0 lier \u00e0 dossiers formations\r\nAide \u00e0 l'envoi par email.\r\n\r\n1h"
+  }
+},
+{
+  "model": "dashboard.echange",
+  "pk": 18,
+  "fields": {
+    "contact": 15,
+    "projet":23,
+    "date": "2022-01-13",
+    "heure": "10:00:00",
+    "type_echange": 1,
+    "statut": 4,
+    "temps_passe": "0",
+    "notes": "Pr\u00e9sentation Zeendoc et r\u00e9cup\u00e9rations d'informations.\r\nWorkflow basique de validation.\r\nWorkflow basique paiement.\r\n2h00"
+  }
+},
+{
+  "model": "dashboard.echange",
+  "pk": 19,
+  "fields": {
+    "contact": 3,
+    "projet":4,
+    "date": null,
+    "heure": "15:44:18",
+    "type_echange": 1,
+    "statut": 1,
+    "temps_passe": "0",
+    "notes": "Mise en place classeur Factures / Eclient\r\n-Mise en place imprimante virtuelle\r\nMise en place agent Zeendoc"
+  }
+},
+{
+  "model": "dashboard.echange",
+  "pk": 20,
+  "fields": {
+    "contact": 12,
+    "projet":5,
+    "date": "2022-01-19",
+    "heure": "10:00:00",
+    "type_echange": 4,
+    "statut": 2,
+    "temps_passe": "0",
+    "notes": "Simulation envoi par mail des dossiers"
+  }
+},
+{
+  "model": "dashboard.echange",
+  "pk": 21,
+  "fields": {
+    "contact": 14,
+    "projet":22,
+    "date": "2022-01-12",
+    "heure": "15:00:00",
+    "type_echange": 5,
+    "statut": 2,
+    "temps_passe": "0",
+    "notes": "R\u00e9ponses \u00e0 questions mail"
+  }
+},
+{
+  "model": "dashboard.echange",
+  "pk": 22,
+  "fields": {
+    "contact": 15,
+    "projet":23,
+    "date": null,
+    "heure": null,
+    "type_echange": 4,
+    "statut": 1,
+    "temps_passe": "0",
+    "notes": "Ils ont une r\u00e9union le 20 janvier avec les collaborateurs\r\nPr\u00e9parer workflow de validation simple"
+  }
+},
+{
+  "model": "dashboard.echange",
+  "pk": 23,
+  "fields": {
+    "contact": 14,
+    "projet":22,
+    "date": "2022-01-27",
+    "heure": "14:30:00",
+    "type_echange": 5,
+    "statut": 3,
+    "temps_passe": "0",
+    "notes": "Se renseigner sur \r\n\r\n- Total notes de frais dans export excel.\r\n- Format mon\u00e9taire\r\n- D\u00e9veloppement sp\u00e9cifique  (s\u00e9parer les champs d'exports imputation HT, TVA 1 colonne par champ)\r\n- Envoyer doc pour stabilo.\r\n\r\n2h"
+  }
+}
+]

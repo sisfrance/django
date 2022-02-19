@@ -40,20 +40,36 @@ class Revendeur(models.Model):
 class Client(models.Model):
     id=models.AutoField(primary_key=True)
     nom=models.CharField(max_length=125)
-    num_armoire=models.CharField(max_length=125)
     adresse1=models.TextField(null=True,blank=True)
     adresse2=models.TextField(null=True,blank=True)
     code_postal=models.CharField(max_length=10,null=True,blank=True)
     ville=models.CharField(max_length=50,null=True,blank=True)
-    revendeur=models.ForeignKey(Revendeur,on_delete=models.SET_NULL, null=True,blank=True)
+    
 
     def __str__(self):
-        return self.nom+"-"+self.num_armoire   
-         
+        return self.nom  
+
+class TypeProjet(models.Model):
+	id=models.AutoField(primary_key=True)
+	type_projet=models.CharField(max_length=25)
+	icone=models.CharField(max_length=2500,null=True,blank=True)
+	
+	def __str__(self):
+		return self.type_projet
+
+class Projet(models.Model):
+    id=models.AutoField(primary_key=True)
+    client=models.ForeignKey(Client,on_delete=models.SET_NULL,null=True,blank=True)
+    type_projet=models.ForeignKey(TypeProjet,on_delete=models.SET_NULL,null=True,blank=True)
+    num_armoire=models.CharField(max_length=125,null=True,blank=True)
+    revendeur=models.ForeignKey(Revendeur,on_delete=models.SET_NULL, null=True,blank=True)
+    def __str__(self):
+        return str(self.client)+"-"+str(self.type_projet)
+    
 class Forfait(models.Model):
     id=models.AutoField(primary_key=True)
     date_commande=models.DateField()
-    client= models.ForeignKey(Client,on_delete=models.SET_NULL,null=True,blank=True)
+    projet= models.ForeignKey(Projet,on_delete=models.SET_NULL,null=True,blank=True)
     categorie_forfait= models.ForeignKey(CategorieForfait,on_delete=models.SET_NULL,null=True,blank=True)
     def __str__(self):
         return self.client.nom+"-"+self.categorie_forfait.categorie_forfait
@@ -63,7 +79,7 @@ class Forfait(models.Model):
 class Consommation(models.Model):
     id=models.AutoField(primary_key=True)
     date=models.DateField()
-    client=models.ForeignKey(Client,on_delete=models.SET_NULL,null=True,blank=True)
+    forfait=models.ForeignKey(Forfait,on_delete=models.SET_NULL,null=True,blank=True)
     nb_docs=models.IntegerField(null=True,blank=True)
     volume_docs=models.IntegerField(null=True,blank=True)
     
@@ -91,7 +107,7 @@ class Intervenant(models.Model):
     
 class Prestation(models.Model):
     id=models.AutoField(primary_key=True)
-    client=models.ForeignKey(Client,on_delete=models.SET_NULL,null=True,blank=True)
+    projet=models.ForeignKey(Projet,on_delete=models.SET_NULL,null=True,blank=True)
     type_prestation=models.ForeignKey(TypePrestation,on_delete=models.SET_NULL,null=True,blank=True)
     intervenant=models.ForeignKey(Intervenant,on_delete=models.SET_NULL,null=True,blank=True)
     date_programmee=models.DateField(null=True,blank=True)
@@ -104,7 +120,7 @@ class Prestation(models.Model):
 
 class Tache(models.Model):
     id=models.AutoField(primary_key=True)
-    client=models.ForeignKey(Client,on_delete=models.SET_NULL,null=True,blank=True)
+    projet=models.ForeignKey(Projet,on_delete=models.SET_NULL,null=True,blank=True)
     nom=models.CharField(max_length=150)
     date_programmee=models.DateField(null=True,blank=True)
     date_echeance=models.DateField(null=True,blank=True)
@@ -120,6 +136,7 @@ class Tache(models.Model):
 class Contact(models.Model):
     id=models.AutoField(primary_key=True)
     client=models.ForeignKey(Client,on_delete=models.SET_NULL,null=True,blank=True)
+    type_projet=models.ForeignKey(TypeProjet,on_delete=models.SET_NULL,null=True,blank=True)
     nom=models.CharField(max_length=50)
     prenom=models.CharField(max_length=30,null=True,blank=True)
     email =models.EmailField(max_length=150,null=True,blank=True)
@@ -139,6 +156,7 @@ class TypeEchange(models.Model):
 class Echange(models.Model):
     id=models.AutoField(primary_key=True)
     contact=models.ForeignKey(Contact,on_delete=models.SET_NULL,null=True,blank=True)
+    projet=models.ForeignKey(Projet,on_delete=models.SET_NULL,null=True,blank=True)
     date=models.DateField(null=True,blank=True)
     heure=models.TimeField(null=True,blank=True)
     type_echange=models.ForeignKey(TypeEchange,on_delete=models.SET_NULL,null=True,blank=True)

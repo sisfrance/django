@@ -35,8 +35,12 @@
             <div data-field="id" data-sens="asc" class="sortarrow sort asc"></span>
         </th>
         <th>
-            <div class="header-elt">Nom</div>
+            <div class="header-elt">Client</div>
             <div data-field="client" data-sens="asc" class="sortarrow sort asc"></div>
+        </th>
+        <th>
+            <div class="header-elt">Type de projet</div>
+            <div data-field="type_projet" data-sens="asc" class="sortarrow sort asc"></div>
         </th>
         <th>
             <div class="header-elt">Numéro d'armoire</div>
@@ -67,29 +71,30 @@
     </tr>
     </thead>
     <tbody>
-    {% for c in liste %}
-    <tr id="line-{{c.id}}" data-id="{{c.id}}" class="line {% cycle  'odd' 'even' %} client">
-        <td class="cell id" >{{c.id}}</td>
-        <td class="cell nom" >{{c.nom}}</td>
-        <td class="cell num_armoire">{{c.num_armoire}}</td>
-        <td class="cell debut_forfait">{{c.debut_forfait}}</td>
-        <td class="cell categorie_forfait">{{c.forfait.categorie_forfait}} </td>
+    {% for p in liste %}
+    <tr id="line-{{p.id}}" data-id="{{p.id}}" class="line {% cycle  'odd' 'even' %} projet">
+        <td class="cell id" >{{p.id}}</td>
+        <td class="cell client" ><a href="/client/{{p.client.id}}">{{p.client.nom}}</a></td>
+        <td class="cell type_projet" >{{p.type_projet}}</td>
+        <td class="cell num_armoire">{{p.num_armoire}}</td>
+        <td class="cell debut_forfait">{{p.debut_forfait}}</td>
+        <td class="cell categorie_forfait">{{p.categorie_forfait}} </td>
         <td class="cell taches">
-            {% for t in c.taches %}
+            {% for t in p.taches %}
                 <p>{{t}}</p>
             {% endfor %}
         </td>
         <td class="cell echanges">
-            {% for e in c.echanges %}
+            {% for e in p.echanges %}
                 <p>{{e}}</p>
             {% endfor %}
         </td>
         <td class="cell prestations">
-            {% for p in c.prestations %}
-                <p>{{p}}</p>
+            {% for pres in p.prestations %}
+                <p>{{pres}}</p>
             {% endfor %}
         </td>
-        <td class="cell details"><a href="/details/{{c.id}}/">Voir</a></td>
+        <td class="cell details"><a href="/details/{{p.id}}/">Voir</a></td>
     </tr>
     {% endfor %}
     </tbody>
@@ -97,7 +102,7 @@
 </div>
 </div>
 {% autoescape off %}
-    <div id="paginator-under" class="paginator" style="text-align:center;">{{ pagination }}</div>
+    <div id="paginator-under" class="paginator text-center" >{{ pagination }}</div>
 {% endautoescape %}
 {% else %}
 <p id="message-liste">Aucun(e) item n'a pour le moment &eacute;t&eacute; trouv&eacute;.</p>

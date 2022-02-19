@@ -13,8 +13,9 @@ from django.shortcuts import render, get_object_or_404
 from django.db.models import Count, Sum,Q
 from django.db.models.functions import ExtractMonth, ExtractYear
 from django.forms.models import model_to_dict
-from suiviprojets.dashboard.models import TypePrestation,CategorieForfait,Flux,Forfait,TypeEchange,Echange,Contact \
+from suiviprojets.dashboard.models import Projet,TypeProjet,TypePrestation,CategorieForfait,Flux,Forfait,TypeEchange,Echange,Contact \
                                             ,StatutTache, Tache,Consommation,Prestation,Client
+from suiviprojets.dashboard.forms import ContactForm
 from suiviprojets.helpers.helpers import apply_filter, filter_construct, Pager
 from wsgiref.util import FileWrapper
 
@@ -28,48 +29,60 @@ MOIS=[{'tag':'janvier','days':31},{'tag':'février','days':29},{'tag':'mars','da
 		
 BASE_FIELDS={'id':'id',
 			'num_armoire':'num_armoire',
-			'nom':'nom',
+			'type_projet':'type_projet',
+			'client':'client',
 			}
 			
 SEARCH_TERMS={'num_armoire':'num_armoire__icontains',
-			'nom':'nom__icontains',
+			'nom':'client__nom__icontains',
 			'forfait':'forfait_id',
-			'sport_type':'sport_type__in',
 			}
 			
-SCRIPTS=['common','dashboard','node_modules/fullcalendar/main.min','index']
+SCRIPTS=['common','node_modules/fullcalendar/main.min','index']
 STYLES=['js/node_modules/chart.js/dist/Chart.min.css',
 		'js/node_modules/fullcalendar/main.min.css','scss/styles.css']
 
 
-def client_compose_liste(c):
-	client=model_to_dict(c)
-	forfait=Forfait.objects.filter(client=c.id).last()
-	taches=Tache.objects.filter(client=c.id,statut__statut='en cours')
-	echanges=Echange.objects.filter(contact__client_id=c.id,date__gt=date.today()).order_by('-date')
-	prestations=Prestation.objects.filter(client=c.id,statut__statut__in=['en attente','en cours'])
-	client['taches']=[t.nom for t in taches]
-	client['debut_forfait']=str(forfait.date_commande)
-	client['categorie_forfait']=forfait.categorie_forfait.categorie_forfait
-	client['echanges']=[str(e.date)+":"+str(e.contact.nom) for e in echanges]
-	client['prestations']=[str(p.type_prestation)+":"+str(p.statut.statut) for p in prestations]
-	return client
+def projet_compose_liste(p):
+	client=p.client
+	projet={"id":p.id,
+			"client":{'nom':p.client.nom,'id':p.client.id},
+			"type_projet":str(p.type_projet),
+			"num_armoire":p.num_armoire,
+			}
+	forfait=Forfait.objects.filter(projet=p.id).last()
+	taches=Tache.objects.filter(projet=p.id,statut__statut='en cours')
+	echanges=Echange.objects.filter(contact__client_id=client.id,date__gt=date.today()).order_by('-date')
+	prestations=Prestation.objects.filter(projet=p.id,statut__statut__in=['en attente','en cours'])
+	projet['taches']=[t.nom for t in taches]
+	projet['debut_forfait']=str(forfait.date_commande)
+	projet['categorie_forfait']=forfait.categorie_forfait.categorie_forfait
+	projet['echanges']=[str(e.date)+":"+str(e.contact.nom) for e in echanges]
+	projet['prestations']=[str(pres.type_prestation)+":"+str(pres.statut.statut) for pres in prestations]
+	return projet
 
 
-def client_compose_details(id):
-	instance_client=Client.objects.get(pk=id)
-	client=model_to_dict(instance_client)
-	forfait=Forfait.objects.filter(client=id).last
-	taches=Tache.objects.filter(client_id=id)
-	echanges=Echange.objects.filter(contact__client_id=id).order_by('-date')
-	prestations=Prestation.objects.filter(client=id)
-	contacts=Contact.objects.filter(client=id).order_by("nom")
+def projet_compose_details(id):
+	instance_projet=Projet.objects.get(pk=id)
+	projet={"id":instance_projet.id,
+			"client":instance_projet.client.nom,
+			"type_projet":str(instance_projet.type_projet),
+			"num_armoire":instance_projet.num_armoire
+			}
+
+	client=instance_projet.client
+	forfait=Forfait.objects.filter(projet=id).last
+	taches=Tache.objects.filter(projet_id=id)
+	echanges=Echange.objects.filter(contact__client_id=client.id).order_by('-date')
+	prestations=Prestation.objects.filter(projet=id)
+	contacts=Contact.objects.filter(client=instance_projet.client.id,type_projet=instance_projet.type_projet.id).order_by("nom")
 	
-	client['taches']=taches
-	client['contacts']=contacts
-	client['forfait']=forfait
-	client['echanges']=echanges
-	client['prestations']= prestations
+	projet['taches']=taches
+	projet['contacts']=contacts
+	projet['forfait']=forfait
+	projet['echanges']=echanges
+	projet['prestations']= prestations
+	
 	""" parsage des evenements """
 	""" un evenement se compose 
 		-title
@@ -79,20 +92,20 @@ def client_compose_details(id):
 		color
 		background-color"""
 	
-	tasks=Tache.objects.filter(client_id=id,statut__statut__in=["à programmer","en attente","en cours"])
+	tasks=Tache.objects.filter(projet_id=id,statut__statut__in=["à programmer","en attente","en cours"])
 	tasks_events={'events':[{'title':t.nom,'start':str(t.date_programmee),'statut':t.statut.color,'description':t.description} for t in tasks],'color':'green','textColor':'white'}
 	
-	prestations=Prestation.objects.filter(client_id=id,statut__statut__in=["en attente","à programmer","en cours"])
+	prestations=Prestation.objects.filter(projet_id=id,statut__statut__in=["en attente","à programmer","en cours"])
 	prestations_events={'events':[{'title':p.type_prestation.type_prestation,'start':str(p.date_programmee),'statut':p.statut.color,'description':p.notes} for p in prestations],'color':'green','textColor':'white'}
 
-	echanges=Echange.objects.filter(contact__client_id=id,statut__statut__in=["en attente","à programmer","en cours"])
+	echanges=Echange.objects.filter(contact__client_id=client.id,statut__statut__in=["en attente","à programmer","en cours"])
 	echanges_events={'events':[{'title':e.type_echange.type_echange,'statut':e.statut.color,'start':str(e.date),'description':e.notes} for e in echanges],'color':'light-green','textColor': 'white'}
 	
-	client['eventsct']=json.dumps(tasks_events)
-	client['eventscp']=json.dumps(prestations_events)
-	client['eventsce']=json.dumps(echanges_events)
-	print(client['eventscp'])
-	return client
+	projet['eventsct']=json.dumps(tasks_events)
+	projet['eventscp']=json.dumps(prestations_events)
+	projet['eventsce']=json.dumps(echanges_events)
+
+	return projet
 	
 """/*************************
    * View dashboard
@@ -112,8 +125,8 @@ def index(request):
 		request.session['message']=""
 		request.session['actions']=[]"""
 	
-	toprogram_prestations=Prestation.objects.filter(Q(statut__statut__in=["en attente","à programmer"])|Q(date_programmee__isnull=True)).values('client__nom','type_prestation__type_prestation','id')
-	toprogram_tasks=Tache.objects.filter(Q(statut__statut__in=["en attente","à programmer"]) | Q(date_programmee__isnull=True)).values('client__nom','nom','id')
+	toprogram_prestations=Prestation.objects.filter(Q(statut__statut__in=["en attente","à programmer"])|Q(date_programmee__isnull=True)).values('projet__client__nom','type_prestation__type_prestation','id')
+	toprogram_tasks=Tache.objects.filter(Q(statut__statut__in=["en attente","à programmer"]) | Q(date_programmee__isnull=True)).values('projet__client__nom','nom','id')
 	next_echanges=Echange.objects.filter(statut__statut__in=["en attente","à programmer"]).values('contact__nom','contact__prenom','date','heure','type_echange__type_echange','id')
 
 	datas={'partial':'dashboard/index.html',
@@ -135,12 +148,13 @@ def projets(request):
 	request.session['actions']=[]
 
 			
-	clients=Client.objects.all()
-	pagination=Pager(clients,"projects").paginate()
+	projets=Projet.objects.all()
+	pagination=Pager(projets,"projects").paginate()
 	
-	Dclients=[client_compose_liste(c) for c in pagination[0]]
+	Dprojets=[projet_compose_liste(p) for p in pagination[0]]
+
 	datas={'partial':'dashboard/liste.html',
-			'liste':Dclients,
+			'liste':Dprojets,
 			'total_elts':pagination[2],
 			'pagination':pagination[1],
 			'scripts':SCRIPTS,
@@ -148,12 +162,29 @@ def projets(request):
 	return render(request,"index.html",datas)
 	
 def details(request,id):
-	client=client_compose_details(id)
+	projet=projet_compose_details(id)
 	datas={'partial':'dashboard/details.html',
-			'client':client,
+			'projet':projet,
 			'styles':STYLES,
 			'scripts':SCRIPTS,}
 	return render(request,"index.html",datas)
+	
+def details_client(request,id):
+	client=Client.objects.get(pk=id)
+	contacts=Contact.objects.filter(client=id).order_by('nom')
+
+	datas={'partial':'dashboard/details_client.html',
+			'client':client,
+			'contacts':contacts,
+			'scripts':SCRIPTS+['node_modules/fullcalendar-scheduler/main'],
+			'styles':STYLES+['js/node_modules/fullcalendar-scheduler/main.css'],
+			'resources':json.dumps([]),
+			'events':json.dumps([]),
+			}
+	return render(request,"index.html",datas)
+	
+def clients(request):
+	pass
 	
 def currents(request):
 	events_tasks = [{"id":t.id,"resourceId":t.client.id,"resourceTitle":t.client.nom,"title":t.nom,"color":"green","start":str(t.date_programmee),"end":str(t.date_realisation),"statut":t.statut.color,"description":t.description} for t in Tache.objects.filter(statut__statut__in=['en attente','en cours'],date_programmee__isnull=False)]
@@ -190,8 +221,8 @@ def download(request):
     for f in Forfait.objects.all().order_by('id'):
         i+=1
 
-        lines.append({'nom':f.client.nom,'date':f.date_commande,'num_armoire':f.client.num_armoire,'adresse1':f.client.adresse1,'adresse2':f.client.adresse2,'code_postal':f.client.code_postal,\
-        'ville':f.client.ville,'revendeur':f.client.revendeur.nom,'forfait':f.categorie_forfait})
+        lines.append({'nom':f.projet.client.nom,'date':f.date_commande,'num_armoire':f.projet.num_armoire,'adresse1':f.projet.client.adresse1,'adresse2':f.projet.client.adresse2,'code_postal':f.projet.client.code_postal,\
+        'ville':f.projet.client.ville,'revendeur':f.projet.revendeur.nom,'forfait':f.categorie_forfait})
     
     
     """lines=[{'nom':f.client.nom,'date':f.date_commande,'num_armoire':f.client.num_armoire,'adresse1':f.client.adresse1,'adresse2':f.client.adresse2,'code_postal':f.client.code_postal,\
@@ -245,16 +276,17 @@ def page(request):
 
 		try:
 			filtre=request.session['filtres']
-			items=Client.objects.all()
+			items=Projet.objects.all()
 			filtered_items=apply_filter(items,filtre)
 			items=__order_by(filtered_items,request.session['sort'])
 		except Exception as error:
 			print(error)
-			items=Client.objects.all()
+			items=Projet.objects.all()
 
 		num_page=int(request.POST['num_page'])
 		pager=Pager(items,'projects',num_page=num_page,nb_items_page=request.session['nb_items']).paginate()
-		reponse=json.dumps({'liste':[client_compose_liste(c) for c in pager[0]],
+
+		reponse=json.dumps({'liste':[projet_compose_liste(p) for p in pager[0]],
 							'pagination': pager[1],
 							'total_elts':pager[2],
 							})
@@ -266,15 +298,15 @@ def nb(request):
 	request.session['nb_items']=int(r['nb'])
 	try:
 		filtre=request.session['filtres']
-		items=Client.objects.all()
+		items=Projet.objects.all()
 		filtered_items=apply_filter(items,filtre)
 		items=__order_by(filtered_items,request.session['sort'])
 	except Exception as error:
 		print(error)
-		items=Client.objects.all()
+		items=Projet.objects.all()
 	pager=Pager(items,'sessions',num_page=1,nb_items_page=request.session['nb_items']).paginate()
 
-	return render(request,'dashboard/liste.html',{'liste':[client_compose_liste(c) for c in pager[0]],
+	return render(request,'dashboard/liste.html',{'liste':[projet_compose_liste(p) for p in pager[0]],
 												'pagination':pager[1],
 												'total_elts':pager[2],
 												'nb':request.session['nb_items'],
@@ -282,15 +314,13 @@ def nb(request):
 def search(request):
 	request.session['filtres']=[{}]
 	filtre=filter_construct(request.POST,SEARCH_TERMS)
-	print(filtre)
 	request.session['filtres']=filtre
-	items=Client.objects.all()
+	items=Projet.objects.all()
 	filtered_items=apply_filter(items,filtre)
-	print(filtered_items)
 	items=filtered_items.order_by('-num_armoire')
 	pager=Pager(items,'projects',nb_items_page=request.session['nb_items']).paginate()
 
-	datas={'liste':[client_compose_liste(c) for c in pager[0]],
+	datas={'liste':[projet_compose_liste(c) for c in pager[0]],
 			'pagination':pager[1],
 			'total_elts':pager[2],}
 	return HttpResponse(json.dumps(datas))
@@ -313,7 +343,7 @@ def sort(request):
 		items=__order_by(filtered_items,request.session['sort'])
 	except Exception as error:
 		print(error)
-		items=Item.objects.all()
+		items=Projet.objects.all()
 	pager=Pager(items,'sessions',num_page=1,nb_items_page=request.session['nb_items']).paginate()
 	reponse=json.dumps({'liste':__parse_items_json(pager[0]),
 						'indices':__liste_indices(),
@@ -321,3 +351,13 @@ def sort(request):
 						'total_elts':pager[2],
 						})
 	return HttpResponse(reponse)
+	
+def add(request):
+	form=ContactForm()
+	return render(request,'dashboard/forms/form.html',{'form':form.as_table()})
+	
+def edit(request):
+	pass
+	
+def save(request):
+	pass

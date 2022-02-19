@@ -59,7 +59,8 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': ['suiviprojets/templates',
                 'suiviprojets/templates/dashboard',
-                '/usr/local/lib/python3.6/site-packages/django/contrib/admin/templates/admin/',],
+                'suiviprojets/templates/dashboard/forms',
+                '/usr/local/lib/python3.6/site-packages/django/contrib/admin/templates/',],
         'APP_DIRS': False,
         'OPTIONS': {
              'context_processors': [
@@ -81,7 +82,7 @@ WSGI_APPLICATION = 'suiviprojets.wsgi.application'
 DATABASES = {
     'default': {
        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-       'NAME': 'suiviprojets',                      # Or path to database file if using sqlite3.
+       'NAME': 'suiviprojets_new',                      # Or path to database file if using sqlite3.
        'USER': 'sis',                      # Not used with sqlite3.
        'PASSWORD': 'Sis1ywMYSQL!',                  # Not used with sqlite3.
        'HOST': 'django-db-1',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -134,4 +135,6 @@ TMP_ROOT="".join([MEDIA_ROOT,'tmp'])
 STATICFILES_DIRS=(
 "/".join([PROJECT_ROOT,"media"]),
 "/".join([PROJECT_ROOT,"static"]),
+"/".join([PROJECT_ROOT,"static","admin"])
+
 )

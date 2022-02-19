@@ -1,5 +1,5 @@
 from django.contrib import admin
-from suiviprojets.dashboard.models import TypePrestation,CategorieForfait,Flux,Forfait,TypeEchange,Echange,Contact \
+from suiviprojets.dashboard.models import Projet,TypePrestation,CategorieForfait,Flux,Forfait,TypeEchange,Echange,Contact \
 										,StatutTache, Tache,Consommation,Prestation,Client,Intervenant,Revendeur
 # Register your models here.
 
@@ -13,6 +13,12 @@ class ElevationAdmin(admin.ModelAdmin):
 	list_display=('id','session',)
 	search_fields=('session__id',)"""
 	
+	
+class ProjetAdmin(admin.ModelAdmin):
+	def add_view(self,request,id):
+		if id:
+			return{"client": Client.objects.get(pk=id)}
+		
 admin.site.register(TypePrestation)
 admin.site.register(CategorieForfait)
 admin.site.register(Flux)
@@ -24,6 +30,7 @@ admin.site.register(StatutTache)
 admin.site.register(Tache)
 admin.site.register(Consommation)
 admin.site.register(Prestation)
+admin.site.register(Projet,ProjetAdmin)
 admin.site.register(Client)
 admin.site.register(Intervenant)
 admin.site.register(Revendeur)

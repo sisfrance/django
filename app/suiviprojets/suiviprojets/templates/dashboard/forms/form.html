@@ -1,0 +1,11 @@
+<section id="formulaire">
+	<h1>Ajout {{objet}}</h1>
+	<form action="javascript.void();" method="POST">
+		{% csrf_token %}
+		<input type="hidden" id="id-projet" value="{{projet.id}}"/>
+		<input type="hidden" id="id-client" value="{{client.id}}"/>
+		<input type="hidden" id="objet" value="{{objet}}"/>
+		{{form}}
+		<input type="submit" value="Valider"/>
+	</form>
+</section>

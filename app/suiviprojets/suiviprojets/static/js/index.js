@@ -3,6 +3,41 @@
 $(function(){
 	
 	
+	/*****
+ * CREE LA FENETRE DETAILS Ingredients et Etapes
+ * ***/
+
+
+ function popupAdmin(voile, id) {
+	  return {
+	    show: function show(htmldatas) {
+	      $("#" + voile).addClass("obscur");
+	      $("#" + id).css({
+	        'width': '800px',
+	        'minHeight': window.innerHeight - 100 + 'px'
+	      });
+	      $("#" + id + "-content").html(htmldatas);
+	      /*tinyMCE.execCommand('mceAddEditor', false, 'etape_description');*/
+	    },
+	    hide: function hide() {
+	      $("#" + id + "-content").empty();
+	      $("#" + id).css({
+	        'width': '0',
+	        'height': '0'
+	      });
+	      /*tinyMCE.execCommand('mceRemoveEditor', false, 'etape_description');*/
+	      setTimeout(function () {
+	        $("#" + voile).removeClass("obscur");
+	      }, 600);
+	    }
+	  };
+	};
+	
+	var popup=popupAdmin("voile","window");
+	
+	$("#close-window").on('click', function (event) {
+		popup.hide();
+	});
 	/****
 	*
 	*   1. AJAX gestion de la pagination
@@ -174,6 +209,7 @@ $(function(){
 
     };
     $("#nb-elts-pages").on("change",function(event){
+						console.log("marche");
                         event.preventDefault();
                         event.stopPropagation();
                         change(this);
@@ -183,8 +219,27 @@ $(function(){
      * 2-Fin-Liste
      ************/
      
+     /****
+	 * 3-Traitement des formulaires 
+	 * **/
+	 $("#add-contact,#add-echange,#add-prestation,#add-tache").on("click",function(event){
+		event.preventDefault();
+		event.stopPropagation();
+		var datas={
+			csrfmiddlewaretoken:$("input[name=csrfmiddlewaretoken]").val(),
+			objet     :$(event.target).attr("data-objet"),
+			projet    :$(event.target).attr("data-projet"),
+			client    :$(event.target).attr("data-client")
+		};
+		$.post("/add/",datas).done(function(response){
+			popup.show(response);
+			
+		});
+		 
+	 });
+     
      /*****
-      * 3-Calendrier
+      * 4-Calendrier
       * ***/
       
       try{
@@ -213,7 +268,8 @@ $(function(){
 	}
 	
     /****
-     * 2-Fin-Calendrier
+     * 4-Fin-Calendrier
      * **/
+	
 	
 });
