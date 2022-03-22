@@ -15,9 +15,13 @@ class ElevationAdmin(admin.ModelAdmin):
 	
 	
 class ProjetAdmin(admin.ModelAdmin):
-	def add_view(self,request,id):
-		if id:
-			return{"client": Client.objects.get(pk=id)}
+	"""def add_view(self,request):
+		try:
+			id=request.GET['id']
+			if id != None:
+				self.client=Client.objects.get(pk=id)		
+		except Exception as error :
+			pass"""
 		
 admin.site.register(TypePrestation)
 admin.site.register(CategorieForfait)

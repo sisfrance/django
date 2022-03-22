@@ -15,7 +15,7 @@ from django.db.models.functions import ExtractMonth, ExtractYear
 from django.forms.models import model_to_dict
 from suiviprojets.dashboard.models import Projet,TypeProjet,TypePrestation,CategorieForfait,Flux,Forfait,TypeEchange,Echange,Contact \
                                             ,StatutTache, Tache,Consommation,Prestation,Client
-from suiviprojets.dashboard.forms import ContactForm
+from suiviprojets.dashboard.forms import ContactForm,PrestationForm,TacheForm,EchangeForm
 from suiviprojets.helpers.helpers import apply_filter, filter_construct, Pager
 from wsgiref.util import FileWrapper
 
@@ -33,11 +33,16 @@ BASE_FIELDS={'id':'id',
 			'client':'client',
 			}
 			
-SEARCH_TERMS={'num_armoire':'num_armoire__icontains',
+SEARCH_TERMS_PROJETS={'num_armoire':'num_armoire__icontains',
 			'nom':'client__nom__icontains',
 			'forfait':'forfait_id',
 			}
 			
+SEARCH_TERMS_CLIENTS={'nom':'nom__icontains',
+					'ville':'ville__icontains',
+					'type_projet':'type_projet_id'
+					}
+					
 SCRIPTS=['common','node_modules/fullcalendar/main.min','index']
 STYLES=['js/node_modules/chart.js/dist/Chart.min.css',
 		'js/node_modules/fullcalendar/main.min.css','scss/styles.css']
@@ -55,8 +60,12 @@ def projet_compose_liste(p):
 	echanges=Echange.objects.filter(contact__client_id=client.id,date__gt=date.today()).order_by('-date')
 	prestations=Prestation.objects.filter(projet=p.id,statut__statut__in=['en attente','en cours'])
 	projet['taches']=[t.nom for t in taches]
-	projet['debut_forfait']=str(forfait.date_commande)
-	projet['categorie_forfait']=forfait.categorie_forfait.categorie_forfait
+	try:
+		projet['debut_forfait']=str(forfait.date_commande)
+		projet['categorie_forfait']=forfait.categorie_forfait.categorie_forfait
+	except Exception as error:
+		projet['debut_forfait']=""
+		projet['categorie_forfait']=""
 	projet['echanges']=[str(e.date)+":"+str(e.contact.nom) for e in echanges]
 	projet['prestations']=[str(pres.type_prestation)+":"+str(pres.statut.statut) for pres in prestations]
 	return projet
@@ -65,8 +74,8 @@ def projet_compose_liste(p):
 def projet_compose_details(id):
 	instance_projet=Projet.objects.get(pk=id)
 	projet={"id":instance_projet.id,
-			"client":instance_projet.client.nom,
-			"type_projet":str(instance_projet.type_projet),
+			"client":{"id":instance_projet.client.id,"nom":instance_projet.client.nom},
+			"type_projet":{"id":instance_projet.type_projet.id,"type_projet":str(instance_projet.type_projet)},
 			"num_armoire":instance_projet.num_armoire
 			}
 
@@ -106,6 +115,20 @@ def projet_compose_details(id):
 	projet['eventsce']=json.dumps(echanges_events)
 
 	return projet
+	
+def client_compose_liste(c):
+	client={'id':c.id,
+			'nom':c.nom,
+			'adresse1':c.adresse1,
+			'adresse2':c.adresse2,
+			'code_postal':c.code_postal,
+			'ville':c.ville
+			}
+	projets=Projet.objects.filter(client=c.id).values('type_projet__type_projet','id').order_by('type_projet')
+	contacts=Contact.objects.filter(client=c.id).values('nom','prenom','id').order_by('nom','prenom')
+	client['projets']=projets
+	client['contacts']=contacts
+	return client
 	
 """/*************************
    * View dashboard
@@ -148,27 +171,40 @@ def projets(request):
 	request.session['actions']=[]
 
 			
-	projets=Projet.objects.all()
-	pagination=Pager(projets,"projects").paginate()
+	projets=__order_by(Projet.objects.all(),request.session['sort'])
+	pagination=Pager(projets,"projets").paginate()
 	
 	Dprojets=[projet_compose_liste(p) for p in pagination[0]]
 
-	datas={'partial':'dashboard/liste.html',
-			'liste':Dprojets,
+	datas={'partial':'dashboard/liste_projets.html',
+			'projets':Dprojets,
 			'total_elts':pagination[2],
 			'pagination':pagination[1],
 			'scripts':SCRIPTS,
 			'styles':STYLES,}
 	return render(request,"index.html",datas)
 	
-def details(request,id):
+def details_projet(request,id):
 	projet=projet_compose_details(id)
-	datas={'partial':'dashboard/details.html',
+	datas={'partial':'dashboard/details_projet.html',
 			'projet':projet,
 			'styles':STYLES,
 			'scripts':SCRIPTS,}
 	return render(request,"index.html",datas)
-	
+
+def clients(request):
+	clients=Client.objects.all().order_by('nom')
+	pagination=Pager(clients,"clients").paginate()
+	Dclients=[client_compose_liste(c) for c in pagination[0]]
+	datas={'partial':'dashboard/liste_clients.html',
+			'clients':Dclients,
+			'scripts':SCRIPTS,
+			'pagination':pagination[1],
+			'total_elts':pagination[2],
+			'styles':STYLES,
+	}
+	return render(request,'index.html',datas)
+		
 def details_client(request,id):
 	client=Client.objects.get(pk=id)
 	contacts=Contact.objects.filter(client=id).order_by('nom')
@@ -183,12 +219,11 @@ def details_client(request,id):
 			}
 	return render(request,"index.html",datas)
 	
-def clients(request):
-	pass
+
 	
 def currents(request):
-	events_tasks = [{"id":t.id,"resourceId":t.client.id,"resourceTitle":t.client.nom,"title":t.nom,"color":"green","start":str(t.date_programmee),"end":str(t.date_realisation),"statut":t.statut.color,"description":t.description} for t in Tache.objects.filter(statut__statut__in=['en attente','en cours'],date_programmee__isnull=False)]
-	events_prestations = [{"id":p.id,"resourceId":p.client.id,"resourceTitle":p.client.nom,"title":str(p.type_prestation),"color":"pink","start":str(p.date_programmee),"end":str(p.date_realisation),"statut":p.statut.color,"description":p.notes} for p in Prestation.objects.filter(statut__statut__in=['en attente','en cours'],date_programmee__isnull=False)]
+	events_tasks = [{"id":t.id,"resourceId":t.projet.client.id,"resourceTitle":t.projet.client.nom,"title":t.nom,"color":"green","start":str(t.date_programmee),"end":str(t.date_realisation),"statut":t.statut.color,"description":t.description} for t in Tache.objects.filter(statut__statut__in=['en attente','en cours'],date_programmee__isnull=False)]
+	events_prestations = [{"id":p.id,"resourceId":p.projet.client.id,"resourceTitle":p.projet.client.nom,"title":str(p.type_prestation),"color":"pink","start":str(p.date_programmee),"end":str(p.date_realisation),"statut":p.statut.color,"description":p.notes} for p in Prestation.objects.filter(statut__statut__in=['en attente','en cours'],date_programmee__isnull=False)]
 	events_echanges = [{"id":e.id,"resourceId":e.contact.client.id,"resourceTitle":e.contact.client.nom,"title":str(e.type_echange),"color":"blue","start":str(e.date),"end":None,"statut":e.statut.color,"description":e.notes} for e in Echange.objects.filter(statut__statut__in=['en attente','en cours'],date__isnull=False)]
 	events=events_tasks+events_prestations+events_echanges
 	tab_check_client=[]
@@ -270,7 +305,7 @@ def __order_by(liste,sort):
 	* @role            utilisateur
 	/************************/"""
 
-def page(request):
+def projets_page(request):
 
 	if request.POST:
 
@@ -284,16 +319,16 @@ def page(request):
 			items=Projet.objects.all()
 
 		num_page=int(request.POST['num_page'])
-		pager=Pager(items,'projects',num_page=num_page,nb_items_page=request.session['nb_items']).paginate()
+		pager=Pager(items,'projets',num_page=num_page,nb_items_page=request.session['nb_items']).paginate()
 
-		reponse=json.dumps({'liste':[projet_compose_liste(p) for p in pager[0]],
+		reponse=json.dumps({'projets':[projet_compose_liste(p) for p in pager[0]],
 							'pagination': pager[1],
 							'total_elts':pager[2],
 							})
 
 		return HttpResponse(reponse)
 
-def nb(request):
+def projets_nb(request):
 	r=request.POST.copy()
 	request.session['nb_items']=int(r['nb'])
 	try:
@@ -304,23 +339,23 @@ def nb(request):
 	except Exception as error:
 		print(error)
 		items=Projet.objects.all()
-	pager=Pager(items,'sessions',num_page=1,nb_items_page=request.session['nb_items']).paginate()
+	pager=Pager(items,'projets',num_page=1,nb_items_page=request.session['nb_items']).paginate()
 
-	return render(request,'dashboard/liste.html',{'liste':[projet_compose_liste(p) for p in pager[0]],
+	return render(request,'dashboard/liste.html',{'projets':[projet_compose_liste(p) for p in pager[0]],
 												'pagination':pager[1],
 												'total_elts':pager[2],
 												'nb':request.session['nb_items'],
 												})
-def search(request):
+def projets_search(request):
 	request.session['filtres']=[{}]
-	filtre=filter_construct(request.POST,SEARCH_TERMS)
+	filtre=filter_construct(request.POST,SEARCH_TERMS_PROJETS)
 	request.session['filtres']=filtre
 	items=Projet.objects.all()
 	filtered_items=apply_filter(items,filtre)
-	items=filtered_items.order_by('-num_armoire')
-	pager=Pager(items,'projects',nb_items_page=request.session['nb_items']).paginate()
+	items=filtered_items.order_by('-id')
+	pager=Pager(items,'projets',nb_items_page=request.session['nb_items']).paginate()
 
-	datas={'liste':[projet_compose_liste(c) for c in pager[0]],
+	datas={'projets':[projet_compose_liste(c) for c in pager[0]],
 			'pagination':pager[1],
 			'total_elts':pager[2],}
 	return HttpResponse(json.dumps(datas))
@@ -333,7 +368,7 @@ def search(request):
 	* @role            utilisateur
 	/************************/"""
 
-def sort(request):
+def projets_sort(request):
 	r=request.POST.copy()
 	request.session['sort']={'field':BASE_FIELDS[r['field']],'sens':r['sens']}
 	try:
@@ -344,20 +379,132 @@ def sort(request):
 	except Exception as error:
 		print(error)
 		items=Projet.objects.all()
-	pager=Pager(items,'sessions',num_page=1,nb_items_page=request.session['nb_items']).paginate()
-	reponse=json.dumps({'liste':__parse_items_json(pager[0]),
+	pager=Pager(items,'projets',num_page=1,nb_items_page=request.session['nb_items']).paginate()
+	reponse=json.dumps({'projets':__parse_items_json(pager[0]),
 						'indices':__liste_indices(),
 						'pagination': pager[1],
 						'total_elts':pager[2],
 						})
 	return HttpResponse(reponse)
 	
+def clients_page(request):
+	if request.POST:
+
+		try:
+			filtre=request.session['filtres']
+			items=Client.objects.all()
+			filtered_items=apply_filter(items,filtre)
+			items=__order_by(filtered_items,request.session['sort'])
+		except Exception as error:
+			print(error)
+			items=Client.objects.all()
+
+		num_page=int(request.POST['num_page'])
+		pager=Pager(items,'clients',num_page=num_page,nb_items_page=request.session['nb_items']).paginate()
+
+		reponse=json.dumps({'liste':[client_compose_liste(p) for p in pager[0]],
+							'pagination': pager[1],
+							'total_elts':pager[2],
+							})
+
+		return HttpResponse(reponse)
+
+def clients_nb(request):	
+	pass
+	
+def clients_search(request):
+	request.session['filtres']=[{}]
+	filtre=filter_construct(request.POST,SEARCH_TERMS_CLIENTS)
+	request.session['filtres']=filtre
+	items=Client.objects.all()
+	filtered_items=apply_filter(items,filtre)
+	items=filtered_items.order_by('-id')
+	pager=Pager(items,'clients',nb_items_page=request.session['nb_items']).paginate()
+
+	datas={'clients':[client_compose_liste(c) for c in pager[0]],
+			'pagination':pager[1],
+			'total_elts':pager[2],}
+	return HttpResponse(json.dumps(datas))
+	
+def clients_sort(request):
+	pass
+
+def create_model_mask(objet):
+	if objet=='contact':
+		mask = {'model':Contact,'form':ContactForm,'fields':[{'field':'client',
+															'model':Client
+															},
+															{'field':'type_projet',
+															'model':TypeProjet
+															}]}
+	elif objet=='echange':
+		mask = {'model':Echange,'form':EchangeForm,'fields':[{'field':'projet',
+															'model':Projet
+															}]}
+	elif objet=='prestation':
+		mask = {'model':Prestation,'form':PrestationForm,'fields':[{'field':'projet',
+																	'model':Projet
+																	}]}
+	elif objet=='tache':
+		mask = {'model':Tache,'form':TacheForm,'fields':[{'field':'projet',
+														'model':Projet
+														}]}
+	else:
+		mask = {}
+	return mask
+	
 def add(request):
-	form=ContactForm()
-	return render(request,'dashboard/forms/form.html',{'form':form.as_table()})
+	
+	r=request.POST.copy()
+	mask=create_model_mask(r['objet'])
+	args={}
+	print(r['projet'])
+	for f in mask['fields']:
+		if r[f['field']] != '':
+			args[f['field']]=f['model'].objects.get(pk=r[f['field']])
+	new_instance=mask['model'](**args)
+	form=mask['form'](instance=new_instance)
+	if r['objet']== 'echange':
+		projet=Projet.objects.get(pk=r['projet'])
+		queryset=Contact.objects.filter(client=projet.client.id,type_projet=projet.type_projet.id).order_by('nom')
+		form.fields['contact'].queryset=queryset
+	try:
+		value=r['client']
+	except Exception:
+		value=''
+		
+	datas={"id":"",
+			"id_projet":r['projet'],
+			"id_client":value,
+			"objet":r['objet'],
+			"form":form.as_p()
+			}
+	return render(request,'dashboard/forms/form.html',datas)
 	
 def edit(request):
-	pass
+	r=request.POST.copy()
+	mask=create_model_mask(r['objet'])
+	instance=mask['model'].objects.get(pk=r['id'])
+	form=mask['form'](instance=instance)
+	datas={"id":r['id'],
+			"id_projet":r['projet'],
+			"id_client":r['client'],
+			"objet":r['objet'],
+			"form":form.as_p()
+			}
+	return render(request,'dashboard/forms/form.html',datas)
 	
 def save(request):
-	pass
+	r=request.POST.copy()
+	mask=create_model_mask(r['objet'])
+	if r['id'] != '':
+		instance=mask['model'].objects.get(pk=r['id'])
+		form=mask['form'](r,instance)
+	else:
+		form=mask['form'](r)
+	if form.is_valid:
+		form.save()
+		return HttpResponseRedirect('/project/'+r['projet']+'/')
+	else:
+		return render(request,'dashboard/forms/form.html',{'form':form.as_p()})
+	

@@ -27,13 +27,7 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=3
-FILE_NAME_0=2827;Python;0;EUTF-8;1;1;0;%2Fhome%2Ftomsolete%2Fdocker%2Fdjango%2Fapp%2Fsuiviprojets%2Fsuiviprojets%2Fsettings.py;0;4
-FILE_NAME_1=2621;Python;0;EUTF-8;1;1;0;%2Fhome%2Ftomsolete%2Fdocker%2Fdjango%2Fapp%2Fsuiviprojets%2Fsuiviprojets%2Fdashboard%2Fmodels.py;0;4
-FILE_NAME_2=3179;Python;0;EUTF-8;1;1;0;%2Fhome%2Ftomsolete%2Fdocker%2Fdjango%2Fapp%2Fsuiviprojets%2Fsuiviprojets%2Fdashboard%2Fviews.py;0;4
-FILE_NAME_3=328;Javascript;0;EUTF-8;1;1;0;%2Fhome%2Ftomsolete%2Fdocker%2Fdjango%2Fapp%2Fsuiviprojets%2Fsuiviprojets%2Fstatic%2Fjs%2Findex.js;0;4
-FILE_NAME_4=0;HTML;0;EUTF-8;1;1;0;%2Fhome%2Ftomsolete%2Fdocker%2Fdjango%2Fapp%2Fsuiviprojets%2Fsuiviprojets%2Ftemplates%2Fdashboard%2Fdetails.html;0;4
-FILE_NAME_5=0;CSS;0;EUTF-8;1;1;0;%2Fhome%2Ftomsolete%2Fdocker%2Fdjango%2Fapp%2Fsuiviprojets%2Fsuiviprojets%2Fstatic%2Fscss%2Fmain.scss;0;4
+current_page=0
 
 [VTE]
 last_dir=/home/tomsolete

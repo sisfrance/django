@@ -72,7 +72,7 @@ class Forfait(models.Model):
     projet= models.ForeignKey(Projet,on_delete=models.SET_NULL,null=True,blank=True)
     categorie_forfait= models.ForeignKey(CategorieForfait,on_delete=models.SET_NULL,null=True,blank=True)
     def __str__(self):
-        return self.client.nom+"-"+self.categorie_forfait.categorie_forfait
+        return self.projet.client.nom+"-"+self.categorie_forfait.categorie_forfait
               
 
 
@@ -116,7 +116,7 @@ class Prestation(models.Model):
     notes=models.TextField(null=True,blank=True)
     
     def __str__(self):
-        return self.client.nom+"-"+self.type_prestation.type_prestation
+        return self.projet.client.nom+"-"+self.type_prestation.type_prestation
 
 class Tache(models.Model):
     id=models.AutoField(primary_key=True)
@@ -131,7 +131,7 @@ class Tache(models.Model):
     personnes_en_charge=models.ManyToManyField(Intervenant,null=True,blank=True)
     
     def __str__(self):
-        return self.nom+"-"+self.client.nom
+        return self.nom+"-"+self.projet.client.nom
 
 class Contact(models.Model):
     id=models.AutoField(primary_key=True)
@@ -144,7 +144,7 @@ class Contact(models.Model):
     notes=models.CharField(max_length=255,null=True,blank=True)
     
     def __str__(self):
-        return self.nom+" "+self.prenom
+        return str(self.nom)+" "+str(self.prenom)
 
 class TypeEchange(models.Model):
     id=models.AutoField(primary_key=True)
@@ -165,4 +165,4 @@ class Echange(models.Model):
     notes=models.TextField()
     
     def __str__(self):
-        return self.type_echange.type_echange+"-"+self.contact.nom+"-"+self.contact.prenom
+        return self.type_echange.type_echange+"-"+str(self.contact.nom)+"-"+str(self.contact.prenom)

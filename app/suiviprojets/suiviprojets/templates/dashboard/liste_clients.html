@@ -1,0 +1,92 @@
+{% include 'filtre_clients.html' %}
+{% autoescape off %}
+<div id="list-header" class="row">
+    <div id="total-items" class="col-4 top-info">
+            <span id="nb-elts">
+                {{total_elts}}
+            </span>
+            <span>
+                &eacute;l&eacute;ments trouv&eacute;s
+            </span>
+
+    </div>
+    <div id="paginator-over" class="paginator col-4">{{ pagination }}</div>
+    <div id="empty-col" class="col-4">
+        <span id="nb-elts-select" class="top-info">
+                <select id="nb-elts-pages" name="nb_elts_pages">
+                    <option value="10" {% if nb == 10 %} selected {% endif %}>10</option>
+                    <option value="25" {% if nb == 25 %} selected {% endif %}>25</option>
+                    <option value="50" {% if nb == 50 %} selected {% endif %}>50</option>
+                    <option value="100" {% if nb == 100 %} selected {% endif %}>100</option>
+                </select>
+            &eacute;l&eacute;ments par page
+            </span>
+    </div>
+</div>
+{% endautoescape %}
+<input type="hidden" id="objet" name="objet" value="client"/>
+{% if clients %}
+<div class="row">
+    <div class="col-12">
+<table id="tableau-items" class="table table-striped">
+    <thead class="table-header thead-light">
+    <tr>
+        <th>
+            <div class="header-elt">Id</div>
+            <div data-field="id" data-sens="asc" class="sortarrow sort asc"></span>
+        </th>
+        <th>
+            <div class="header-elt">Nom</div>
+            <div data-field="nom" data-sens="asc" class="sortarrow sort asc"></div>
+        </th>
+        <th>
+            <div class="header-elt">Ville</div>
+            <div data-field="ville" data-sens="asc" class="sortarrow sort asc"></div>
+        </th>
+        <th>
+            <div class="header-elt ">Projets</div>
+        </th>
+        <th>
+            <div class="header-elt">Contacts</div>
+        </th>
+        <th>
+            <div class="header-elt">D&eacute;tails</div>
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for c in clients %}
+    <tr id="line-{{c.id}}" data-id="{{c.id}}" class="line {% cycle  'odd' 'even' %} projet">
+        <td class="cell id" >{{c.id}}</td>
+        <td class="cell nom">{{c.nom}}</td>
+        <td class="cell ville" >{{c.ville}}</td>
+        <td class="cell projets">
+			{% for p in c.projets %}
+				<a href="/projet/{{p.id}}/">{{p.type_projet__type_projet}}</a>
+				{% if c.projets|length > 1 %}
+					<span>,</span>
+				{% endif %}
+			{% endfor %}
+		</td>
+        <td class="cell contacts">
+			{% for con in c.contacts %}
+				<span>{{con.nom}}&nbsp;{{con.prenom}}</span>
+				{% if c.contacts|length > 1 %}
+					<span>,</span>
+				{% endif %}
+			{% endfor %}
+        </td>
+        
+        <td class="cell details"><a href="/client/{{c.id}}/">Voir</a></td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+</div>
+{% autoescape off %}
+    <div id="paginator-under" class="paginator text-center" >{{ pagination }}</div>
+{% endautoescape %}
+{% else %}
+<p id="message-liste">Aucun(e) item n'a pour le moment &eacute;t&eacute; trouv&eacute;.</p>
+{% endif %}

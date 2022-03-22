@@ -1,7 +1,7 @@
 $(function () {
 	
-	/*****
- * CREE LA FENETRE DETAILS Ingredients et Etapes
+/*****
+ * CREE LA FENETRE DETAILS DE FORMULAIRE
  * ***/
 
 

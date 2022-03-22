@@ -25,7 +25,7 @@
 					<h3>Contacts : </h3>
 				</div>
 				<div class="col-4 text-right">
-					<a id="add-contact" data-objet="contact" class="btn btn-secondary" href='/admin/dashboard/contact/add/'>Ajouter contact</a>
+					<a id="add-contact" data-client="{{projet.client.id}}" data-type_projet="{{projet.type_projet.id}}" data-projet="{{projet.id}}" data-objet="contact" class="btn btn-secondary" href='/admin/dashboard/contact/add/'>Ajouter contact</a>
 				</div>
 			</div>
 			<div class="row">
@@ -59,7 +59,7 @@
 					<h3>Echanges : </h3>
 				</div>
 				<div class="col-4 text-right">
-					<a id="add-echange" data-objet="echange" class="btn btn-secondary" href='/admin/dashboard/echange/add/'>Ajouter échange</a>
+					<a id="add-echange" data-projet="{{projet.id}}" data-objet="echange" class="btn btn-secondary" href='/admin/dashboard/echange/add/'>Ajouter échange</a>
 				</div>
 			</div>
 			<div class="row">
@@ -93,7 +93,7 @@
 					<h3>Prestations & D&eacute;veloppements Sp&eacute;cifiques :</h3>
 				</div>
 				<div class="col-4 text-right">
-					<a class="btn btn-secondary" href='/admin/dashboard/prestation/add/'>Ajouter prestation</a>
+					<a id="add-prestation" class="btn btn-secondary" data-projet="{{projet.id}}" data-objet="prestation" href='/admin/dashboard/prestation/add/'>Ajouter prestation</a>
 				</div>
 			</div>
 			<div id="prestations">
@@ -129,7 +129,7 @@
 				</div>
 				<!--<div class="col-1"></div>-->
 				<div class="col-3 text-right">
-					<a class="btn btn-secondary" href='/admin/dashboard/tache/add/'>Ajouter tâche</a>
+					<a id="add-tache" class="btn btn-secondary" data-projet="{{projet.id}}" data-objet="tache" href='/admin/dashboard/tache/add/'>Ajouter tâche</a>
 				</div>
 			</div>
 			<div id="taches">

@@ -1,4 +1,5 @@
-{% include 'filtre.html' %}
+{% include 'filtre_projets.html' %}
+<input type="hidden" id="objet" name="objet" value="projet"/>
 {% autoescape off %}
 <div id="list-header" class="row">
     <div id="total-items" class="col-4 top-info">
@@ -24,7 +25,7 @@
     </div>
 </div>
 {% endautoescape %}
-{% if liste %}
+{% if projets %}
 <div class="row">
     <div class="col-12">
 <table id="tableau-items" class="table table-striped">
@@ -71,10 +72,10 @@
     </tr>
     </thead>
     <tbody>
-    {% for p in liste %}
+    {% for p in projets %}
     <tr id="line-{{p.id}}" data-id="{{p.id}}" class="line {% cycle  'odd' 'even' %} projet">
         <td class="cell id" >{{p.id}}</td>
-        <td class="cell client" ><a href="/client/{{p.client.id}}">{{p.client.nom}}</a></td>
+        <td class="cell client"><a href="/client/{{p.client.id}}">{{p.client.nom}}</a></td>
         <td class="cell type_projet" >{{p.type_projet}}</td>
         <td class="cell num_armoire">{{p.num_armoire}}</td>
         <td class="cell debut_forfait">{{p.debut_forfait}}</td>
@@ -94,7 +95,7 @@
                 <p>{{pres}}</p>
             {% endfor %}
         </td>
-        <td class="cell details"><a href="/details/{{p.id}}/">Voir</a></td>
+        <td class="cell details"><a href="/project/{{p.id}}/">Voir</a></td>
     </tr>
     {% endfor %}
     </tbody>

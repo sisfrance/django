@@ -81,19 +81,28 @@ $(function(){
 						console.log(error);
 				}
 			};
-	var __filldatas=function(cible,result,options){
+	var __filldatas=function(cible,objet,result,options){
 
 		  var lines=$(cible);
 		  var nbeltsppage=parseInt($("#nb-elts-pages").val());
 		  var nb_lignes_vides=nbeltsppage-result.length;
+
 		  $.each(result,function(index,data){
+			  
 			  $(lines[index]).attr({"id":"line-"+data['id'],"data-id":data["id"]});
 			  if($(lines[index]).find(".details>a").length==0){
-				   $(lines[index]).find(".details").empty().append("<a href='/details/"+data["id"]+"/'>Voir</a>"); 
+				   $(lines[index]).find(".details").empty().html("<a href='/details/"+data["id"]+"/'>Voir</a>"); 
+			  //}else if($(lines[index]).find(".client>a").length==0){
+				  
+					$(lines[index]).find(".client").attr({"data_id":data["id"]});
+					$(lines[index]).find(".client").empty().html("<a href='/client/"+data['client']['id']+"/'>"+data['client']['nom']+"</a>");
 			  }else{
-				   $(lines[index]).find(".details>a").attr({"href":"/details/"+data["id"]+"/"});
+				  console.log("3");
+				  $(lines[index]).find(".details>a").attr({"href":"/details/"+data["id"]+"/"});
+				  $(lines[index]).find(".client>a").attr({"href":"/client/"+data['client']['id']+"/"})
+				  $(lines[index]).find(".client>a").empty().html(data['client']['nom']);
 		      }
-			  
+		      delete data.client
 			  for(field in data){
 				__fillfield($(lines[index]).find("."+field),data[field],data['id'],field+"-"+data['id'],options);
 			 }
@@ -115,14 +124,16 @@ $(function(){
          var link=$(target).find('a');
          var num_page=$(link).attr('data-page');
          var csrf_token=$("input[name=csrfmiddlewaretoken]").val();
-         $.post('/projects/page/',
+         var objet=$(target).find("#objet").val();
+         console.log(objet);
+         $.post('/'+objet+'s/page/',
                {'csrfmiddlewaretoken':csrf_token,
                 'num_page':num_page})
                .done(function(resp){
                  var json=JSON.parse(resp);
-                 console.log(json);
+                 /*!console.log(json);*/
                   /*! fill the different fields */
-                  __filldatas(".line",json.liste,json.indices);
+                  __filldatas(".line",objet,json.liste,json.indices);
                   /*! fill pagination area */
                   $('.paginator').empty().html(json.pagination);
                   $('#nb-elts').empty().html(json.total_elts);
@@ -148,6 +159,7 @@ $(function(){
 	*****/
 	$("#search").on("click",function(event){
 		event.preventDefault();
+		var objet=$("#objet").val();
 		var datas={'csrfmiddlewaretoken':$("input[name='csrfmiddlewaretoken']").val(),
 					'num_armoire':$("#num_armoire").val(),
 					'nom':$("#nom").val(),
@@ -157,7 +169,7 @@ $(function(){
 			 var json=JSON.parse(response);
 			/*__filldatas(".line",json.liste,json.indices);*/
 			  /*! fill pagination area */
-			__filldatas(".line",json.liste,json.indices);
+			__filldatas(".line",objet,json.liste,json.indices);
 			$('#nb-elts').html(json.total_elts);
 			$('.paginator').html(json.pagination);
 			$(".page-item").on('click',function(event){event.preventDefault();event.stopPropagation();click(this);});
@@ -172,13 +184,14 @@ $(function(){
         var elt=this;
         var sens=$(elt).attr("data-sens");
         var csrf_token=$("input[name=csrfmiddlewaretoken]").val();
+        var objet=$("#objet").val();
         params={'csrfmiddlewaretoken':csrf_token,
                 'field':$(this).attr('data-field'),
                 'sens':sens,
                 };
        $.post("/projects/sort/",params,function(response){
                         var json=JSON.parse(response);
-                        __filldatas(".line",json.liste,json.indices);
+                        __filldatas(".line",objet,json.liste,json.indices);
                          $('.paginator').html(json.pagination);
                          $(".lien-page").on('click',function(event){event.preventDefault();click(this,event);});
                          /* on reinitialise les valeurs de sens des fleches */
@@ -227,9 +240,10 @@ $(function(){
 		event.stopPropagation();
 		var datas={
 			csrfmiddlewaretoken:$("input[name=csrfmiddlewaretoken]").val(),
-			objet     :$(event.target).attr("data-objet"),
-			projet    :$(event.target).attr("data-projet"),
-			client    :$(event.target).attr("data-client")
+			objet      :$(event.target).attr("data-objet"),
+			type_projet:$(event.target).attr("data-type_projet"),
+			projet     :$(event.target).attr("data-projet"),
+			client     :$(event.target).attr("data-client")
 		};
 		$.post("/add/",datas).done(function(response){
 			popup.show(response);
@@ -237,7 +251,11 @@ $(function(){
 		});
 		 
 	 });
-     
+	 $("#submit").on("click",function(event){
+		event.preventDefault();
+		event.stopPropagation();
+		 
+		})  
      /*****
       * 4-Calendrier
       * ***/
