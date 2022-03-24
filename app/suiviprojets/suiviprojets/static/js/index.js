@@ -3,7 +3,7 @@
 $(function(){
 	
 	
-	/*****
+/*****
  * CREE LA FENETRE DETAILS Ingredients et Etapes
  * ***/
 
@@ -78,31 +78,39 @@ $(function(){
 					}
 				}
 				catch(error){
-						console.log(error);
+					return false;
+					/*console.log(error);*/
 				}
 			};
 	var __filldatas=function(cible,objet,result,options){
 
 		  var lines=$(cible);
 		  var nbeltsppage=parseInt($("#nb-elts-pages").val());
-		  var nb_lignes_vides=nbeltsppage-result.length;
+		  var nb_lignes_vides=nbeltsppage - result.length;
 
 		  $.each(result,function(index,data){
 			  
 			  $(lines[index]).attr({"id":"line-"+data['id'],"data-id":data["id"]});
 			  if($(lines[index]).find(".details>a").length==0){
-				   $(lines[index]).find(".details").empty().html("<a href='/details/"+data["id"]+"/'>Voir</a>"); 
+				   $(lines[index]).find(".details").empty().html("<a href='/"+objet+"/"+data["id"]+"/'>Voir</a>"); 
 			  //}else if($(lines[index]).find(".client>a").length==0){
-				  
+				  if(objet == 'projet'){
 					$(lines[index]).find(".client").attr({"data_id":data["id"]});
 					$(lines[index]).find(".client").empty().html("<a href='/client/"+data['client']['id']+"/'>"+data['client']['nom']+"</a>");
+				 }
 			  }else{
-				  console.log("3");
-				  $(lines[index]).find(".details>a").attr({"href":"/details/"+data["id"]+"/"});
-				  $(lines[index]).find(".client>a").attr({"href":"/client/"+data['client']['id']+"/"})
-				  $(lines[index]).find(".client>a").empty().html(data['client']['nom']);
+				  $(lines[index]).find(".details>a").attr({"href":"/"+objet+"/"+data["id"]+"/"});
+				  if( objet == 'projet'){
+					$(lines[index]).find(".client>a").attr({"href":"/client/"+data['client']['id']+"/"})
+					$(lines[index]).find(".client>a").empty().html(data['client']['nom']);
+				  }
 		      }
-		      delete data.client
+		      try{
+				delete data.client;
+			  }
+			  catch(error){
+				console.log(error.err);  
+			  }
 			  for(field in data){
 				__fillfield($(lines[index]).find("."+field),data[field],data['id'],field+"-"+data['id'],options);
 			 }
@@ -124,8 +132,7 @@ $(function(){
          var link=$(target).find('a');
          var num_page=$(link).attr('data-page');
          var csrf_token=$("input[name=csrfmiddlewaretoken]").val();
-         var objet=$(target).find("#objet").val();
-         console.log(objet);
+         var objet=$("#objet").val();
          $.post('/'+objet+'s/page/',
                {'csrfmiddlewaretoken':csrf_token,
                 'num_page':num_page})
@@ -157,15 +164,26 @@ $(function(){
 	*   2. AJAX gestion de la liste
 	*
 	*****/
-	$("#search").on("click",function(event){
-		event.preventDefault();
+	var search=function(target){
 		var objet=$("#objet").val();
-		var datas={'csrfmiddlewaretoken':$("input[name='csrfmiddlewaretoken']").val(),
-					'num_armoire':$("#num_armoire").val(),
-					'nom':$("#nom").val(),
-					'forfait':$("#forfait").val()
-				};
-		$.post('/search/',datas,function(response){
+		var datas={'csrfmiddlewaretoken':$("input[name='csrfmiddlewaretoken']").val()};
+		switch(objet){
+				case 'projet':
+					datas['num_armoire']=$("#num_armoire").val();
+					datas['nom']=$("#nom").val();
+					datas['forfait']=$("#forfait").val();
+					break;
+				case 'client':
+					datas['nom']=$("#nom").val();
+					datas['ville']=$("#ville").val();
+					break;
+				default:
+					return false;
+			
+			
+		}
+		
+		$.post('/'+objet+'s/search/',datas,function(response){
 			 var json=JSON.parse(response);
 			/*__filldatas(".line",json.liste,json.indices);*/
 			  /*! fill pagination area */
@@ -175,54 +193,63 @@ $(function(){
 			$(".page-item").on('click',function(event){event.preventDefault();event.stopPropagation();click(this);});
 
 		});
-		
+	}// end of search
+	var sort=function(target){
+	        var elt=target;
+	        var sens=$(elt).attr("data-sens");
+	        var csrf_token=$("input[name=csrfmiddlewaretoken]").val();
+	        var objet=$("#objet").val();
+	        params={'csrfmiddlewaretoken':csrf_token,
+	                'field':$(target).attr('data-field'),
+	                'sens':sens,
+	                };
+	       $.post("/"+objet+"s/sort/",params,function(response){
+	                        var json=JSON.parse(response);
+	                        __filldatas(".line",objet,json.liste,json.indices);
+	                         $('.paginator').html(json.pagination);
+	                         /*$(".lien-page").on('click',function(event){event.preventDefault();click(this,event);});*/
+	                         $(".page-item").on('click',function(event){event.preventDefault();event.stopPropagation();click(this);});
+	                         /* on reinitialise les valeurs de sens des fleches */
+	                         $(".sort[data-sens='desc']").removeClass("desc");
+	                         $(".sort[data-sens='desc']").addClass("asc");
+	                         /* on change la valeur du sens dans le data-sens */
+	                         $(elt).attr({"data-sens":(sens == "asc")?"desc":"asc"});
+	                         $(elt).addClass((sens == "asc")?"desc":"asc");
+	                         $(elt).removeClass(sens);
+	
+	
+	        });
+	}//end of sort
+	$("#search").on("click",function(event){
+		event.preventDefault();
+		event.stopPropagation();
+		search(this);	
 	});
 	
     $(".sort").on('click',function(event){
-        event.preventDefault();
-        event.stopPropagation();
-        var elt=this;
-        var sens=$(elt).attr("data-sens");
-        var csrf_token=$("input[name=csrfmiddlewaretoken]").val();
-        var objet=$("#objet").val();
-        params={'csrfmiddlewaretoken':csrf_token,
-                'field':$(this).attr('data-field'),
-                'sens':sens,
-                };
-       $.post("/projects/sort/",params,function(response){
-                        var json=JSON.parse(response);
-                        __filldatas(".line",objet,json.liste,json.indices);
-                         $('.paginator').html(json.pagination);
-                         $(".lien-page").on('click',function(event){event.preventDefault();click(this,event);});
-                         /* on reinitialise les valeurs de sens des fleches */
-                         $(".sort[data-sens='desc']").removeClass("desc");
-                         $(".sort[data-sens='desc']").addClass("asc");
-                         /* on change la valeur du sens dans le data-sens */
-                         $(elt).attr({"data-sens":(sens == "asc")?"desc":"asc"});
-                         $(elt).addClass((sens == "asc")?"desc":"asc");
-                         $(elt).removeClass(sens);
-
-
-        });
-
-
+		event.preventDefault();
+		event.stopPropagation();
+        sort(this);
     });
     
     var change=function(target){
 			        var nb=$(target).val();
+			        var objet=$("#objet").val();
+			        var csrf_token=$("input[name=csrfmiddlewaretoken]").val();
 			        var params={'csrfmiddlewaretoken':csrf_token,
 			                    'nb':nb};
-			        $.post('/projects/nb/',params,function(response){
+			        $.post('/'+objet+'s/nb/',params,function(response){
 			                    $("#liste-items").empty().html(response);
 			                    $(".page-item").on('click',function(event){event.preventDefault();click(this);});
 			                    $("#nb-elts-pages").val(nb);
 			                    $("#nb-elts-pages").on('change',function(event){event.preventDefault();change(this);});
+			                    $("#search").on("click",function(event){event.preventDefault();search(this);});
+								$(".sort").on('click',function(event){event.preventDefault();sort(this);});
 			        });
 
 
     };
     $("#nb-elts-pages").on("change",function(event){
-						console.log("marche");
                         event.preventDefault();
                         event.stopPropagation();
                         change(this);

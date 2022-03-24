@@ -11,7 +11,7 @@
             </span>
 
     </div>
-    <div id="paginator-over" class="paginator col-4">{{ pagination }}</div>
+    <div id="paginator-over" class="paginator col-4 text-center">{{ pagination }}</div>
     <div id="empty-col" class="col-4">
         <span id="nb-elts-select" class="top-info">
                 <select id="nb-elts-pages" name="nb_elts_pages">
@@ -95,7 +95,7 @@
                 <p>{{pres}}</p>
             {% endfor %}
         </td>
-        <td class="cell details"><a href="/project/{{p.id}}/">Voir</a></td>
+        <td class="cell details edit"><a href="/projet/{{p.id}}/">Voir</a></td>
     </tr>
     {% endfor %}
     </tbody>
@@ -103,7 +103,11 @@
 </div>
 </div>
 {% autoescape off %}
-    <div id="paginator-under" class="paginator text-center" >{{ pagination }}</div>
+   <div id="list-under" class="row">
+	<div class="col-4"></div>
+    <div id="paginator-under" class="paginator col-4 text-center" >{{ pagination }}</div>
+    <div class="col-4"></div>
+</div>
 {% endautoescape %}
 {% else %}
 <p id="message-liste">Aucun(e) item n'a pour le moment &eacute;t&eacute; trouv&eacute;.</p>

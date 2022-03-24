@@ -27,10 +27,15 @@ MOIS=[{'tag':'janvier','days':31},{'tag':'février','days':29},{'tag':'mars','da
 		{'tag':'juillet','days':31},{'tag':'août','days':31},{'tag':'septembre','days':30}, \
 		{'tag':'octobre','days':31},{'tag':'novembre','days':30},{'tag':'décembre','days':31}]
 		
-BASE_FIELDS={'id':'id',
+BASE_FIELDS_PROJETS={'id':'id',
 			'num_armoire':'num_armoire',
 			'type_projet':'type_projet',
 			'client':'client',
+			}
+			
+BASE_FIELDS_CLIENTS={'id':'id',
+			'nom':'nom',
+			'ville':'ville',
 			}
 			
 SEARCH_TERMS_PROJETS={'num_armoire':'num_armoire__icontains',
@@ -40,7 +45,6 @@ SEARCH_TERMS_PROJETS={'num_armoire':'num_armoire__icontains',
 			
 SEARCH_TERMS_CLIENTS={'nom':'nom__icontains',
 					'ville':'ville__icontains',
-					'type_projet':'type_projet_id'
 					}
 					
 SCRIPTS=['common','node_modules/fullcalendar/main.min','index']
@@ -126,8 +130,10 @@ def client_compose_liste(c):
 			}
 	projets=Projet.objects.filter(client=c.id).values('type_projet__type_projet','id').order_by('type_projet')
 	contacts=Contact.objects.filter(client=c.id).values('nom','prenom','id').order_by('nom','prenom')
-	client['projets']=projets
-	client['contacts']=contacts
+	client['Dprojets']=[{"type_projet":p["type_projet__type_projet"],"id":p["id"]} for p in projets]
+	client['projets']=','.join(["<a href='/projet/"+str(p["id"])+"'>"+str(p["type_projet__type_projet"])+"</a>" for p in projets])
+	client['Dcontacts']=[{"nom":ct["nom"],"prenom":ct["prenom"],"id":ct["id"]} for ct in contacts]
+	client['contacts']=','.join(["<span>%s %s</span>" % (ct["nom"],ct["prenom"]) for ct in contacts])
 	return client
 	
 """/*************************
@@ -193,6 +199,13 @@ def details_projet(request,id):
 	return render(request,"index.html",datas)
 
 def clients(request):
+	
+	request.session['sort']={'field':'nom','sens':'desc'}
+	request.session['nb_items']=10
+	request.session['filtres']=[{}]
+	request.session['message']=""
+	request.session['actions']=[]
+	
 	clients=Client.objects.all().order_by('nom')
 	pagination=Pager(clients,"clients").paginate()
 	Dclients=[client_compose_liste(c) for c in pagination[0]]
@@ -320,8 +333,8 @@ def projets_page(request):
 
 		num_page=int(request.POST['num_page'])
 		pager=Pager(items,'projets',num_page=num_page,nb_items_page=request.session['nb_items']).paginate()
-
-		reponse=json.dumps({'projets':[projet_compose_liste(p) for p in pager[0]],
+		""" Attention envoi en json donc il faut laisser les tags liste et pagination """
+		reponse=json.dumps({'liste':[projet_compose_liste(p) for p in pager[0]],
 							'pagination': pager[1],
 							'total_elts':pager[2],
 							})
@@ -341,7 +354,7 @@ def projets_nb(request):
 		items=Projet.objects.all()
 	pager=Pager(items,'projets',num_page=1,nb_items_page=request.session['nb_items']).paginate()
 
-	return render(request,'dashboard/liste.html',{'projets':[projet_compose_liste(p) for p in pager[0]],
+	return render(request,'dashboard/liste_projets.html',{'projets':[projet_compose_liste(p) for p in pager[0]],
 												'pagination':pager[1],
 												'total_elts':pager[2],
 												'nb':request.session['nb_items'],
@@ -355,7 +368,7 @@ def projets_search(request):
 	items=filtered_items.order_by('-id')
 	pager=Pager(items,'projets',nb_items_page=request.session['nb_items']).paginate()
 
-	datas={'projets':[projet_compose_liste(c) for c in pager[0]],
+	datas={'liste':[projet_compose_liste(c) for c in pager[0]],
 			'pagination':pager[1],
 			'total_elts':pager[2],}
 	return HttpResponse(json.dumps(datas))
@@ -370,18 +383,17 @@ def projets_search(request):
 
 def projets_sort(request):
 	r=request.POST.copy()
-	request.session['sort']={'field':BASE_FIELDS[r['field']],'sens':r['sens']}
+	request.session['sort']={'field':BASE_FIELDS_PROJETS[r['field']],'sens':r['sens']}
 	try:
 		filtre=request.session['filtres']
-		items=Item.objects.all()
+		items=Projet .objects.all()
 		filtered_items=apply_filter(items,filtre)
 		items=__order_by(filtered_items,request.session['sort'])
 	except Exception as error:
 		print(error)
 		items=Projet.objects.all()
 	pager=Pager(items,'projets',num_page=1,nb_items_page=request.session['nb_items']).paginate()
-	reponse=json.dumps({'projets':__parse_items_json(pager[0]),
-						'indices':__liste_indices(),
+	reponse=json.dumps({'liste':[projet_compose_liste(p) for p in pager[0]],
 						'pagination': pager[1],
 						'total_elts':pager[2],
 						})
@@ -410,7 +422,22 @@ def clients_page(request):
 		return HttpResponse(reponse)
 
 def clients_nb(request):	
-	pass
+	r=request.POST.copy()
+	request.session['nb_items']=int(r['nb'])
+	try:
+		filtre=request.session['filtres']
+		items=Client.objects.all()
+		filtered_items=apply_filter(items,filtre)
+		items=__order_by(filtered_items,request.session['sort'])
+	except Exception as error:
+		print(error)
+		items=Client.objects.all()
+	pager=Pager(items,'clients',num_page=1,nb_items_page=request.session['nb_items']).paginate()
+	return render(request,'dashboard/liste_clients.html',{'clients':[client_compose_liste(p) for p in pager[0]],
+												'pagination':pager[1],
+												'total_elts':pager[2],
+												'nb':request.session['nb_items'],
+												})
 	
 def clients_search(request):
 	request.session['filtres']=[{}]
@@ -421,13 +448,28 @@ def clients_search(request):
 	items=filtered_items.order_by('-id')
 	pager=Pager(items,'clients',nb_items_page=request.session['nb_items']).paginate()
 
-	datas={'clients':[client_compose_liste(c) for c in pager[0]],
+	datas={'liste':[client_compose_liste(c) for c in pager[0]],
 			'pagination':pager[1],
 			'total_elts':pager[2],}
 	return HttpResponse(json.dumps(datas))
 	
 def clients_sort(request):
-	pass
+	r=request.POST.copy()
+	request.session['sort']={'field':BASE_FIELDS_CLIENTS[r['field']],'sens':r['sens']}
+	try:
+		filtre=request.session['filtres']
+		items=Client.objects.all()
+		filtered_items=apply_filter(items,filtre)
+		items=__order_by(filtered_items,request.session['sort'])
+	except Exception as error:
+		print(error)
+		items=Client.objects.all()
+	pager=Pager(items,'clients',num_page=1,nb_items_page=request.session['nb_items']).paginate()
+	reponse=json.dumps({'liste':[client_compose_liste(p) for p in pager[0]],
+						'pagination': pager[1],
+						'total_elts':pager[2],
+						})
+	return HttpResponse(reponse)
 
 def create_model_mask(objet):
 	if objet=='contact':
