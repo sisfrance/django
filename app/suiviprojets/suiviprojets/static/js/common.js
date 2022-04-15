@@ -3,7 +3,9 @@ $(function () {
 /*****
  * CREE LA FENETRE DETAILS DE FORMULAIRE
  * ***/
-
+/*******
+*  2. PARSE LES ZONES DE FILTRES
+******/
 
  function popupAdmin(voile, id) {
 	  return {

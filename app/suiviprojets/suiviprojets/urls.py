@@ -38,4 +38,5 @@ urlpatterns = [
     path(r'add/',views.add),
     path(r'edit/',views.edit),
     path(r'save/',views.save),
+    path(r'conso/<str:id>',views.conso),
 ]

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'suiviprojets.dashboard',
     'bootstrap4',
+    'django_cron',
 ]
 
 MIDDLEWARE = [
@@ -51,7 +52,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
+CRON_CLASSES =[
+	'suiviprojets.helpers.cron.ZeendocCheckCronJob',
+]
 ROOT_URLCONF = 'suiviprojets.urls'
 
 TEMPLATES = [

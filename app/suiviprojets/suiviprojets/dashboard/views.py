@@ -16,7 +16,7 @@ from django.forms.models import model_to_dict
 from suiviprojets.dashboard.models import Projet,TypeProjet,TypePrestation,CategorieForfait,Flux,Forfait,TypeEchange,Echange,Contact \
                                             ,StatutTache, Tache,Consommation,Prestation,Client
 from suiviprojets.dashboard.forms import ContactForm,PrestationForm,TacheForm,EchangeForm
-from suiviprojets.helpers.helpers import apply_filter, filter_construct, Pager
+from suiviprojets.helpers.helpers import apply_filter, filter_construct, Pager,ZeepClient
 from wsgiref.util import FileWrapper
 
 
@@ -47,7 +47,7 @@ SEARCH_TERMS_CLIENTS={'nom':'nom__icontains',
 					'ville':'ville__icontains',
 					}
 					
-SCRIPTS=['common','node_modules/fullcalendar/main.min','index']
+SCRIPTS=['common','node_modules/fullcalendar/main.min','index','jquery_soap','node_modules/jquery-xml2json/src/xml2json']
 STYLES=['js/node_modules/chart.js/dist/Chart.min.css',
 		'js/node_modules/fullcalendar/main.min.css','scss/styles.css']
 
@@ -74,6 +74,28 @@ def projet_compose_liste(p):
 	projet['prestations']=[str(pres.type_prestation)+":"+str(pres.statut.statut) for pres in prestations]
 	return projet
 
+def calcul_consommation(id_projet):
+	forfait=Forfait.objects.filter(projet=id_projet).order_by("-date_commande")[0]
+	""" Variables locales
+	    - conso_actuelle_temps
+	    - conso_actuelle_forfait
+	"""
+	consommation=Consommation.objects.filter(forfait=forfait.id).order_by("-date")[0]
+	nb_jours=(consommation.date-forfait.date_commande).days
+	conso_nb_jours = nb_jours / (forfait.categorie_forfait.duree*365)
+	print(str(conso_nb_jours)+":"+str(nb_jours))
+	
+	if(forfait.categorie_forfait.flux.flux=="flux"):
+		conso_flux=(consommation.volume_docs/forfait.categorie_forfait.volume)*100
+		print(str(conso_flux)+"%")
+	elif (forfait.categorie_forfait.flux.flux=='documents'):
+		conso_documents=(consommation.nb_docs/forfait.categorie_forfait.volume)*100
+		print(str(conso_documents)+"%")
+	else:
+		pass
+	""" Verification de la validite de l'abonnement """
+	
+	
 
 def projet_compose_details(id):
 	instance_projet=Projet.objects.get(pk=id)
@@ -82,7 +104,7 @@ def projet_compose_details(id):
 			"type_projet":{"id":instance_projet.type_projet.id,"type_projet":str(instance_projet.type_projet)},
 			"num_armoire":instance_projet.num_armoire
 			}
-
+	calcul_consommation(id)
 	client=instance_projet.client
 	forfait=Forfait.objects.filter(projet=id).last
 	taches=Tache.objects.filter(projet_id=id)
@@ -135,7 +157,40 @@ def client_compose_liste(c):
 	client['Dcontacts']=[{"nom":ct["nom"],"prenom":ct["prenom"],"id":ct["id"]} for ct in contacts]
 	client['contacts']=','.join(["<span>%s %s</span>" % (ct["nom"],ct["prenom"]) for ct in contacts])
 	return client
+
+def client_compose_detail(c):
+	contacts=Contact.objects.filter(client=c.id).order_by('nom')
+	client={"id":c.id,
+			"nom":c.nom,
+			"contacts":[{"id":con.id,
+						"nom":con.nom,
+						"prenom":con.prenom,
+						"tel":con.tel,
+						"email":con.email,
+						} for con in contacts]
+			}
+	projets=[p.id for p in Projet.objects.filter(client=c.id)]
+	""" parsage des evenements """
+	""" un evenement se compose 
+		-title
+		-start
+		-end
+		l'ensemble des events peut avoir les propriétés
+		color
+		background-color"""
+	tasks=Tache.objects.filter(projet_id__in=projets,statut__statut__in=["à programmer","en attente","en cours"])
+	tasks_events={'events':[{'title':t.nom,'start':str(t.date_programmee),'statut':t.statut.color,'description':t.description} for t in tasks],'color':'green','textColor':'white'}
 	
+	prestations=Prestation.objects.filter(projet_id__in=projets,statut__statut__in=["en attente","à programmer","en cours"])
+	prestations_events={'events':[{'title':p.type_prestation.type_prestation,'start':str(p.date_programmee),'statut':p.statut.color,'description':p.notes} for p in prestations],'color':'green','textColor':'white'}
+
+	echanges=Echange.objects.filter(contact__client_id=c.id,statut__statut__in=["en attente","à programmer","en cours"])
+	echanges_events={'events':[{'title':e.type_echange.type_echange,'statut':e.statut.color,'start':str(e.date),'description':e.notes} for e in echanges],'color':'light-green','textColor': 'white'}
+	
+	client['eventsct']=json.dumps(tasks_events)
+	client['eventscp']=json.dumps(prestations_events)
+	client['eventsce']=json.dumps(echanges_events)
+	return client
 """/*************************
    * View dashboard
    * procedure
@@ -145,6 +200,7 @@ def client_compose_liste(c):
 	 @authentification oui
 	 @role             utilisateur
    *************************/"""
+   
 def index(request):
 	
 	"""if request.session.get('filtres') == None:
@@ -220,15 +276,12 @@ def clients(request):
 		
 def details_client(request,id):
 	client=Client.objects.get(pk=id)
-	contacts=Contact.objects.filter(client=id).order_by('nom')
+	c=client_compose_detail(client)
 
 	datas={'partial':'dashboard/details_client.html',
-			'client':client,
-			'contacts':contacts,
+			'client':c,
 			'scripts':SCRIPTS+['node_modules/fullcalendar-scheduler/main'],
 			'styles':STYLES+['js/node_modules/fullcalendar-scheduler/main.css'],
-			'resources':json.dumps([]),
-			'events':json.dumps([]),
 			}
 	return render(request,"index.html",datas)
 	
@@ -500,7 +553,7 @@ def add(request):
 	r=request.POST.copy()
 	mask=create_model_mask(r['objet'])
 	args={}
-	print(r['projet'])
+
 	for f in mask['fields']:
 		if r[f['field']] != '':
 			args[f['field']]=f['model'].objects.get(pk=r[f['field']])
@@ -539,14 +592,21 @@ def edit(request):
 def save(request):
 	r=request.POST.copy()
 	mask=create_model_mask(r['objet'])
-	if r['id'] != '':
+	if r['id'] != '-1':
 		instance=mask['model'].objects.get(pk=r['id'])
 		form=mask['form'](r,instance)
 	else:
 		form=mask['form'](r)
-	if form.is_valid:
-		form.save()
+	if form.is_valid():
+		form.save()	
 		return HttpResponseRedirect('/project/'+r['projet']+'/')
 	else:
 		return render(request,'dashboard/forms/form.html',{'form':form.as_p()})
+
+def conso(request,id):
+	forfait=Forfait.objects.filter(projet=id).last()
+	api=ZeepClient(forfait.url,'t.melin@sisfrance.eu','MelinT2021!',forfait.classeurs)
+	api.ask()
+	api.show_conso()
+	return HttpResponse(api.show_conso())
 	

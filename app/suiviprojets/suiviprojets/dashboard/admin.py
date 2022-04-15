@@ -1,6 +1,6 @@
 from django.contrib import admin
 from suiviprojets.dashboard.models import Projet,TypePrestation,CategorieForfait,Flux,Forfait,TypeEchange,Echange,Contact \
-										,StatutTache, Tache,Consommation,Prestation,Client,Intervenant,Revendeur
+										,StatutTache, Tache,Consommation,Prestation,Client,Intervenant,Revendeur,TypeProjet
 # Register your models here.
 
 """class SessionAdmin(admin.ModelAdmin):
@@ -22,7 +22,11 @@ class ProjetAdmin(admin.ModelAdmin):
 				self.client=Client.objects.get(pk=id)		
 		except Exception as error :
 			pass"""
+	pass
 		
+class ConsoAdmin(admin.ModelAdmin):
+	list_display=('id','date','nb_docs','volume_docs','forfait')
+	
 admin.site.register(TypePrestation)
 admin.site.register(CategorieForfait)
 admin.site.register(Flux)
@@ -32,9 +36,10 @@ admin.site.register(Forfait)
 admin.site.register(Contact)
 admin.site.register(StatutTache)
 admin.site.register(Tache)
-admin.site.register(Consommation)
+admin.site.register(Consommation,ConsoAdmin)
 admin.site.register(Prestation)
 admin.site.register(Projet,ProjetAdmin)
 admin.site.register(Client)
 admin.site.register(Intervenant)
 admin.site.register(Revendeur)
+admin.site.register(TypeProjet)

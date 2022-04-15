@@ -70,6 +70,8 @@ class Forfait(models.Model):
     id=models.AutoField(primary_key=True)
     date_commande=models.DateField()
     projet= models.ForeignKey(Projet,on_delete=models.SET_NULL,null=True,blank=True)
+    url=models.CharField(max_length=50,null=True,blank=True)
+    classeurs=models.CharField(max_length=150,null=True,blank=True)
     categorie_forfait= models.ForeignKey(CategorieForfait,on_delete=models.SET_NULL,null=True,blank=True)
     def __str__(self):
         return self.projet.client.nom+"-"+self.categorie_forfait.categorie_forfait
@@ -78,13 +80,13 @@ class Forfait(models.Model):
 
 class Consommation(models.Model):
     id=models.AutoField(primary_key=True)
-    date=models.DateField()
+    date=models.DateField(auto_now_add=True)
     forfait=models.ForeignKey(Forfait,on_delete=models.SET_NULL,null=True,blank=True)
     nb_docs=models.IntegerField(null=True,blank=True)
-    volume_docs=models.IntegerField(null=True,blank=True)
+    volume_docs=models.DecimalField(max_digits=10,decimal_places=2,null=True,blank=True)
     
     def __str__(self):
-        return self.client+"-"+nb_docs
+        return self.forfait.categorie_forfait.categorie_forfait+"Nb de documents::"+str(self.nb_docs)+";Volume :"+str(self.volume_docs)
 
 class StatutTache(models.Model):
     id=models.AutoField(primary_key=True)
@@ -162,7 +164,7 @@ class Echange(models.Model):
     type_echange=models.ForeignKey(TypeEchange,on_delete=models.SET_NULL,null=True,blank=True)
     statut=models.ForeignKey(StatutTache,on_delete=models.SET_NULL,null=True,blank=True,default=1)
     temps_passe=models.CharField(max_length=20,null=True,blank=True,default="0")
-    notes=models.TextField()
+    notes=models.TextField(null=True,blank=True)
     
     def __str__(self):
         return self.type_echange.type_echange+"-"+str(self.contact.nom)+"-"+str(self.contact.prenom)

@@ -2,6 +2,9 @@
 import os
 import math
 import re
+from zeep import Client,Settings,xsd
+from zeep.transports import Transport
+import json
 from functools import reduce
 from operator import itemgetter
 from datetime import datetime,date,timedelta
@@ -384,45 +387,116 @@ class Pager:
             print("erreur de pagination")
             return [],[],0
 
-def values_per_intervalle(datas,intervalle):
-	last_distance=max([d.distance for d in datas])
-	tab_tmp=[[] for i in range(0,math.floor(last_distance/(intervalle*1000)+1))]
-	tab=[[] for i in range(0,math.floor(last_distance/(intervalle*1000)+1))]
-	
-	def somme(liste,index,field):
-		return reduce(lambda a,b: a+b,[t[field] for t in liste[index]])
-		
-	def moyenne(liste,index,field):
-		return reduce(lambda a,b: a+b,[t[field] for t in liste[index]])/len(liste[index])
-		
-	def maximum(liste,index,field):
-		return max([v[field] for v in liste[index]])
-		
-	def minimum(liste,index,field):
-		return min([v[field] for v in liste[index]])
-	
-	def ecart(liste,index,field):
-		return maximum(liste,index,field)- minimum(liste,index,field)
-		
-	def timetransf(value):
-		minutes=math.floor(value/6000)
-		secondes=value % 6000
-		return ":".join([str(minutes),str(secondes)])
-		
-	for d in datas:
-		tab_tmp[math.floor(d.distance/(intervalle*1000))].append(model_to_dict(d))
-	""" formatage de tab """
+""" ***********************************
+* @class ZeepClient
+* @brief objet permettant d'aller chercher des informations via l'api de zeendoc
+* @params tableau_valeurs <Array> defini le groupe d'objets à paginer
+*         url      <String> la chaine de caracteres pour definir
+*                                  l'url sur laquelle cliquer sur un des elements de la barre de pagination
+*         user     <string> identifiant utilisateur
+*         mdp      <string> mot de passe
+*         classeurs <string> liste des classeurs sous forme de chaine de caractères séparés par des virgules
+*
+* @methods paginate <public> renvoie un tuple de tableaux
+*          __lien   <private> renvoie les liens formates à paginate
+*
+************************************"""
 
-	for ind in range(0,len(tab)):
-		#timetransf(ecart(tab_tmp,ind,'duration'))
-		tab[ind]={'distance':(ind+1)*intervalle,
-			'duration':str(timedelta(seconds=ecart(tab_tmp,ind,'duration'))),
-			'avg_speed':round(divide(ecart(tab_tmp,ind,'distance'),ecart(tab_tmp,ind,'duration'))*3.6,2),
-			'elevation_gain':ecart(tab_tmp,ind,'elevation_gain'),
-			'elevation_loss':ecart(tab_tmp,ind,'elevation_loss')
-			}
-	tab[ind]['distance']=round(last_distance/1000,2)
-	return tab 
-	
+class ZeepClient():
+	def __init__(self,url,user,mdp,forfait):
+		self.url=url
+		self.user=user
+		self.mdp=mdp
+		self.classeurs=forfait.classeurs.split(";")
+		self.nb_docs=0
+		self.size=0
+		self.settings=Settings(strict=False,xml_huge_tree=True)
+		try:
+			transport=Transport(operation_timeout=800,timeout=800)
+			self.client=Client("https://armoires.zeendoc.com/"+self.url+"/ws/0_7/wsdl.php?wsdl",transport=transport,settings=self.settings)
+			self.__ask()
+		except Exception as e:
+			print("Erreur client"+self.url)
+			print(str(e))
+			pass
+			
+	def __create_request_data(self,coll):
+		return {'Login':self.user,
+					'Password':'',
+					'CPassword':self.mdp,
+					'Coll_Id':'coll_'+coll,
+					'Get_PDF_FileSize':1,
+					'IndexList':[{'Index':{
+									'Id':1,
+									'Label':'N_Status',
+									'Value':'-2',
+									'Operator':'ABOVE'
+									}
+								 }
+								],
+					'StrictMode':0,
+					'Order_Col':'',
+					'saved_query':"",
+					'Order':'ASC',
+					'Query_Operator':"",
+					'From':0,
+					'Nb_Results':"",
+					'Get_Original_FileSize':1,
+					'Get_Comments':0,
+					'Get_History':0,
+					'Get_Shipment_Status':0,
+									
+				}
+	def __ask_classeur(self,id_classeur):
+		print("je parse le classeur "+id_classeur)
+
+		requests_datas=self.__create_request_data(id_classeur)
+		response=self.client.service.searchDoc(**requests_datas)
+		
+		try:
+			datas=json.loads(response)
+		except Exception as error:
+			print(str(error))
+		
+		dictDatas=dict(datas)
+		
+		try:
+			nb_docs=dictDatas['Nb_Docs']
+		except Exception as error:
+			print("expection_ask_classeur : nb_docs "+str(error))
+			nb_docs=0
+			
+
+		documents=dictDatas['Document']
+		Adocuments=[]
+		for doc in documents:
+			try:
+				Adocuments.append(int(doc['FileSize_Original']))
+			except Exception:
+				pass
+			
+		size=round(reduce(lambda a,b: a+b,[d for d in Adocuments])/1000000,2)
+
+			
+		print("classeur %s nb_docs:%s size:%s" % (id_classeur,nb_docs,size))
+		
+		return {'nb_docs':nb_docs,'size':size}
+		
+	def __ask(self):
+		for coll in self.classeurs:
+			result=self.__ask_classeur(coll)
+			self.nb_docs+=result['nb_docs']
+			self.size+=result['size']
+			
+	def getNbDocs(self):
+		return round(self.nb_docs,0)
+		
+	def getVolumeDocs(self):
+		return round(self.size,2)
+			
+	def show_conso(self):
+		return 'nombre de documents : %s / taille totale : %s' % (self.nb_docs,self.size)
+		
+			
 
 

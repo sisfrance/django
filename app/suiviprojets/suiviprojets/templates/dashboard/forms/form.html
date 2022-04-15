@@ -1,12 +1,21 @@
 <section id="formulaire">
 	<h1>Ajout {{objet}}</h1>
-	<form action="javascript.void();" method="POST">
+	<form id="objetForm" action="javascript:void(0);" method="POST">
 		{% csrf_token %}
-		<input type="hidden" id="id" value="{{id}}" />
-		<input type="hidden" id="id-projet" value="{{id_projet}}"/>
-		<input type="hidden" id="id-client" value="{{id_client}}"/>
-		<input type="hidden" id="objet" value="{{objet}}"/>
+		<input type="hidden" id="id" name="id" value="{{id|default:-1}}" />
+		<input type="hidden" id="projet" name="projet" value="{{id_projet}}"/>
+		<input type="hidden" id="client" name="client" value="{{id_client}}"/>
+		<input type="hidden" id="objet" name="objet" value="{{objet}}"/>
+		{% if form.errors %}
+			{% for field in form %}
+				{% for error in field.errors %}
+					<div class="alert alert-danger">
+						<strong>{{error|escape}}</strong>
+					</div>
+				{% endfor %}
+			{% endfor %}
+		{% endif %}
 		{{form}}
-		<input id="save" type="submit" value="Valider"/>
+		<input id="submitForm" type="submit" value="Valider"/>
 	</form>
 </section>

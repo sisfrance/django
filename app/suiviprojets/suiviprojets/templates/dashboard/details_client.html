@@ -38,7 +38,7 @@
 							<th>Edition</th>
 						</thead>
 						<tbody>
-							{% for contact in contacts %}
+							{% for contact in client.contacts %}
 							<tr>
 								<td class="contact-nom">{{contact.nom}}</td>
 								<td class="contact-prenom">{{contact.prenom}}</td>
@@ -52,6 +52,18 @@
 				</div>
 			</div>
 		</div>
+				
+	</div>
+	<div class="row">
+		<div class="col-12">
+					<script>
+						var eventsct={{client.eventsct|safe|default:'[]'}};
+						var eventscp={{client.eventscp|safe|default:'[]'}};
+						var eventsce={{client.eventsce|safe|default:'[]'}};
+					</script>
+					<div id="calendar"></div>
+		</div>
+	</div>
 </section>
 </body>
 {% endblock %}

@@ -258,7 +258,17 @@ $(function(){
      /****
      * 2-Fin-Liste
      ************/
-     
+     function parseDatas(cible){
+		var params={};
+			$.each($(cible).find("input[type='text'],input[type='hidden'],input[type='number'],input[type='checkbox']:checked,select,textarea"),function(index,elt){
+				if($(elt).val()){
+					params[$(elt).attr('name')]=$(elt).val();
+				}
+			});
+
+			return params;
+		};
+
      /****
 	 * 3-Traitement des formulaires 
 	 * **/
@@ -274,15 +284,52 @@ $(function(){
 		};
 		$.post("/add/",datas).done(function(response){
 			popup.show(response);
+			$("#submitForm").on("click",function(event){
+			event.preventDefault();
+			event.stopPropagation();
+			var datas=parseDatas("#objetForm");
+			datas["csrfmiddlewaretoken"]=$("input[name=csrfmiddlewaretoken]").val();
+			datas["objet"]=$("#objet").val();
+			datas["type_projet"]=$("#type_projet").val();
+			$.post("/save/",datas)
+			.done(function(response){
+					popup.hide();
+			});	
+		});
 			
 		});
 		 
 	 });
-	 $("#submit").on("click",function(event){
+	 
+		
+	 $("#soapss").on("click",function(event){
 		event.preventDefault();
-		event.stopPropagation();
-		 
-		})  
+		event.stopPropagation(); 
+		$.soap({
+				url:'https://armoires.zeendoc.com/tpn/ws/0_7/Zeendoc.php',
+				method:'searchDoc',
+				appendMethodToURL:false,
+				data:{
+					Login:'t.melin@sisfrance.eu',
+					CPassword:'MelinT2021!',
+					Coll_Id:'coll_1',
+					Get_PDF_FileSize:1
+				},
+				success:function(soapResponse){
+					var xmlDoc=soapResponse.toXML();
+					$json=JSON.parse($(xmlDoc).find("jsonResponse").text());
+					console.log($json);
+					$.each($json.Document,function(index,doc){
+						
+						
+					});
+				},
+				error:function(SOAPResponse){
+						alert('Error acessing WS');
+				}
+				
+		})
+	  })
      /*****
       * 4-Calendrier
       * ***/

@@ -1,0 +1,43 @@
+version: '3'
+
+services:  
+#zabbix-server-mysql:
+#image: zabbix/zabbix-server-mysql
+#container_name: zabbix-server-mysql
+#environment:
+#- DB_SERVER_HOST=db_zbx_proxy
+#- MYSQL_DATABASE=zbxproxy
+#- MYSQL_USER=zabbix
+#- MYSQL_PASSWORD=Sis1ywMYSQL!
+#- MYSQL_ROOT_PASSWORD=Sis1ywMYSQL!
+#- PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+#- ZBX_JAVAGATEWAY=zabbix-java-gateway
+#- ZBX_StartVMwareCollectors=5
+#- ZBX_VMwareFrequency=60
+#- ZBX_VMwarePerfFrequency=60
+#- ZBX_VMwareCacheSize=32M
+#- ZBX_VMwareTimeout=120  
+#networks:
+#- inventory_default
+#ports:
+#- 10051:10051
+#links:
+#- zabbix-java-gateway:zabbix-java-gateway
+#restart:
+#unless-stopped
+    zabbix-proxy-mysql:
+        image: zabbix/zabbix-proxy-mysql
+        container_name: zabbix-proxy-mysql
+        environment:
+          - DB_SERVER_HOST=db_zbxprx
+          - MYSQL_DATABASE=zabbix_proxy
+          - MYSQL_USER=zabbix
+          - MYSQL_PASSWORD=Sis1ywMYSQL!
+          - ZBX_HOSTNAME=ZbxPrxTest
+          - ZBX_SERVER_HOST=network.sisfrance.eu
+        #links:
+        #  - zabbix-server-mysql:zabbix-server
+        expose:
+          - 10051/tcp
+        #networks:
+        #  - inventory_default
