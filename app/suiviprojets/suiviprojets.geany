@@ -27,11 +27,11 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=3
+current_page=28
 FILE_NAME_0=0;Python;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ct.melin%5CDocker%5Cdjango%5Capp%5Csuiviprojets%5Csuiviprojets%5Cdashboard%5Capps.py;0;4
 FILE_NAME_1=1067;Python;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ct.melin%5CDocker%5Cdjango%5Capp%5Csuiviprojets%5Csuiviprojets%5Curls.py;0;4
 FILE_NAME_2=1761;HTML;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ct.melin%5CDocker%5Cdjango%5Capp%5Csuiviprojets%5Csuiviprojets%5Ctemplates%5Cdashboard%5Cindex.html;0;4
-FILE_NAME_3=3896;Python;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ct.melin%5CDocker%5Cdjango%5Capp%5Csuiviprojets%5Csuiviprojets%5Cdashboard%5Cviews.py;0;4
+FILE_NAME_3=24479;Python;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ct.melin%5CDocker%5Cdjango%5Capp%5Csuiviprojets%5Csuiviprojets%5Cdashboard%5Cviews.py;0;4
 FILE_NAME_4=1216;Python;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ct.melin%5CDocker%5Cdjango%5Capp%5Csuiviprojets%5Csuiviprojets%5Cdashboard%5Cadmin.py;0;4
 FILE_NAME_5=419;HTML;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ct.melin%5CDocker%5Cdjango%5Capp%5Csuiviprojets%5Csuiviprojets%5Ctemplates%5Cdashboard%5Ccurrent_tasks.html;0;4
 FILE_NAME_6=573;HTML;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ct.melin%5CDocker%5Cdjango%5Capp%5Csuiviprojets%5Csuiviprojets%5Ctemplates%5Cmenu.html;0;4
@@ -51,10 +51,10 @@ FILE_NAME_19=272;HTML;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ct.melin%5Cdocker%5Cdjango%5C
 FILE_NAME_20=2557;HTML;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ct.melin%5Cdocker%5Cdjango%5Capp%5Csuiviprojets%5Csuiviprojets%5Ctemplates%5Cdashboard%5Cliste_clients.html;0;4
 FILE_NAME_21=2113;HTML;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ct.melin%5CDocker%5Cdjango%5Capp%5Csuiviprojets%5Csuiviprojets%5Ctemplates%5Cdashboard%5Cfiltre_clients.html;0;4
 FILE_NAME_22=0;HTML;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ct.melin%5CDocker%5Cdjango%5Capp%5Csuiviprojets%5Csuiviprojets%5Ctemplates%5Cdashboard%5Cfiltre_projets.html;0;4
-FILE_NAME_23=5961;HTML;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ct.melin%5CDocker%5Cdjango%5Capp%5Csuiviprojets%5Csuiviprojets%5Ctemplates%5Cdashboard%5Cdetails_projet.html;0;4
+FILE_NAME_23=192;HTML;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ct.melin%5CDocker%5Cdjango%5Capp%5Csuiviprojets%5Csuiviprojets%5Ctemplates%5Cdashboard%5Cdetails_projet.html;0;4
 FILE_NAME_24=0;None;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ct.melin%5CDocker%5Cdjango%5Capp%5Csuiviprojets%5Csuiviprojets%5Cstatic%5Cscss%5Capp.scss;0;4
 FILE_NAME_25=0;CSS;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ct.melin%5CDocker%5Cdjango%5Capp%5Csuiviprojets%5Csuiviprojets%5Cstatic%5Cscss%5Cstyles.css;0;4
 FILE_NAME_26=307;Python;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ct.melin%5CDocker%5Cdjango%5Capp%5Csuiviprojets%5Czeeptest.py;0;4
 FILE_NAME_27=10711;Javascript;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ct.melin%5CDocker%5Cdjango%5Capp%5Csuiviprojets%5Csuiviprojets%5Cstatic%5Cjs%5Cindex.js;0;4
-FILE_NAME_28=514;Python;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ct.melin%5Cdocker%5Cdjango%5Capp%5Csuiviprojets%5Csuiviprojets%5Chelpers%5Ccron.py;0;4
+FILE_NAME_28=680;Python;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ct.melin%5Cdocker%5Cdjango%5Capp%5Csuiviprojets%5Csuiviprojets%5Chelpers%5Ccron.py;0;4
 FILE_NAME_29=332;Python;0;EUTF-8;1;1;0;C%3A%5CUsers%5Ct.melin%5CDocker%5Cdjango%5Capp%5Csuiviprojets%5Csuiviprojets%5Chelpers%5Cconso.py;0;4

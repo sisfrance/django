@@ -54,47 +54,67 @@ STYLES=['js/node_modules/chart.js/dist/Chart.min.css',
 
 def projet_compose_liste(p):
 	client=p.client
+	
 	projet={"id":p.id,
 			"client":{'nom':p.client.nom,'id':p.client.id},
 			"type_projet":str(p.type_projet),
 			"num_armoire":p.num_armoire,
 			}
+	
 	forfait=Forfait.objects.filter(projet=p.id).last()
 	taches=Tache.objects.filter(projet=p.id,statut__statut='en cours')
 	echanges=Echange.objects.filter(contact__client_id=client.id,date__gt=date.today()).order_by('-date')
 	prestations=Prestation.objects.filter(projet=p.id,statut__statut__in=['en attente','en cours'])
+	
 	projet['taches']=[t.nom for t in taches]
+	
 	try:
 		projet['debut_forfait']=str(forfait.date_commande)
 		projet['categorie_forfait']=forfait.categorie_forfait.categorie_forfait
 	except Exception as error:
 		projet['debut_forfait']=""
 		projet['categorie_forfait']=""
+		
 	projet['echanges']=[str(e.date)+":"+str(e.contact.nom) for e in echanges]
 	projet['prestations']=[str(pres.type_prestation)+":"+str(pres.statut.statut) for pres in prestations]
+	
+	if p.type_projet.id == 1:
+		projet['consommation']=calcul_consommation(p.id)
 	return projet
 
 def calcul_consommation(id_projet):
-	forfait=Forfait.objects.filter(projet=id_projet).order_by("-date_commande")[0]
-	""" Variables locales
-	    - conso_actuelle_temps
-	    - conso_actuelle_forfait
-	"""
-	consommation=Consommation.objects.filter(forfait=forfait.id).order_by("-date")[0]
-	nb_jours=(consommation.date-forfait.date_commande).days
-	conso_nb_jours = nb_jours / (forfait.categorie_forfait.duree*365)
-	print(str(conso_nb_jours)+":"+str(nb_jours))
-	
-	if(forfait.categorie_forfait.flux.flux=="flux"):
-		conso_flux=(consommation.volume_docs/forfait.categorie_forfait.volume)*100
-		print(str(conso_flux)+"%")
-	elif (forfait.categorie_forfait.flux.flux=='documents'):
-		conso_documents=(consommation.nb_docs/forfait.categorie_forfait.volume)*100
-		print(str(conso_documents)+"%")
-	else:
-		pass
-	""" Verification de la validite de l'abonnement """
-	
+	try:
+		forfait=Forfait.objects.filter(projet=id_projet).order_by("-date_commande")[0]
+		
+		""" Variables locales
+		    - conso_actuelle_temps
+		    - conso_actuelle_forfait
+		"""
+		consommation=Consommation.objects.filter(forfait=forfait.id).order_by("-date")[0]
+		nb_jours_restants=(consommation.date-forfait.date_commande).days
+		conso_nb_jours = nb_jours_restants / int(forfait.categorie_forfait.duree*365)
+		
+		if(forfait.categorie_forfait.flux.flux=="flux"):
+			conso_forfait=(consommation.volume_docs/forfait.categorie_forfait.volume*int(forfait.categorie_forfait.duree)*100)
+			print(str(conso_forfait)+"%")
+		elif (forfait.categorie_forfait.flux.flux=='documents'):
+			conso_forfait=(consommation.nb_docs/forfait.categorie_forfait.volume*int(forfait.categorie_forfait.duree)*100)
+			print(str(conso_forfait)+"%")
+		else:
+			pass
+		""" Verification de la validite de l'abonnement """
+		conso = {
+				'conso_nb_jours':conso_nb_jours,
+				'nb_jours':nb_jours_restants,
+				'conso_forfait':conso_forfait,
+				}
+	except Exception as err:
+		conso = {
+				'conso_nb_jours':-1,
+				'nb_jours':-1,
+				'conso_forfat':-1,
+				}
+	return conso
 	
 
 def projet_compose_details(id):
@@ -104,7 +124,6 @@ def projet_compose_details(id):
 			"type_projet":{"id":instance_projet.type_projet.id,"type_projet":str(instance_projet.type_projet)},
 			"num_armoire":instance_projet.num_armoire
 			}
-	calcul_consommation(id)
 	client=instance_projet.client
 	forfait=Forfait.objects.filter(projet=id).last
 	taches=Tache.objects.filter(projet_id=id)
@@ -117,7 +136,8 @@ def projet_compose_details(id):
 	projet['forfait']=forfait
 	projet['echanges']=echanges
 	projet['prestations']= prestations
-	
+	if instance_projet.type_projet.id == 1:
+		projet['consommation']=calcul_consommation(id)
 	""" parsage des evenements """
 	""" un evenement se compose 
 		-title
