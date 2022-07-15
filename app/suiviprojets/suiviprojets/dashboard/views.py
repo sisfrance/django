@@ -1,4 +1,4 @@
-import json
+import simplejson as json
 import csv
 import mimetypes
 import os
@@ -51,6 +51,8 @@ SCRIPTS=['common','node_modules/fullcalendar/main.min','index','jquery_soap','no
 STYLES=['js/node_modules/chart.js/dist/Chart.min.css',
 		'js/node_modules/fullcalendar/main.min.css','scss/styles.css']
 
+def __init__():
+	pass
 
 def projet_compose_liste(p):
 	client=p.client
@@ -61,58 +63,78 @@ def projet_compose_liste(p):
 			"num_armoire":p.num_armoire,
 			}
 	
-	forfait=Forfait.objects.filter(projet=p.id).last()
 	taches=Tache.objects.filter(projet=p.id,statut__statut='en cours')
 	echanges=Echange.objects.filter(contact__client_id=client.id,date__gt=date.today()).order_by('-date')
 	prestations=Prestation.objects.filter(projet=p.id,statut__statut__in=['en attente','en cours'])
 	
-	projet['taches']=[t.nom for t in taches]
-	
-	try:
-		projet['debut_forfait']=str(forfait.date_commande)
-		projet['categorie_forfait']=forfait.categorie_forfait.categorie_forfait
-	except Exception as error:
-		projet['debut_forfait']=""
-		projet['categorie_forfait']=""
-		
 	projet['echanges']=[str(e.date)+":"+str(e.contact.nom) for e in echanges]
 	projet['prestations']=[str(pres.type_prestation)+":"+str(pres.statut.statut) for pres in prestations]
+	projet['taches']=[t.nom for t in taches]
 	
-	if p.type_projet.id == 1:
-		projet['consommation']=calcul_consommation(p.id)
+	""" Traitement de la consommation """
+	
+	if(p.type_projet.id == 1):
+		forfait=Forfait.objects.filter(projet=p.id).order_by('-date_commande')[0]
+		
+		try:
+			projet['debut_forfait']=str(forfait.date_commande)
+			projet['categorie_forfait']=forfait.categorie_forfait.categorie_forfait
+		except Exception as error:
+			projet['debut_forfait']=""
+			projet['categorie_forfait']=""
+		
+		consommation=calcul_consommation(p.id)
+		
+		for k,v in consommation.items():
+			projet[k]=v
+		
 	return projet
 
 def calcul_consommation(id_projet):
 	try:
 		forfait=Forfait.objects.filter(projet=id_projet).order_by("-date_commande")[0]
 		
-		""" Variables locales
-		    - conso_actuelle_temps
-		    - conso_actuelle_forfait
-		"""
 		consommation=Consommation.objects.filter(forfait=forfait.id).order_by("-date")[0]
-		nb_jours_restants=(consommation.date-forfait.date_commande).days
-		conso_nb_jours = nb_jours_restants / int(forfait.categorie_forfait.duree*365)
+		nb_jours_consommes=(consommation.date-forfait.date_commande).days
+		conso_nb_jours = "{:.1f} %".format(nb_jours_consommes / int(forfait.categorie_forfait.duree*365)*100)
 		
-		if(forfait.categorie_forfait.flux.flux=="flux"):
-			conso_forfait=(consommation.volume_docs/forfait.categorie_forfait.volume*int(forfait.categorie_forfait.duree)*100)
-			print(str(conso_forfait)+"%")
-		elif (forfait.categorie_forfait.flux.flux=='documents'):
-			conso_forfait=(consommation.nb_docs/forfait.categorie_forfait.volume*int(forfait.categorie_forfait.duree)*100)
-			print(str(conso_forfait)+"%")
+		nb_docs=int(consommation.nb_docs)
+		f_volume_docs=consommation.volume_docs/1000
+		volume_docs="{:.1f} Go".format(f_volume_docs)
+		
+		
+		if forfait.categorie_forfait.flux.flux=="flux":
+			conso_volume_docs="{:.1f} %".format((f_volume_docs/(forfait.categorie_forfait.volume*int(forfait.categorie_forfait.duree)))*100)
+			conso_nb_docs="N/D"
+			
+		elif forfait.categorie_forfait.flux.flux=="documents":
+		
+			conso_volume_docs="N/D"
+			conso_nb_docs="{:.1f} %".format((nb_docs/(forfait.categorie_forfait.volume*int(forfait.categorie_forfait.duree)))*100)
+			
 		else:
 			pass
-		""" Verification de la validite de l'abonnement """
+		
+		
 		conso = {
 				'conso_nb_jours':conso_nb_jours,
-				'nb_jours':nb_jours_restants,
-				'conso_forfait':conso_forfait,
+				'nb_jours':nb_jours_consommes,
+				'volume_docs':volume_docs,
+				'nb_docs':nb_docs,
+				'conso_volume_docs':conso_volume_docs,
+				'conso_nb_docs':conso_nb_docs,
 				}
+
 	except Exception as err:
+		print(err)
 		conso = {
 				'conso_nb_jours':-1,
 				'nb_jours':-1,
-				'conso_forfat':-1,
+				'volume_docs':-1,
+				'nb_docs':-1,
+				'conso_volume_docs':-1,
+				'conso_nb_docs':-1,
+				
 				}
 	return conso
 	
@@ -124,8 +146,9 @@ def projet_compose_details(id):
 			"type_projet":{"id":instance_projet.type_projet.id,"type_projet":str(instance_projet.type_projet)},
 			"num_armoire":instance_projet.num_armoire
 			}
+			
 	client=instance_projet.client
-	forfait=Forfait.objects.filter(projet=id).last
+	forfait=Forfait.objects.filter(projet=id).order_by('-date')[0]
 	taches=Tache.objects.filter(projet_id=id)
 	echanges=Echange.objects.filter(contact__client_id=client.id).order_by('-date')
 	prestations=Prestation.objects.filter(projet=id)
@@ -136,6 +159,7 @@ def projet_compose_details(id):
 	projet['forfait']=forfait
 	projet['echanges']=echanges
 	projet['prestations']= prestations
+	
 	if instance_projet.type_projet.id == 1:
 		projet['consommation']=calcul_consommation(id)
 	""" parsage des evenements """
@@ -211,6 +235,7 @@ def client_compose_detail(c):
 	client['eventscp']=json.dumps(prestations_events)
 	client['eventsce']=json.dumps(echanges_events)
 	return client
+	
 """/*************************
    * View dashboard
    * procedure

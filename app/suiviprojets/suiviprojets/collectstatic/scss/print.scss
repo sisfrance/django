@@ -1,0 +1,51 @@
+@media print{
+
+/* On retire tous les elements visuels specifiques de la page web
+ * -l'image
+ * -les asides
+ * -La frise chronologique des etapes
+ * -on deplie toutes les etapes
+ * -on enleve le beandeau
+ * -on donne aux etapes une mise en page particulière
+ * */
+#main{
+	width:100%;
+	margin:0 10% auto;
+	background-color:#fff;
+	font-size:10pt;
+	font-style:normal;
+
+}
+ nav,header,aside,#horizontal-timeline,.control-display{
+	display:none;
+ 
+ }
+ .etape-entete{
+	display:block;
+ }
+ .etape-description{
+	display:block;
+	line-height:1.1em;
+ }
+ #control-nb{
+	border:none;
+ }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}

@@ -1,4 +1,4 @@
 .data/
-suiviprojets/suiviprojets/dashboard/migrations
-suiviprojets/suiviprojets/settings.py
+app/suiviprojets/suiviprojets/dashboard/migrations
+app/suiviprojets/suiviprojets/settings.py
 

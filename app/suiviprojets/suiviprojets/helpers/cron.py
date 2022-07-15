@@ -8,7 +8,7 @@ class ZeendocCheckCronJob(CronJobBase):
 	code='suiviprojets_helpers_cron_ZeendocCheckCronJob'
 	
 	def do(self):
-		"""projets=Projet.objects.filter(type_projet=1)
+		projets=Projet.objects.filter(type_projet__id=1)
 		for projet in projets:
 			try:
 				forfait=Forfait.objects.filter(projet=projet.id).order_by("-date_commande")[0]
@@ -20,6 +20,5 @@ class ZeendocCheckCronJob(CronJobBase):
 				conso=Consommation(**datas)
 				conso.save()
 			except Exception as e:
-				print(e)"""
-		print("coucou")
+				print(e)
 			

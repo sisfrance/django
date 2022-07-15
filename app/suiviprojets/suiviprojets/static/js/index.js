@@ -97,7 +97,18 @@ $(function(){
 				  if(objet == 'projet'){
 					$(lines[index]).find(".client").attr({"data_id":data["id"]});
 					$(lines[index]).find(".client").empty().html("<a href='/client/"+data['client']['id']+"/'>"+data['client']['nom']+"</a>");
-				 }
+					// remplissage des consommations
+					$(lines[index]).find(".wp_jours .comp").empty().html("<span class='diag-text-left nb_jours' data_id='"+data["id"]+"'>"+data["nb_jours"]+"</span>");
+					$(lines[index]).find(".wp_jours .comp-light").empty().html("<span class='diag-text-right conso_nb_jours' data_id='"+data["id"]+"'>"+data["conso_nb_jours"]+"</span>");
+					
+					$(lines[index]).find(".wp_nb_docs .comp").empty().html("<span class='diag-text-left nb_docs' data_id='"+data["id"]+"'>"+data["nb_docs"]+"</span>");
+					$(lines[index]).find(".wp_nb_docs .comp-light").empty().html("<span class='diag-text-right conso_nb_docs' data_id='"+data["id"]+"'>"+data["conso_nb_docs"]+"</span>");
+					
+					$(lines[index]).find(".wp_volume_docs .comp").empty().html("<span class='diag-text-left volume_docs' data_id='"+data["id"]+"'>"+data["volume_docs"]+"</span>");
+					$(lines[index]).find(".wp_volume_docs .comp-light").empty().html("<span class='diag-text-right conso_volume_docs' data_id='"+data["id"]+"'>"+data["conso_volume_docs"]+"</span>");
+					
+				  }
+				  
 			  }else{
 				  $(lines[index]).find(".details>a").attr({"href":"/"+objet+"/"+data["id"]+"/"});
 				  if( objet == 'projet'){

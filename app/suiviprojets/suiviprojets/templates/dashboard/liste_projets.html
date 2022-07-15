@@ -25,50 +25,69 @@
     </div>
 </div>
 {% endautoescape %}
+<style>
+	
+</style>
+
 {% if projets %}
 <div class="row">
     <div class="col-12">
 <table id="tableau-items" class="table table-striped">
     <thead class="table-header thead-light">
     <tr>
-        <th>
+        <td rowspan="2">
             <div class="header-elt">Id</div>
             <div data-field="id" data-sens="asc" class="sortarrow sort asc"></span>
-        </th>
-        <th>
+        </td>
+        <td rowspan="2">
             <div class="header-elt">Client</div>
             <div data-field="client" data-sens="asc" class="sortarrow sort asc"></div>
-        </th>
-        <th>
+        </td>
+        <td rowspan="2">
             <div class="header-elt">Type de projet</div>
             <div data-field="type_projet" data-sens="asc" class="sortarrow sort asc"></div>
-        </th>
-        <th>
+        </td>
+        <td rowspan="2">
             <div class="header-elt">Numéro d'armoire</div>
              <div data-field="numero_armoire" data-sens="asc" class="sortarrow sort asc"></div>
-        </th>
-        <th>
+        </td>
+        <td rowspan="2">
             <div class="header-elt">Date début forfait en cours</div>
             <div data-field="debut_forfait" data-sens="asc" class="sortarrow sort asc"></div>
-        </th>
-        <th>
-            <div class="header-elt">Forfait</div>
-            <div data-field="current_tasks" data-sens="asc" class="sortarrow sort asc"></div>
+        </td>
+        <td rowspan="2">
+            <div class="header-elt">Type de forfait</div>
+            <div data-field="forfait" data-sens="asc" class="sortarrow sort asc"></div>
 
-        </th>
-        <th>
-            <div class="header-elt">Tâches en cours</div>    
-        </th>
-        <th>
+        </td>
+         <td colspan="3">
+            <div class="header-elt">Consommation forfait</div>
+        </td>
+       
+         <td rowspan="2">
+            <div class="header-elt">T&acirc;ches en cours</div>    
+        </td>
+        <td rowspan="2">
             <div class="header-elt">Prochaine prise de contact</div>
             <div data-field="last_touch" data-sens="asc" class="sortarrow sort asc"></div>
-        </th>
-         <th>
+        </td>
+         <td rowspan="2">
             <div class="header-elt">Prestations</div>
-        </th>
-        <th>
+        </td>
+        <td rowspan="2">
             <div class="header-elt">D&eacute;tails</div>
-        </th>
+        </td>
+    </tr>
+    <tr>
+		<td>
+            <div class="header-elt">Jours</div>    
+        </td>
+		 <td>
+            <div class="header-elt">Nb</div>    
+        </td>
+        <td>
+            <div class="header-elt">Volume</div>    
+        </td>
     </tr>
     </thead>
     <tbody>
@@ -80,6 +99,68 @@
         <td class="cell num_armoire">{{p.num_armoire}}</td>
         <td class="cell debut_forfait">{{p.debut_forfait}}</td>
         <td class="cell categorie_forfait">{{p.categorie_forfait}} </td>
+        <td class="wp_cell wp_jours">
+			<table>
+				<tr>
+					<td class="cell  comp">
+						<span class="diag-text-left nb_jours" >{{p.nb_jours}}</span>
+					</td>
+					<td class="cell empty no-diag">
+						<span class="diag-text" >&nbsp;</span>
+					</td>
+				</tr>
+				<tr>
+					<td class="cell empty no-diag">
+						<span class="diag-text" >&nbsp;</span>
+					</td>
+					<td class="cell  comp-light">
+						<span class="diag-text-right conso_nb_jours" >{{p.conso_nb_jours}}</span>
+					</td>
+				</tr>
+			</table>
+		</td>
+        <!--<td class="cell conso_nb_jours">{% if p.conso_nb_jours == -1 %} ND {% else %} {{p.conso_nb_jours}} % {% endif %}</td>-->
+        <td class="wp_cell wp_nb_docs">
+			<table>
+				<tr>
+					<td class="cell  comp">
+						<span class="diag-text-left nb_docs" >{{p.nb_docs}}</span>
+					</td>
+					<td class="cell empty no-diag">
+						<span>&nbsp;</span>
+					</td>
+				</tr>
+				<tr>
+					<td class="cell empty no-diag">
+						<span>&nbsp;</span>
+					</td>
+					<td class="cell  comp-light">
+						<span class="diag-text-right conso_nb_docs" >{{p.conso_nb_docs}}</span>
+					</td>
+				</tr>
+			</table>
+		</td>
+		<td class="wp_cell wp_volume_docs">
+			<table>
+				<tr>
+					<td class="cell  comp">
+						<span class="diag-text-left volume_docs" >{{p.volume_docs}}</span>
+					</td>
+					<td class="cell empty no-diag">
+						<span>&nbsp;</span>
+					</td>
+				</tr>
+				<tr>
+					<td class="cell empty no-diag">
+						<span>&nbsp;</span>
+					</td>
+					<td class="cell  comp-light">
+						<span class="diag-text-right conso_volume_docs" >{{p.conso_volume_docs}}</span>
+					</td>
+				</tr>
+				
+			</table>
+		</td>
         <td class="cell taches">
             {% for t in p.taches %}
                 <p>{{t}}</p>

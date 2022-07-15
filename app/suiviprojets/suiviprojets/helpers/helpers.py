@@ -414,10 +414,13 @@ class ZeepClient():
 		try:
 			transport=Transport(operation_timeout=800,timeout=800)
 			self.client=Client("https://armoires.zeendoc.com/"+self.url+"/ws/0_7/wsdl.php?wsdl",transport=transport,settings=self.settings)
+			print("######CLIENT :"+self.url+"##########")
 			self.__ask()
+			print("######FIN"+self.url+"######")
 		except Exception as e:
 			print("Erreur client"+self.url)
 			print(str(e))
+			print("########")
 			pass
 			
 	def __create_request_data(self,coll):
@@ -449,11 +452,10 @@ class ZeepClient():
 				}
 	def __ask_classeur(self,id_classeur):
 		print("je parse le classeur "+id_classeur)
-
 		requests_datas=self.__create_request_data(id_classeur)
-		response=self.client.service.searchDoc(**requests_datas)
-		
+	
 		try:
+			response=self.client.service.searchDoc(**requests_datas)
 			datas=json.loads(response)
 		except Exception as error:
 			print(str(error))
@@ -469,11 +471,12 @@ class ZeepClient():
 
 		documents=dictDatas['Document']
 		Adocuments=[]
+		
 		for doc in documents:
 			try:
-				Adocuments.append(int(doc['FileSize_Original']))
-			except Exception:
-				pass
+				Adocuments.append(int(doc['FileSize_PDF']))
+			except Exception as err:
+				print(err)
 			
 		size=round(reduce(lambda a,b: a+b,[d for d in Adocuments])/1000000,2)
 
@@ -483,6 +486,7 @@ class ZeepClient():
 		return {'nb_docs':nb_docs,'size':size}
 		
 	def __ask(self):
+		
 		for coll in self.classeurs:
 			result=self.__ask_classeur(coll)
 			self.nb_docs+=result['nb_docs']
