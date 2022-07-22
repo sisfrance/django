@@ -26,7 +26,7 @@ SECRET_KEY = 'lph(jp73q%+5b#8#v%-tam9mysnlxd*#2rgl8l3g@*mxff+b_%'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.17.6']
 
 
 # Application definition

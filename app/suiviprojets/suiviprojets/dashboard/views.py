@@ -54,6 +54,14 @@ STYLES=['js/node_modules/chart.js/dist/Chart.min.css',
 def __init__():
 	pass
 
+def transformToDays(hours):
+	if hours is None :
+		return "0 j"
+	else:
+		d = hours //8
+		h = hours % 8 
+	return str(int(d))+" j, "+str(int(h))+" h"
+
 def projet_compose_liste(p):
 	client=p.client
 	
@@ -352,7 +360,37 @@ def currents(request):
 			'events':json.dumps(events),
 			}
 	return render(request,"index.html",datas)
+	
+def temps_passe(request):
+	""" Requete permettant de recuperer le temps passe par projets """
+	projets=[{"id":p.id,"client":p.client.nom,"revendeur":p.revendeur.nom } for p in Projet.objects.all()]
+	
+	for p in projets:
+		tp_ech=Echange.objects.filter(projet=p["id"]).aggregate(Sum('temps_passe'))
+		tp_tac=Tache.objects.filter(projet=p["id"]).aggregate(Sum('temps_passe'))
+		print(tp_ech)
+		p['temps échanges']=transformToDays(tp_ech['temps_passe__sum'])
+		p['temps installation']=transformToDays(tp_tac['temps_passe__sum'])
+		
+	labels=['id','client','revendeur','temps échanges','temps installation',]
+	tempfile="/".join([settings.TMP_ROOT,"tempstmp.csv"])
+	
+	with open(tempfile,"a") as fich:
+		writer=csv.DictWriter(fich,fieldnames=labels,delimiter=";",dialect='excel')
+		writer.writeheader()
+		for p in projets:
+			writer.writerow(p)
+		fich.close()
 
+	filec=open(tempfile,"r")
+
+	response=HttpResponse(FileWrapper(filec),content_type=mimetypes.guess_type(filec.name)[0])
+	response['Content-Disposition']='attachment; filename='+filec.name
+	os.remove(tempfile)
+
+	return response
+    
+    
 def download(request):
 
     """filtre=request.session['filtres']
