@@ -686,10 +686,4 @@ def save(request):
 	else:
 		return render(request,'dashboard/forms/form.html',{'form':form.as_p()})
 
-def conso(request,id):
-	forfait=Forfait.objects.filter(projet=id).last()
-	api=ZeepClient(forfait.url,'t.melin@sisfrance.eu','MelinT2021!',forfait.classeurs)
-	api.ask()
-	api.show_conso()
-	return HttpResponse(api.show_conso())
 	
