@@ -2,6 +2,7 @@
 app/suiviprojets/__pycache__
 app/suiviprojets/uwsgi.ini
 app/suiviprojets/suiviprojets/dashboard/migrations
+app/suiviprojets/suiviprojets
 app/suiviprojets/suiviprojets/settings.py
 
 
