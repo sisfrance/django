@@ -1,8 +1,13 @@
 .data/
+app/suiviprojets/__backup
 app/suiviprojets/__pycache__
+app/suiviprojets/suiviprojets.geany
+app/suiviprojets/zabbix-proxy.yml
+app/suiviprojets/zeeptest.py
 app/suiviprojets/uwsgi.ini
 app/suiviprojets/suiviprojets/dashboard/migrations
 app/suiviprojets/suiviprojets
 app/suiviprojets/suiviprojets/settings.py
-
+app/suiviprojets/*.sql
+app/suiviprojets/*.json
 

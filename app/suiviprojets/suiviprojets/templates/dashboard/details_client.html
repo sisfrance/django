@@ -56,6 +56,35 @@
 	</div>
 	<div class="row">
 		<div class="col-12">
+			<div class="row">
+				<div class="col-12">
+					<h3>D&eacute;tails des projets en cours</h3>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12">
+					<table class="table table-light table-striped">
+						<thead class='thead-light'>
+							<th>Type de projet</th>
+							<th>Num&eacute;ro d'armoire</th>
+							<th>Temps total pass&eacute;</th>
+						</thead>
+						<tbody>
+							{% for projet in client.projets %}
+							<tr>
+								<td class="type_projet">{{projet.type_projet }}</td>
+								<td class="numero_armoire">{% if projet.id == 1 %}{{ projet.num_armoire }}{% else %}/{% endif %}</td>
+								<td class="temps_passe">{{projet.temps_passe}}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12">
 					<script>
 						var eventsct={{client.eventsct|safe|default:'[]'}};
 						var eventscp={{client.eventscp|safe|default:'[]'}};

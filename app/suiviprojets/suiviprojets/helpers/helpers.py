@@ -407,7 +407,10 @@ class ZeepClient():
 		self.url=url
 		self.user=user
 		self.mdp=mdp
-		self.classeurs=forfait.classeurs.split(";")
+		try:
+			self.classeurs=forfait.classeurs.split(";")
+		except Exception as e:
+			self.classeurs=forfait.split(";")
 		self.nb_docs=0
 		self.size=0
 		self.settings=Settings(strict=False,xml_huge_tree=True)
@@ -453,10 +456,18 @@ class ZeepClient():
 	def __ask_classeur(self,id_classeur):
 		print("je parse le classeur "+id_classeur)
 		requests_datas=self.__create_request_data(id_classeur)
-	
+		i=1
+		bool=False
 		try:
-			response=self.client.service.searchDoc(**requests_datas)
-			datas=json.loads(response)
+			while bool == False and i < 5:
+				response=self.client.service.searchDoc(**requests_datas)
+				try:
+					datas=json.loads(response)
+					bool=True
+				except Exception as e:
+					i+=1
+				print(i)
+					
 		except Exception as error:
 			print(str(error))
 		
@@ -471,17 +482,18 @@ class ZeepClient():
 
 		documents=dictDatas['Document']
 		Adocuments=[]
-		
+		#Bdocuments=[]
 		for doc in documents:
 			try:
-				Adocuments.append(int(doc['FileSize_PDF']))
+				#Bdocuments.append(int(doc['FileSize_PDF']))
+				Adocuments.append(int(doc['FileSize_Original']))
 			except Exception as err:
 				print(err)
 			
 		size=round(reduce(lambda a,b: a+b,[d for d in Adocuments])/1000000,2)
-
+		#sizecomp=round(reduce(lambda a,b: a+b,[d for d in Bdocuments])/1000000,2)
 			
-		print("classeur %s nb_docs:%s size:%s" % (id_classeur,nb_docs,size))
+		print("classeur %s nb_docs:%s size:%s " % (id_classeur,nb_docs,size))
 		
 		return {'nb_docs':nb_docs,'size':size}
 		

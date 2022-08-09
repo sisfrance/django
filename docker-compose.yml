@@ -1,6 +1,16 @@
 version: '2'
 
 services:
+    nginx:
+      image: nginx
+	  ports:
+	    - 80:80
+	  volumes:
+		  -  "./nginx/conf:/etc/nginx"
+		  -  "./app:/var/app"
+	  links:
+		  - db:mysqldb
+		  - nginx:nginx
     db:
         image: mysql
         command: --default-authentication-plugin=mysql_native_password
@@ -17,5 +27,6 @@ services:
             - "8000:8000"
         links:
            - db:mysqldb
+           - nginx:nginx
         volumes:
             - "./app:/var/app"

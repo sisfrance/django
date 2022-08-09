@@ -54,6 +54,14 @@ STYLES=['js/node_modules/chart.js/dist/Chart.min.css',
 def __init__():
 	pass
 
+def determineTempsPasse(id_projet):
+	tp_ech=Echange.objects.filter(projet=id_projet).aggregate(Sum('temps_passe'))
+	tp_tac=Tache.objects.filter(projet=id_projet).aggregate(Sum('temps_passe'))
+	temps_echanges=transformToDays(tp_ech['temps_passe__sum'])
+	temps_installation=transformToDays(tp_tac['temps_passe__sum'])
+	print("%s jours echanges, %s jours installation" % (temps_echanges,temps_installation))
+	return "%s jours echanges, %s jours installation" % (temps_echanges,temps_installation)
+
 def transformToDays(hours):
 	if hours is None :
 		return "0 j"
@@ -156,7 +164,7 @@ def projet_compose_details(id):
 			}
 			
 	client=instance_projet.client
-	forfait=Forfait.objects.filter(projet=id).order_by('-date')[0]
+	forfait=Forfait.objects.filter(projet=id).order_by('-date_commande')[0]
 	taches=Tache.objects.filter(projet_id=id)
 	echanges=Echange.objects.filter(contact__client_id=client.id).order_by('-date')
 	prestations=Prestation.objects.filter(projet=id)
@@ -214,6 +222,11 @@ def client_compose_detail(c):
 	contacts=Contact.objects.filter(client=c.id).order_by('nom')
 	client={"id":c.id,
 			"nom":c.nom,
+			"adresse1":c.adresse1,
+			"adresse2":c.adresse2,
+			"code_postal":c.code_postal,
+			"ville":c.ville,
+			"projets":[{'id':p.id,'type_projet':p.type_projet,'num_armoire':p.num_armoire,'temps_passe':determineTempsPasse(p.id)} for p in Projet.objects.filter(client=c.id)],
 			"contacts":[{"id":con.id,
 						"nom":con.nom,
 						"prenom":con.prenom,
@@ -221,7 +234,7 @@ def client_compose_detail(c):
 						"email":con.email,
 						} for con in contacts]
 			}
-	projets=[p.id for p in Projet.objects.filter(client=c.id)]
+	projets=[p['id'] for p in client['projets']]
 	""" parsage des evenements """
 	""" un evenement se compose 
 		-title
@@ -368,7 +381,6 @@ def temps_passe(request):
 	for p in projets:
 		tp_ech=Echange.objects.filter(projet=p["id"]).aggregate(Sum('temps_passe'))
 		tp_tac=Tache.objects.filter(projet=p["id"]).aggregate(Sum('temps_passe'))
-		print(tp_ech)
 		p['temps échanges']=transformToDays(tp_ech['temps_passe__sum'])
 		p['temps installation']=transformToDays(tp_tac['temps_passe__sum'])
 		

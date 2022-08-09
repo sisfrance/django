@@ -27,17 +27,26 @@ class ProjetAdmin(admin.ModelAdmin):
 class ConsoAdmin(admin.ModelAdmin):
 	list_display=('id','date','nb_docs','volume_docs','forfait')
 	
+class EchangeAdmin(admin.ModelAdmin):
+	list_display=('id','contact','projet','statut','temps_passe')
+
+class PrestationAdmin(admin.ModelAdmin):
+	list_display=('type_prestation','projet','date_programmee','date_realisation','statut')
+
+class TacheAdmin(admin.ModelAdmin):
+	list_display=('date_programmee','projet','nom','date_realisation','statut')
+
 admin.site.register(TypePrestation)
 admin.site.register(CategorieForfait)
 admin.site.register(Flux)
 admin.site.register(TypeEchange)
-admin.site.register(Echange)
+admin.site.register(Echange, EchangeAdmin)
 admin.site.register(Forfait)
 admin.site.register(Contact)
 admin.site.register(StatutTache)
-admin.site.register(Tache)
+admin.site.register(Tache, TacheAdmin)
 admin.site.register(Consommation,ConsoAdmin)
-admin.site.register(Prestation)
+admin.site.register(Prestation, PrestationAdmin)
 admin.site.register(Projet,ProjetAdmin)
 admin.site.register(Client)
 admin.site.register(Intervenant)
