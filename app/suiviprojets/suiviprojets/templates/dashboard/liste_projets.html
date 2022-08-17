@@ -92,7 +92,7 @@
     </thead>
     <tbody>
     {% for p in projets %}
-    <tr id="line-{{p.id}}" data-id="{{p.id}}" class="line {% cycle  'odd' 'even' %} projet">
+    <tr id="line-{{p.id}}" data-id="{{p.id}}" class="line {{p.alert}} {% cycle  'odd' 'even' %}  projet">
         <td class="cell id" >{{p.id}}</td>
         <td class="cell client"><a href="/client/{{p.client.id}}">{{p.client.nom}}</a></td>
         <td class="cell type_projet" >{{p.type_projet}}</td>

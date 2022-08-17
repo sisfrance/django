@@ -95,6 +95,7 @@ $(function(){
 				   $(lines[index]).find(".details").empty().html("<a href='/"+objet+"/"+data["id"]+"/'>Voir</a>"); 
 			  //}else if($(lines[index]).find(".client>a").length==0){
 				  if(objet == 'projet'){
+					$(lines[index]).removeClass(['green','red','orange']).addClass(data['alert']);
 					$(lines[index]).find(".client").attr({"data_id":data["id"]});
 					$(lines[index]).find(".client").empty().html("<a href='/client/"+data['client']['id']+"/'>"+data['client']['nom']+"</a>");
 					// remplissage des consommations
@@ -112,6 +113,7 @@ $(function(){
 			  }else{
 				  $(lines[index]).find(".details>a").attr({"href":"/"+objet+"/"+data["id"]+"/"});
 				  if( objet == 'projet'){
+					$(lines[index]).removeClass(['green','red','orange']).addClass(data['alert']);
 					$(lines[index]).find(".client>a").attr({"href":"/client/"+data['client']['id']+"/"})
 					$(lines[index]).find(".client>a").empty().html(data['client']['nom']);
 				  }
@@ -132,6 +134,7 @@ $(function(){
 		  /*console.log(nb_lignes_vides);*/
 		  if(nb_lignes_vides>0){
 				for(var index=(nbeltsppage-(nb_lignes_vides));index<nbeltsppage;index++){
+					$(lines[index]).removeClass(['green','red','orange']);
 					$(lines[index]).attr({"id":"line-empty-"+index,"data-id":"empty"});
 					$.each($(lines[index]).find(".cell"),function(ind,elt){
 							 __fillfield($(elt),"empty",index,"empty-"+index,options)

@@ -457,52 +457,34 @@ class ZeepClient():
 		print("je parse le classeur "+id_classeur)
 		requests_datas=self.__create_request_data(id_classeur)
 		i=1
-		bool=False
+		response=self.client.service.searchDoc(**requests_datas)
+		datas=json.loads(response)
+		#dictDatas=dict(datas)
 		try:
-			while bool == False and i < 5:
-				response=self.client.service.searchDoc(**requests_datas)
-				try:
-					datas=json.loads(response)
-					bool=True
-				except Exception as e:
-					i+=1
-				print(i)
-					
-		except Exception as error:
-			print(str(error))
-		
-		dictDatas=dict(datas)
-		
-		try:
-			nb_docs=dictDatas['Nb_Docs']
-		except Exception as error:
-			print("expection_ask_classeur : nb_docs "+str(error))
-			nb_docs=0
-			
+			docs=[doc['FileSize_Original'] for doc in datas['Document']]
+		except Exception as e:
+			docs=[]
+		#print(docs)
 
-		documents=dictDatas['Document']
-		Adocuments=[]
-		#Bdocuments=[]
-		for doc in documents:
-			try:
-				#Bdocuments.append(int(doc['FileSize_PDF']))
-				Adocuments.append(int(doc['FileSize_Original']))
-			except Exception as err:
-				print(err)
+		
 			
-		size=round(reduce(lambda a,b: a+b,[d for d in Adocuments])/1000000,2)
+		size=round(reduce(lambda a,b: int(a)+int(b),docs)/1000000,2)
 		#sizecomp=round(reduce(lambda a,b: a+b,[d for d in Bdocuments])/1000000,2)
 			
-		print("classeur %s nb_docs:%s size:%s " % (id_classeur,nb_docs,size))
+		print("classeur %s nb_docs:%s size:%s " % (id_classeur,str(len(docs))
+		,str(size)))
 		
-		return {'nb_docs':nb_docs,'size':size}
+		return {'nb_docs':len(docs),'size':size}
 		
 	def __ask(self):
 		
 		for coll in self.classeurs:
-			result=self.__ask_classeur(coll)
-			self.nb_docs+=result['nb_docs']
-			self.size+=result['size']
+			try:
+				result=self.__ask_classeur(coll)
+				self.nb_docs+=result['nb_docs']
+				self.size+=result['size']
+			except Exception as e:
+				pass
 			
 	def getNbDocs(self):
 		return round(self.nb_docs,0)

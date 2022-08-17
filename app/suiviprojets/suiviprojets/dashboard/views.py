@@ -107,38 +107,70 @@ def projet_compose_liste(p):
 	return projet
 
 def calcul_consommation(id_projet):
+	""" @function define_alert
+	    @brief  Traitement des alertes
+				conso_nb_jours    >  80% -> rouge
+				conso_volume_docs >  80% -> rouge
+				conso_nb_docs     >  80% -> rouge
+				conso_nb_docs/conso_nb_jours > 1,3
+				conso_volume_docs / conso_nb_jours >1,3 
+				
+				conso_volume_docs > conso_nb_jours -> jaune
+				conso_nb_docs     > conso_nb_jours -> jaune
+				
+				@conso : conso_volume_docs ou conso_nb_docs
+				@conso_jours : conso_nb jours
+				@seuil_forfait : 80%
+				@seuil_compare : 1,3
+	
+	"""
+	def define_alert(conso,conso_jours,seuil_forfait,seuil_compare):
+		if (float(conso) > float(seuil_forfait)) or (float(conso_jours) > float(seuil_compare)) or (float(conso) / float(conso_jours) > float(seuil_compare)):
+			alert="red"
+			print(conso)
+			print(conso_jours)
+		elif float(conso) /float(conso_jours) > 1:
+			alert="yellow"
+		else:
+			alert="green"
+			
+		print(alert)
+		return alert
+		
 	try:
 		forfait=Forfait.objects.filter(projet=id_projet).order_by("-date_commande")[0]
 		
 		consommation=Consommation.objects.filter(forfait=forfait.id).order_by("-date")[0]
 		nb_jours_consommes=(consommation.date-forfait.date_commande).days
-		conso_nb_jours = "{:.1f} %".format(nb_jours_consommes / int(forfait.categorie_forfait.duree*365)*100)
+		conso_nb_jours =nb_jours_consommes / int(forfait.categorie_forfait.duree*365)
+		
 		
 		nb_docs=int(consommation.nb_docs)
-		f_volume_docs=consommation.volume_docs/1000
-		volume_docs="{:.1f} Go".format(f_volume_docs)
+		volume_docs=consommation.volume_docs
 		
 		
 		if forfait.categorie_forfait.flux.flux=="flux":
-			conso_volume_docs="{:.1f} %".format((f_volume_docs/(forfait.categorie_forfait.volume*int(forfait.categorie_forfait.duree)))*100)
-			conso_nb_docs="N/D"
-			
+			conso_volume_docs=volume_docs/(forfait.categorie_forfait.volume*1000*int(forfait.categorie_forfait.duree))
+			conso_nb_docs="/"
+			alert=define_alert(conso_volume_docs,conso_nb_jours,0.8,1.3)
 		elif forfait.categorie_forfait.flux.flux=="documents":
 		
-			conso_volume_docs="N/D"
-			conso_nb_docs="{:.1f} %".format((nb_docs/(forfait.categorie_forfait.volume*int(forfait.categorie_forfait.duree)))*100)
-			
+			conso_volume_docs="/"
+			conso_nb_docs=(nb_docs/(forfait.categorie_forfait.volume*int(forfait.categorie_forfait.duree)))
+			alert=define_alert(conso_nb_docs,conso_nb_jours,0.8,1.3)
 		else:
 			pass
 		
 		
+		
 		conso = {
-				'conso_nb_jours':conso_nb_jours,
+				'conso_nb_jours': "{:.1f} %".format(conso_nb_jours*100),
 				'nb_jours':nb_jours_consommes,
-				'volume_docs':volume_docs,
+				'volume_docs':"{:.1f} Go".format(volume_docs/1000),
 				'nb_docs':nb_docs,
-				'conso_volume_docs':conso_volume_docs,
-				'conso_nb_docs':conso_nb_docs,
+				'conso_volume_docs': conso_volume_docs != "/" and "{:.1f} %".format(conso_volume_docs*100 )or "/" ,
+				'conso_nb_docs': conso_nb_docs != "/" and "{:.1f} %".format(conso_nb_docs*100) or "/" ,
+				'alert':alert,
 				}
 
 	except Exception as err:
@@ -150,8 +182,9 @@ def calcul_consommation(id_projet):
 				'nb_docs':-1,
 				'conso_volume_docs':-1,
 				'conso_nb_docs':-1,
-				
+				'alert':'red',
 				}
+	
 	return conso
 	
 

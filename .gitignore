@@ -1,4 +1,11 @@
 .data/
+nginx/
+logs/
+docker-compose.yml
+Dockerfile
+README.md
+requirements.txt
+suiviprojets.geany
 app/suiviprojets/__backup
 app/suiviprojets/__pycache__
 app/suiviprojets/suiviprojets.geany

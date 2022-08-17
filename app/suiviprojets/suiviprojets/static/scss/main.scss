@@ -141,19 +141,19 @@ table{
 	.diag{
 		width:100%;
 		height:auto;
-		background-color:#D1D1D1;
+		background-color:$gray-case;
 		
 	}
 
 	.comp{
 		margin:0;
 		padding:0;
-		background-color:#D1D1D1;
+		background-color:$gray-case;
 	}
 	.comp-light{
 		margin:0;
 		padding:0;
-		background-color:#E8E8E8;
+		background-color:$gray-case-light;
 	}
 	
 .no-diag {
@@ -161,7 +161,7 @@ table{
     height: 35px;
     width: 35px;
     overflow: hidden;
-    background-color:#d1d1d1;
+    background-color:$gray-case;
 }
 .diag-text-left,.diag-text-right{
 	
@@ -194,6 +194,16 @@ table td, .table td {
     -webkit-transform: rotate(45deg);
     -moz-transform: rotate(45deg);
     transform: rotate(45deg);
+}
+.red td{
+	background-color:rgba(199,0,57,0.5);
+}
+.red td.comp-light{
+	background-color:rgba(231,157,178);
+}
+.yellow td{
+	background-color: rgb(255,195,0); /* fallback */
+	background-color:rgba(255,195,0,0.5);
 }
 /*////////////////////////////////////////////////////
 * FIN 1-LISTE PRINCIPALE
