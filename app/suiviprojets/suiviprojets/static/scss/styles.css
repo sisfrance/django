@@ -370,6 +370,10 @@ table td, .table td {
   background-color: rgba(255, 195, 0, 0.5);
 }
 
+.yellow td.comp-light {
+  background-color: #f9e39c;
+}
+
 /*////////////////////////////////////////////////////
 * FIN 1-LISTE PRINCIPALE
 /////////////////////////////////////////////////////*/

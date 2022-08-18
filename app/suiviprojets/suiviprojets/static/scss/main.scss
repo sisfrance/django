@@ -197,6 +197,7 @@ table td, .table td {
 }
 .red td{
 	background-color:rgba(199,0,57,0.5);
+	
 }
 .red td.comp-light{
 	background-color:rgba(231,157,178);
@@ -204,6 +205,9 @@ table td, .table td {
 .yellow td{
 	background-color: rgb(255,195,0); /* fallback */
 	background-color:rgba(255,195,0,0.5);
+}
+.yellow td.comp-light{
+	background-color:rgba(249,227,156);
 }
 /*////////////////////////////////////////////////////
 * FIN 1-LISTE PRINCIPALE
