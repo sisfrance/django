@@ -312,6 +312,12 @@ def index(request):
 	toprogram_prestations=Prestation.objects.filter(Q(statut__statut__in=["en attente","à programmer"])|Q(date_programmee__isnull=True)).values('projet__client__nom','type_prestation__type_prestation','id')
 	toprogram_tasks=Tache.objects.filter(Q(statut__statut__in=["en attente","à programmer"]) | Q(date_programmee__isnull=True)).values('projet__client__nom','nom','id')
 	next_echanges=Echange.objects.filter(statut__statut__in=["en attente","à programmer"]).values('contact__nom','contact__prenom','date','heure','type_echange__type_echange','id')
+	
+	clients=[]
+	for pr in toprogram_prestations:
+		if pr['projet__client__nom'] not in clients:
+			clients.append(pr['projet__client__nom'])
+			
 
 	datas={'partial':'dashboard/index.html',
 			'toprogram_prestations':toprogram_prestations,

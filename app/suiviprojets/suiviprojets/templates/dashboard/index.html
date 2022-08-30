@@ -23,7 +23,7 @@
 			<div id="toprogram_tasks" class="paragraph-accueil">
 				<ul>
 				{% for task in toprogram_tasks %}
-					<li class="li-tache"><a href="/admin/dashboard/tache/{{task.id}}/change">{{task.client__nom}}-{{task.nom}}</a></li>
+					<li class="li-tache"><a href="/admin/dashboard/tache/{{task.id}}/change">{{task.projet__client__nom}}-{{task.nom}}</a></li>
 				{% endfor %}
 				</ul>
 			</div>
@@ -33,7 +33,7 @@
 			<div id="toprogram_prestations" class="paragraph-accueil">
 				<ul>
 				{% for prestation in toprogram_prestations %}
-					<li class="li-prestation"><a href="/admin/dashboard/prestation/{{prestation.id}}/change">{{prestation.client__nom}}-{{prestation.type_prestation__type_prestation}}</a></li>
+					<li class="li-prestation"><a href="/admin/dashboard/prestation/{{prestation.id}}/change">{{prestation.projet__client__nom}}-{{prestation.type_prestation__type_prestation}}</a></li>
 				{% endfor %}
 				</ul>
 			</div>

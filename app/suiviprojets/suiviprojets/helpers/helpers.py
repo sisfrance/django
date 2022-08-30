@@ -407,15 +407,17 @@ class ZeepClient():
 		self.url=url
 		self.user=user
 		self.mdp=mdp
+		self.forfait=forfait
 		try:
-			self.classeurs=forfait.classeurs.split(";")
+			self.classeurs=self.forfait.classeurs.split(";")
 		except Exception as e:
-			self.classeurs=forfait.split(";")
+			self.classeurs=self.forfait.split(";")
 		self.nb_docs=0
 		self.size=0
 		self.settings=Settings(strict=False,xml_huge_tree=True)
 		try:
-			transport=Transport(operation_timeout=800,timeout=800)
+			"""operation_timeout=1600,timeout=1600"""
+			transport=Transport(timeout=600)
 			self.client=Client("https://armoires.zeendoc.com/"+self.url+"/ws/0_7/wsdl.php?wsdl",transport=transport,settings=self.settings)
 			print("######CLIENT :"+self.url+"##########")
 			self.__ask()
@@ -426,19 +428,29 @@ class ZeepClient():
 			print("########")
 			pass
 			
-	def __create_request_data(self,coll):
+	def __create_request_searchdoc(self,coll):
+		
 		return {'Login':self.user,
 					'Password':'',
 					'CPassword':self.mdp,
 					'Coll_Id':'coll_'+coll,
-					'Get_PDF_FileSize':1,
+					
 					'IndexList':[{'Index':{
 									'Id':1,
 									'Label':'N_Status',
 									'Value':'-2',
+									'Operator':'ABOVE',
+									}
+								 },
+								 {'Index':
+									{
+									'Id':2,
+									'Label':'Creation_Date',
+									'Value':str(self.forfait.date_commande),
 									'Operator':'ABOVE'
 									}
 								 }
+								 
 								],
 					'StrictMode':0,
 					'Order_Col':'',
@@ -446,35 +458,85 @@ class ZeepClient():
 					'Order':'ASC',
 					'Query_Operator':"",
 					'From':0,
-					'Nb_Results':"",
+					'Nb_Results':'',
+					'Get_PDF_FileSize':0,
 					'Get_Original_FileSize':1,
 					'Get_Comments':0,
 					'Get_History':0,
 					'Get_Shipment_Status':0,
 									
 				}
+	def __create_request_nbdoc(self,coll):
+		
+		return {'Login':self.user,
+				'Password':'',
+				'CPassword':self.mdp,
+				'Coll_Id':'coll_'+coll,
+					
+				'IndexList':[{'Index':{
+								'Id':1,
+								'Label':'N_Status',
+								'Value':'-2',
+								'Operator':'ABOVE',
+								}
+							 },
+							 {'Index':
+								{
+								'Id':2,
+								'Label':'Creation_Date',
+								'Value':str(self.forfait.date_commande),
+								'Operator':'ABOVE'
+								}
+							 }
+							 
+							],
+				'StrictMode':0,
+				'Order_Col':'',
+				'saved_query':"",
+				'Order':'ASC',
+				'Query_Operator':"",
+				'From':0,
+				'Nb_Results':'',
+				'Get_PDF_FileSize':0,
+				'Get_Original_FileSize':1,
+				'Get_Comments':0,
+				'Get_History':0,
+				'Get_Shipment_Status':0,
+				}
+				
 	def __ask_classeur(self,id_classeur):
 		print("je parse le classeur "+id_classeur)
-		requests_datas=self.__create_request_data(id_classeur)
+		requests_datas=self.__create_request_nbdoc(id_classeur)
 		i=1
 		response=self.client.service.searchDoc(**requests_datas)
 		datas=json.loads(response)
 		#dictDatas=dict(datas)
 		try:
-			docs=[doc['FileSize_Original'] for doc in datas['Document']]
+			if str(datas['Result']) == "0":
+				print("result ok")
+				"""docs=[doc['FileSize_Original'] for doc in datas['Document']]"""
+				nb_docs=datas['Nb_Docs']
+				"""size=round(reduce(lambda a,b: int(a)+int(b),docs),2)"""
+			elif str(datas['Result'] == "-1"):
+				print("Error_Msg:"+datas['Error_Msg'])
+				nb_docs=0
+				size=0
+				
 		except Exception as e:
-			docs=[]
+			print("Erreur sur la requete SOAP"+e)
+			nb_docs=0
+			size=0
 		#print(docs)
 
 		
 			
-		size=round(reduce(lambda a,b: int(a)+int(b),docs)/1000000,2)
+		
 		#sizecomp=round(reduce(lambda a,b: a+b,[d for d in Bdocuments])/1000000,2)
 			
-		print("classeur %s nb_docs:%s size:%s " % (id_classeur,str(len(docs))
-		,str(size)))
+		"""print("classeur %s nb_docs_req:%s nb_docs_calcul:%s size:%s " % (id_classeur,str(nb_docs),str(len(docs)),str(size)))"""
+		print("classeur %s nb_docs_req:%s " % (id_classeur,str(nb_docs)))
 		
-		return {'nb_docs':len(docs),'size':size}
+		return {'nb_docs':nb_docs,'size':size}
 		
 	def __ask(self):
 		
