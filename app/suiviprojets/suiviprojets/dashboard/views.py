@@ -420,8 +420,8 @@ def temps_passe(request):
 	for p in projets:
 		tp_ech=Echange.objects.filter(projet=p["id"]).aggregate(Sum('temps_passe'))
 		tp_tac=Tache.objects.filter(projet=p["id"]).aggregate(Sum('temps_passe'))
-		p['temps échanges']=transformToDays(tp_ech['temps_passe__sum'])
-		p['temps installation']=transformToDays(tp_tac['temps_passe__sum'])
+		p['temps échanges']=tp_ech['temps_passe__sum']
+		p['temps installation']=tp_tac['temps_passe__sum']
 		
 	labels=['id','client','revendeur','temps échanges','temps installation',]
 	tempfile="/".join([settings.TMP_ROOT,"tempstmp.csv"])

@@ -1,0 +1,19 @@
+Switch:
+
+Port 17: Reprise WAN DSR500
+Port 18: Renvoie LAN
+Port 19: Renvoie WAN/LAN Adista
+Port 20: Reprise téléphonie Adista (VLAN3????)
+Port 21: Reprise 4G
+Port 22: Reprise connexion 4G de basculement
+
+PORT 23-24 interco switch
+
+
+
+Borne WIFI:
+
+SSID:
+
+GIHP-TRANSPORT Transport@54180
+GIHP54180	GIHP@admin@54180
