@@ -33,6 +33,7 @@ urlpatterns = [
     path(r'currents/',views.currents),
     path('admin/', admin.site.urls),
     path(r'download/',views.download),
+    path(r'nom_domaines/',views.noms_domaines),
     path(r'travail/',views.temps_passe),
     path(r'projets/search/',views.projets_search),
     path(r'clients/search/',views.clients_search),

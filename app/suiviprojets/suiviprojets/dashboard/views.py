@@ -2,6 +2,7 @@ import simplejson as json
 import csv
 import mimetypes
 import os
+import re
 from django.conf import settings
 from operator import itemgetter
 import itertools
@@ -440,7 +441,31 @@ def temps_passe(request):
 	os.remove(tempfile)
 
 	return response
-    
+
+def noms_domaines(request):
+	tableau_domaines=[]
+	contacts=Contact.objects.all()
+	for c in contacts:
+		if c.email != None and c.email !="" :
+			ma=re.match(r"^(\w+[ \. | \- | \_ ]?\w*)*\@((\w+[ \. | \- | \_ ]?\w*)*\.\w+)$",c.email)
+			if ma.group(2) not in tableau_domaines:
+				tableau_domaines.append({"client":c.client.nom,"nom_domaine":ma.group(2)})
+	labels=["client","nom_domaine"]
+	tempfile="/".join([settings.TMP_ROOT,"domainestmp.csv"])
+	
+	with open(tempfile,"a") as fichier:
+		writer=csv.DictWriter(fichier,fieldnames=labels,delimiter=";",dialect="excel")
+		writer.writeheader()
+		for t in tableau_domaines:
+			writer.writerow(t)
+		fichier.close()
+	
+	filec=open(tempfile,"r")
+
+	response=HttpResponse(FileWrapper(filec),content_type=mimetypes.guess_type(filec.name)[0])
+	response['Content-Disposition']='attachment; filename='+filec.name
+	os.remove(tempfile)
+	return response
     
 def download(request):
 
