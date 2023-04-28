@@ -130,7 +130,7 @@ class Tache(models.Model):
     statut=models.ForeignKey(StatutTache,on_delete=models.SET_NULL,null=True,blank=True,default=1)
     temps_passe=models.CharField(max_length=20,null=True,blank=True)
     description=models.TextField(null=True,blank=True)
-    personnes_en_charge=models.ManyToManyField(Intervenant,null=True,blank=True)
+    intervenant=models.ManyToManyField(Intervenant,null=True,blank=True)
     
     def __str__(self):
         return self.nom+"-"+self.projet.client.nom
@@ -165,6 +165,7 @@ class Echange(models.Model):
     statut=models.ForeignKey(StatutTache,on_delete=models.SET_NULL,null=True,blank=True,default=1)
     temps_passe=models.CharField(max_length=20,null=True,blank=True,default="0")
     notes=models.TextField(null=True,blank=True)
+    intervenant=models.ForeignKey(Intervenant, on_delete=models.SET_NULL,null=True,blank=True)
     
     def __str__(self):
         return self.type_echange.type_echange+"-"+str(self.contact.nom)+"-"+str(self.contact.prenom)

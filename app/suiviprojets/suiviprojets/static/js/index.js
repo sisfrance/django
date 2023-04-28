@@ -172,7 +172,24 @@ $(function(){
     /*!****
      *    Fin 1 AJAX gestion des pages
      * ****/
+    /****
+     * 
+     * 1.5 AJAX AUTOCOMPLETION ACCUEIL
+     * 
+     * ***/
+     $("#filtre-kanban #projet").on("change",function(event){
+		 event.preventDefault();
+		 
+		});
+      $("#filtre-kanban #intervenant").on("change",function(event){
+		 event.preventDefault();
+		 
+		});
      
+    /*****
+     * 
+     *  FIN 1.5
+     ****/
     /****
 	*
 	*   2. AJAX gestion de la liste

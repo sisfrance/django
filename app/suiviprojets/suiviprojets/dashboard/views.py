@@ -15,7 +15,7 @@ from django.db.models import Count, Sum,Q
 from django.db.models.functions import ExtractMonth, ExtractYear
 from django.forms.models import model_to_dict
 from suiviprojets.dashboard.models import Projet,TypeProjet,TypePrestation,CategorieForfait,Flux,Forfait,TypeEchange,Echange,Contact \
-                                            ,StatutTache, Tache,Consommation,Prestation,Client
+                                            ,StatutTache, Tache,Consommation,Prestation,Client, Intervenant
 from suiviprojets.dashboard.forms import ContactForm,PrestationForm,TacheForm,EchangeForm
 from suiviprojets.helpers.helpers import apply_filter, filter_construct, Pager,ZeepClient
 from wsgiref.util import FileWrapper
@@ -38,7 +38,9 @@ BASE_FIELDS_CLIENTS={'id':'id',
 			'nom':'nom',
 			'ville':'ville',
 			}
-			
+SEARCH_FIELDS_KANBAN={'projet':'projet__icontains',
+					'personnes':'intervenant',
+					}
 SEARCH_TERMS_PROJETS={'num_armoire':'num_armoire__icontains',
 			'nom':'client__nom__icontains',
 			'forfait':'forfait_id',
@@ -125,6 +127,8 @@ def calcul_consommation(id_projet):
 				@seuil_compare : 1,3
 	
 	"""
+	pass
+	
 	def define_alert(conso,conso_jours,seuil_forfait,seuil_compare):
 		if (float(conso) > float(seuil_forfait)) or (float(conso_jours) > float(seuil_compare)) or (float(conso) / float(conso_jours) > float(seuil_compare)):
 			alert="red"
@@ -302,28 +306,51 @@ def client_compose_detail(c):
    *************************/"""
    
 def index(request):
-	
+	filtres={'intervenants':Intervenant.objects.all().order_by('nom','prenom'),
+			'projets':Projet.objects.all().order_by('client'),
+			}
 	"""if request.session.get('filtres') == None:
 		request.session['sort']={'field':'date','sens':'desc'}
 		request.session['nb_items']=10
 		request.session['filtres']=[{}]
 		request.session['message']=""
 		request.session['actions']=[]"""
+		
+	""" Préparation du kanban """
+	
+	statuts=StatutTache.objects.all()
+	""" Préparation des taches ou prestation à effectuer """
+	echanges={}
+	taches={}
+	prestations={}
+	for s in statuts :
+		echanges[s.statut]=Echange.objects.filter(statut=s.id).order_by('-date')
+		taches[s.statut]=Tache.objects.filter(statut=s.id).order_by('-date_programmee')
+		prestations[s.statut]=Prestation.objects.filter(statut=s.id).order_by('-date')
+		
+	kanban={'echanges':echanges,
+			'taches':taches,
+			'prestations':prestations}
+	
 	
 	toprogram_prestations=Prestation.objects.filter(Q(statut__statut__in=["en attente","à programmer"])|Q(date_programmee__isnull=True)).values('projet__client__nom','type_prestation__type_prestation','id')
 	toprogram_tasks=Tache.objects.filter(Q(statut__statut__in=["en attente","à programmer"]) | Q(date_programmee__isnull=True)).values('projet__client__nom','nom','id')
 	next_echanges=Echange.objects.filter(statut__statut__in=["en attente","à programmer"]).values('contact__nom','contact__prenom','date','heure','type_echange__type_echange','id')
 	
 	clients=[]
+	
 	for pr in toprogram_prestations:
 		if pr['projet__client__nom'] not in clients:
 			clients.append(pr['projet__client__nom'])
 			
 
-	datas={'partial':'dashboard/index.html',
+	datas={'partial':'dashboard/kanban.html',
+			'status':statuts,
+			'kanban':kanban,
 			'toprogram_prestations':toprogram_prestations,
 			'toprogram_tasks':toprogram_tasks,
 			'next_echanges':next_echanges,
+			'filtres':filtres,
 			'scripts':SCRIPTS,
 			'styles':STYLES,}
 
@@ -682,6 +709,17 @@ def clients_sort(request):
 						'total_elts':pager[2],
 						})
 	return HttpResponse(reponse)
+
+def accueil_search(request):
+	r=request.POST.copy()
+	filtre=filter_construct(request.POST,SEARCH_FIELDS_KANBAN)
+	echangesAll=Echange.objects.all()
+	tachesAll=Tache.objects.all()
+	prestationsAll=Prestation.objects.all()
+	items=apply_filter(echangesAll,filtre)
+	print(items)
+	return HttpResponse("Coucou")
+	
 
 def create_model_mask(objet):
 	if objet=='contact':

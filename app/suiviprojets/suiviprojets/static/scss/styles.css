@@ -497,4 +497,75 @@ span.statut {
   min-width: 100px;
 }
 
+/*/////////////////////////////////////////////////
+* DEBUT 5-KANBAN 
+///////////////////////////////////////////////////*/
+.titre-action h1 {
+  font-size: 1.5em;
+  text-align: center;
+  font-weight: 700;
+}
+
+.titre-accueil {
+  font-size: 1.2em;
+  font-weight: 600;
+  text-align: center;
+}
+
+.echanges, .taches, .prestations {
+  overflow-x: hidden;
+  overflow-y: scroll;
+  height: 520px;
+}
+
+.carte {
+  margin: 2pt;
+  border-radius: 0.4rem;
+  max-height: 160px;
+  background-color: #fff;
+  overflow: hidden;
+}
+
+.echange, .tache, .prestation {
+  padding: 0 5px;
+  border: solid #fff 5px;
+}
+
+.radius {
+  border-radius: 1rem;
+}
+
+.echange {
+  background-color: #fd7e14;
+}
+
+.tache {
+  background-color: #20c997;
+}
+
+.prestation {
+  background-color: #ffce67;
+}
+
+.content-carte {
+  padding: 2px;
+  font-size: 0.8em;
+}
+.content-carte label {
+  font-weight: 600;
+  text-decoration: underline;
+}
+.content-carte span {
+  font-style: italic;
+}
+
+.title-carte {
+  font-size: 1.2em;
+  font-weight: 800;
+}
+
+/*////////////////////////////////////////////////
+* FIN 5-KANBAN
+/////////////////////////////////////////////////*/
+
 /*# sourceMappingURL=styles.css.map */
