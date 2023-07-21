@@ -6,7 +6,6 @@ Dockerfile
 README.md
 requirements.txt
 suiviprojets.geany
-
 app/suiviprojets/__backup
 app/suiviprojets/__pycache__
 app/suiviprojets/suiviprojets/__pycache__
@@ -21,4 +20,4 @@ app/suiviprojets/suiviprojets
 app/suiviprojets/suiviprojets/settings.py
 app/suiviprojets/*.sql
 app/suiviprojets/*.json
-
+.gitignore
