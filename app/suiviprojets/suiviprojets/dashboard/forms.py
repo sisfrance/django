@@ -27,6 +27,7 @@ class EchangeForm(forms.ModelForm):
 		fields='__all__'
 		
 class ContactForm(forms.ModelForm):
+	email=forms.CharField(widget=forms.TextInput)
 	class Meta:
 		model=Contact
 		fields='__all__'

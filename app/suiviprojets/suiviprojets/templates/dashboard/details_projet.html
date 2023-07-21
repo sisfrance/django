@@ -8,6 +8,8 @@
   	<div class="row main-title">
   		<div id="main-title" class="col-12 text-center">
   				<h2>D&eacute;tails du projet n°{{projet.num_armoire}} Client {{projet.client.nom}}</h2>
+  				<input type="hidden" id="id_projet" value="{{projet.id}}">
+  				<input type="hidden" id="id_client" value="{{projet.client.id}}">
   		</div>
   	</div>
   	<div class="row">
@@ -30,27 +32,8 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-12">
-					<table id="contacts-table"class='table table-light table-striped'>
-						<thead class="thead-light">
-							<th>Nom</th>
-							<th>Prénom</th>
-							<th>@mail</th>
-							<th>téléphones</th>
-							<th>Edition</th>
-						</thead>
-						<tbody>
-							{% for contact in projet.contacts %}
-							<tr>
-								<td class="contact-nom">{{contact.nom}}</td>
-								<td class="contact-prenom">{{contact.prenom}}</td>
-								<td class="contact-email">{{contact.email}}</td>
-								<td class="contact-tel">{{contact.tel}}</td>
-								<td class="contact-edit"><a id="edit" data-objet="contact" href='/admin/dashboard/contact/{{contact.id}}/change/'>Edit</a></td>
-							</tr>
-							{% endfor %}
-						</tbody>
-					</table>
+				<div class="col-12 partiel_contacts">
+					{% include 'partiel_contact.html' %}
 				</div>
 			</div>
 		</div>
@@ -64,25 +47,8 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-12">
-					<table id="contacts-table" class="table table-striped">
-						<thead class="thead-light">
-							<th>Date</th>
-							<th>Contact</th>
-							<th>Motif</th>
-							<th>Edition</th>
-						</thead>
-						<tbody>
-							{% for echange in projet.echanges %}
-							<tr>
-								<td class="echange-date">{{echange.date|date:'d/m/Y'}}</td>
-								<td class="echange-contact">{{echange.contact}}</td>
-								<td class="echange-type">{{echange.type_echange}}</td>
-								<td><a id=""href='/admin/dashboard/echange/{{echange.id}}/change/'>Edit</a></td>
-							</tr>
-							{% endfor %}
-						</tbody>
-					</table>
+				<div class="col-12 partiel_echanges">
+					{% include 'partiel_echange.html' %}
 				</div>
 			</div>
   	</div>
@@ -97,29 +63,8 @@
 					<a id="add-prestation" class="btn btn-secondary" data-projet="{{projet.id}}" data-objet="prestation" href='/admin/dashboard/prestation/add/'>Ajouter prestation</a>
 				</div>
 			</div>
-			<div id="prestations">
-				<table class='table table-striped'>
-					<thead class="thead-light">
-						<tr>
-							<th>Type prestation</th>
-							<th>Intervenant</th>
-							<th>Date programmée</th>
-							<th>statut</th>
-							<th>Edition</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for pr in projet.prestations %}
-						<tr>
-							<td class="prestation-type">{{pr.type_prestation}}</td>
-							<td class="prestation-intervenant">{{pr.intervenant}}</td>
-							<td class="prestation-date">{{pr.date_programmee|date:"d/m/Y"}}</td>
-							<td class="prestations-statut">{{pr.statut.statut}}</td>
-							<td class="prestation-edit"><a href='/admin/dashboard/prestation/{{pr.id}}/change/'>Edit</a></td>
-						</tr>
-						{% endfor %}
-					</tbody>
-				</table>
+			<div id="prestations" class="partiel_prestation">
+				{% include 'partiel_prestation.html' %}
 			</div>
 		</div><!--fin col-6-->
 		<!-- autre colonne -->
@@ -133,33 +78,8 @@
 					<a id="add-tache" class="btn btn-secondary" data-projet="{{projet.id}}" data-objet="tache" href='/admin/dashboard/tache/add/'>Ajouter tâche</a>
 				</div>
 			</div>
-			<div id="taches">
-				<table class='table table-striped'>
-					<thead class='thead-light'>
-						<tr>
-							<th>Nom</th>
-							<th>Prévue le</th>
-							<th>Echéance</th>
-							<th >Statut</th>
-							<th>Responsables</th>
-							<!--<th>Description</th>-->
-							<th>Edition</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for ta in projet.taches %}
-						<tr>
-							<td class="task-nom">{{ta.nom}}</td>
-							<td class="tast-date">{{ta.date_programmee|date:"d/m/Y"}}</td>
-							<td class="task-echeance">{{ta.date_echeance|date:"d/m/Y"}}</td>
-							<td class="task-statut">{{pr.statut}}</td>
-							<td class="task-presonne">{{ta.personne_en_charge}}</td>
-							<!--<td class="task-description">{{ta.description}}</td>-->
-							<td class="task-edit"><a href='/admin/dashboard/tache/{{ta.id}}/change/'>Edit</a></td>
-						</tr>
-						{% endfor %}
-					</tbody>
-				</table>
+			<div id="taches" class="partiel_taches">
+				{% include 'partiel_tache.html' %}
 			</div>
 	    </div>
 	</div><!-- fin row interne-->

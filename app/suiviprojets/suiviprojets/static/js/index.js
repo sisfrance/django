@@ -310,8 +310,8 @@ $(function(){
 			csrfmiddlewaretoken:$("input[name=csrfmiddlewaretoken]").val(),
 			objet      :$(event.target).attr("data-objet"),
 			type_projet:$(event.target).attr("data-type_projet"),
-			projet     :$(event.target).attr("data-projet"),
-			client     :$(event.target).attr("data-client")
+			projet     :$("#id_projet").val(),
+			client     :$("#id_client").val()
 		};
 		$.post("/add/",datas).done(function(response){
 			popup.show(response);
@@ -332,7 +332,40 @@ $(function(){
 		 
 	 });
 	 
+	$(".edit").on("click",function(event){
+		event.preventDefault();
+		event.stopPropagation();
+		/*type_projet:$(event.target).attr("data-type_projet"),
 		
+		client     :$(event.target).attr("data-client"),*/
+		var datas={
+			csrfmiddlewaretoken:$("input[name=csrfmiddlewaretoken]").val(),/*projet     :$(event.target).attr("data-projet"),*/
+			objet      :$(event.target).attr("data-objet"),
+			id         :$(event.target).attr("data-id"),
+			projet     :$("#id_projet").val(),
+			client     :$("#id_client").val()
+		};
+		$.post("/edit/",datas).done(function(response){
+			popup.show(response);
+			$("#submitForm").on("click",function(event){
+			event.preventDefault();
+			event.stopPropagation();
+			var datas=parseDatas("#objetForm");
+			/*datas["type_projet"]=$("#type_projet").val();*/
+			datas["csrfmiddlewaretoken"]=$("input[name=csrfmiddlewaretoken]").val();
+			datas["objet"]=$("#objet").val();
+			datas["projet"]=$("#id_projet").val();
+			datas["client"]=$("#id_client").val();
+			datas["id"]=$("#id").val();
+			$.post("/save/",datas)
+			.done(function(response){
+					popup.hide();
+			});	
+		});
+			
+		});
+	});
+	
 	 $("#soapss").on("click",function(event){
 		event.preventDefault();
 		event.stopPropagation(); 

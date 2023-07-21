@@ -181,6 +181,12 @@ table td, .table td {
 	padding:0;
 	margin:0;
 }
+.projet{
+	.taches,.prestations,.echanges{
+		overflow-y:scroll;
+		height:70px;
+	}
+}
 .no-diag:before { 
     content:'';
     position: absolute;
@@ -209,6 +215,7 @@ table td, .table td {
 .yellow td.comp-light{
 	background-color:rgba(249,227,156);
 }
+
 /*////////////////////////////////////////////////////
 * FIN 1-LISTE PRINCIPALE
 /////////////////////////////////////////////////////*/

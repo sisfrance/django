@@ -341,6 +341,11 @@ table td, .table td {
   margin: 0;
 }
 
+.projet .taches, .projet .prestations, .projet .echanges {
+  overflow-y: scroll;
+  height: 70px;
+}
+
 .no-diag:before {
   content: "";
   position: absolute;

@@ -383,6 +383,10 @@ def details_projet(request,id):
 	projet=projet_compose_details(id)
 	datas={'partial':'dashboard/details_projet.html',
 			'projet':projet,
+			'contacts':projet['contacts'],
+			'prestations':projet['prestations'],
+			'echanges':projet['echanges'],
+			'taches':projet['taches'],
 			'styles':STYLES,
 			'scripts':SCRIPTS,}
 	return render(request,"index.html",datas)
@@ -723,22 +727,22 @@ def accueil_search(request):
 
 def create_model_mask(objet):
 	if objet=='contact':
-		mask = {'model':Contact,'form':ContactForm,'fields':[{'field':'client',
-															'model':Client
+		mask = {'model':Contact,'form':ContactForm,'template':'partiel_client','fields':[{'field':'client',
+															'model':Client,
 															},
 															{'field':'type_projet',
 															'model':TypeProjet
 															}]}
 	elif objet=='echange':
-		mask = {'model':Echange,'form':EchangeForm,'fields':[{'field':'projet',
+		mask = {'model':Echange,'form':EchangeForm,'template':'partiel_echange','fields':[{'field':'projet',
 															'model':Projet
 															}]}
 	elif objet=='prestation':
-		mask = {'model':Prestation,'form':PrestationForm,'fields':[{'field':'projet',
+		mask = {'model':Prestation,'form':PrestationForm,'template':'partiel_prestation','fields':[{'field':'projet',
 																	'model':Projet
 																	}]}
 	elif objet=='tache':
-		mask = {'model':Tache,'form':TacheForm,'fields':[{'field':'projet',
+		mask = {'model':Tache,'form':TacheForm,'template':'partiel_tache','fields':[{'field':'projet',
 														'model':Projet
 														}]}
 	else:
@@ -754,6 +758,7 @@ def add(request):
 	for f in mask['fields']:
 		if r[f['field']] != '':
 			args[f['field']]=f['model'].objects.get(pk=r[f['field']])
+		print(args)
 	new_instance=mask['model'](**args)
 	form=mask['form'](instance=new_instance)
 	if r['objet']== 'echange':
@@ -778,9 +783,8 @@ def edit(request):
 	mask=create_model_mask(r['objet'])
 	instance=mask['model'].objects.get(pk=r['id'])
 	form=mask['form'](instance=instance)
-	datas={"id":r['id'],
-			"id_projet":r['projet'],
-			"id_client":r['client'],
+	datas={"id":instance.id,
+			"projet":r['projet'],
 			"objet":r['objet'],
 			"form":form.as_p()
 			}
@@ -791,13 +795,13 @@ def save(request):
 	mask=create_model_mask(r['objet'])
 	if r['id'] != '-1':
 		instance=mask['model'].objects.get(pk=r['id'])
-		form=mask['form'](r,instance)
+		form=mask['form'](request.POST,instance=instance)
 	else:
 		form=mask['form'](r)
 	if form.is_valid():
-		form.save()	
-		return HttpResponseRedirect('/project/'+r['projet']+'/')
+		form.save()
+		return HttpResponseRedirect('/projet/'+r['projet']+'/')
 	else:
 		return render(request,'dashboard/forms/form.html',{'form':form.as_p()})
 
-	
+

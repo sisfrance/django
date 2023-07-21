@@ -134,14 +134,29 @@ class Tache(models.Model):
     
     def __str__(self):
         return self.nom+"-"+self.projet.client.nom
-
+        
+"""class Task(models.Model):
+    id=models.AutoField(primary_key=True)
+    projet=models.ForeignKey(Projet,on_delete=models.SET_NULL,null=True,blank=True)
+    nom=models.CharField(max_length=150)
+    date_programmee=models.DateField(null=True,blank=True)
+    date_echeance=models.DateField(null=True,blank=True)
+    date_realisation=models.DateField(null=True,blank=True)
+    statut=models.ForeignKey(StatutTache,on_delete=models.SET_NULL,null=True,blank=True,default=1)
+    temps_passe=models.CharField(max_length=20,null=True,blank=True)
+    description=models.TextField(null=True,blank=True)
+    intervenant=models.ManyToManyField(Intervenant,null=True,blank=True)
+    
+    def __str__(self):
+       return self.nom+"-"+self.projet.client.nom"""
+    
 class Contact(models.Model):
     id=models.AutoField(primary_key=True)
     client=models.ForeignKey(Client,on_delete=models.SET_NULL,null=True,blank=True)
     type_projet=models.ForeignKey(TypeProjet,on_delete=models.SET_NULL,null=True,blank=True)
     nom=models.CharField(max_length=50)
     prenom=models.CharField(max_length=30,null=True,blank=True)
-    email =models.EmailField(max_length=150,null=True,blank=True)
+    email = models.EmailField(max_length=150,null=True,blank=True)
     tel = models.CharField(max_length=150,null=True,blank=True)
     notes=models.CharField(max_length=255,null=True,blank=True)
     
