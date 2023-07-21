@@ -6,8 +6,10 @@ Dockerfile
 README.md
 requirements.txt
 suiviprojets.geany
+
 app/suiviprojets/__backup
 app/suiviprojets/__pycache__
+app/suiviprojets/suiviprojets/__pycache__
 
 app/suiviprojets/suiviprojets.geany
 app/suiviprojets/zabbix-proxy.yml
