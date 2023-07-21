@@ -1,0 +1,22 @@
+<table class='table table-striped'>
+	<thead class="thead-light">
+		<tr>
+			<th>Type prestation</th>
+			<th>Intervenant</th>
+			<th>Date programmée</th>
+			<th>statut</th>
+			<th>Edition</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for pr in prestations %}
+		<tr>
+			<td class="prestation-type">{{pr.type_prestation}}</td>
+			<td class="prestation-intervenant">{{pr.intervenant}}</td>
+			<td class="prestation-date">{{pr.date_programmee|date:"d/m/Y"}}</td>
+			<td class="prestations-statut">{{pr.statut.statut}}</td>
+			<td class="prestation-edit"><a id="prestation-{{pr.id}}-edit" class="edit" data-objet="prestation" data-id="{{pr.id}}" href='/admin/dashboard/prestation/{{pr.id}}/change/'>Edit</a></td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>

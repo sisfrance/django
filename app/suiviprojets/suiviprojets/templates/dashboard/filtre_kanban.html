@@ -1,0 +1,47 @@
+<div class="row">
+    <div id="filtre-kanban" class="col-10">
+        <div class="filtre filtre-line-1 row">
+            <div id="line-1-bloc-1" class="col-3">
+                    <div class="d-wrapper">
+						<div class="control-label label-info ">Projet :</div>
+
+                            <select id="projet" name="projet" class="change form-control" multiple="multiple" >
+                            {% for projet in filtres.projets %}
+                                <option value="{{projet.id}}">{{projet}}</option>
+                            {% endfor %}
+							</select>
+                        
+                    </div>
+            </div>
+             <div id="line-1-bloc-2" class="col-3">
+				<div class="control-label label-info">Personne en charge : </div>
+                    <select id="intervenant" name="intervenant" class="change form-control" multiple="multiple" >
+                            {% for personne in filtres.intervenants %}
+                                <option value="{{personne.id}}">{{personne.nom}}&nbsp;{{personne.prenom}}</option>
+                            {% endfor %}
+                    </select>
+                </div>
+            <div id="line-1-bloc-3" class="col-3">
+				<div class="d-wrapper">
+                    <div class="control-label label-info">Client : </div>
+	                    <div class="col-12 input-group">
+	                            <input id="client" type="text" class="keyup form-control" name="client" value="" placeholder="client"/>
+	                     </div>
+				</div>
+            </div>
+            <div id="line-1-bloc-3" class="col-1">
+		     </div><!--separateur-->
+
+        </div>
+
+    </div>
+    <div class="col-2">
+        <div class="filtre btn-group-vertical">
+            <input id="search" class="btn" type="button" name="search" value="Rechercher"/>
+            <form id="download-form" action="/download/" method="POST">
+                    {% csrf_token %}
+                    <input id="download-button" class="download btn btn-success" type="submit" name="download" value="T&eacute;l&eacute;charger"/>
+            </form>
+        </div><!-- /group-vertical -->
+    </div>
+</div>

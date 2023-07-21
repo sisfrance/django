@@ -1,0 +1,21 @@
+	<table id="contacts-table"class='table table-light table-striped'>
+		<thead class="thead-light">
+			<th>Nom</th>
+			<th>Prénom</th>
+			<th>@mail</th>
+			<th>téléphones</th>
+			<th>Edition</th>
+		</thead>
+		<tbody>
+			{% for contact in contacts %}
+			<tr>
+				<td class="contact-nom">{{contact.nom}}</td>
+				<td class="contact-prenom">{{contact.prenom}}</td>
+				<td class="contact-email">{{contact.email}}</td>
+				<td class="contact-tel">{{contact.tel}}</td>
+				<td class="contact-edit"><a id="contact-{{contact.id}}-edit" class="edit" data-objet="contact" data-id="{{contact.id}}" href='/admin/dashboard/contact/{{contact.id}}/change/'>Edit</a></td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+

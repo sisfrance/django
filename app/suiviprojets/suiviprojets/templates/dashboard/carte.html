@@ -1,0 +1,15 @@
+<div class="content-carte">
+	<h4 class="title-carte">{{param.projet.client}}</h4>
+	{% if objet == "echange" %} 
+		<p class="contact-carte"><label>Nom du contact : </label><span>{{param.contact}}</span></p>
+		<p class="date-programmation-carte"><label>Date programmée :</label><span>{{param.date}}</span></p>
+		<p class="notes-carte"><label>Notes : </label><span>{{ param.notes }}</span></p>
+	{% elif objet == "tache" %}
+		<p class="tech-carte"><label>Responsable : </label><span>{{param.personne_en_charge}}</span></p>
+		<p class="date-programmation-carte"><label>Date programmée :</label><span>{{param.date_programmee}}</span></p>
+	{% elif objet == "prestation" %}
+		<p class="tech-carte"><label>Responsable : </label><span>{{param.personne_en_charge}}</p>
+		<p class="date-programmation-carte"><label>Date programmée :</label><span>{{param.date_programmee}}</span></p>
+		<p class="type-prestation-carte"><label>Type de prestation : </label><span>{{param.type_prestation}}</span></p>
+	{% endif %}
+</div>

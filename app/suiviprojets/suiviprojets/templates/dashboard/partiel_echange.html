@@ -1,0 +1,20 @@
+<div class="col-12">
+	<table id="contacts-table" class="table table-striped">
+		<thead class="thead-light">
+			<th>Date</th>
+			<th>Contact</th>
+			<th>Motif</th>
+			<th>Edition</th>
+		</thead>
+		<tbody>
+			{% for echange in echanges %}
+			<tr>
+				<td class="echange-date">{{echange.date|date:'d/m/Y'}}</td>
+				<td class="echange-contact">{{echange.contact}}</td>
+				<td class="echange-type">{{echange.type_echange}}</td>
+				<td><a id="echange-{{echange.id}}-edit" class="edit" data-objet="echange"  data-id="{{echange.id}}" href='/admin/dashboard/echange/{{echange.id}}/change/'>Edit</a></td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>

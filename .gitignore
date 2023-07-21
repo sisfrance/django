@@ -16,7 +16,6 @@ app/suiviprojets/zeeptest.py
 app/suiviprojets/sharepy.py
 app/suiviprojets/uwsgi.ini
 app/suiviprojets/suiviprojets/dashboard/migrations
-app/suiviprojets/suiviprojets
 app/suiviprojets/suiviprojets/settings.py
 app/suiviprojets/*.sql
 app/suiviprojets/*.json
