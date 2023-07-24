@@ -326,7 +326,7 @@ def index(request):
 	for s in statuts :
 		echanges[s.statut]=Echange.objects.filter(statut=s.id).order_by('-date')
 		taches[s.statut]=Tache.objects.filter(statut=s.id).order_by('-date_programmee')
-		prestations[s.statut]=Prestation.objects.filter(statut=s.id).order_by('-date')
+		prestations[s.statut]=Prestation.objects.filter(statut=s.id).order_by('-date_programmee')
 		
 	kanban={'echanges':echanges,
 			'taches':taches,
