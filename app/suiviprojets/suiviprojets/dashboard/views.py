@@ -8,8 +8,9 @@ from operator import itemgetter
 import itertools
 from functools import reduce
 from datetime import datetime, date, timedelta
-from django.http import Http404, HttpResponse, StreamingHttpResponse, HttpResponseRedirect
+from django.http import Http404, HttpResponse, StreamingHttpResponse, HttpResponseRedirect,JsonResponse
 from django.template import RequestContext
+from django.template.loader import render_to_string
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Count, Sum,Q
 from django.db.models.functions import ExtractMonth, ExtractYear
@@ -38,8 +39,9 @@ BASE_FIELDS_CLIENTS={'id':'id',
 			'nom':'nom',
 			'ville':'ville',
 			}
-SEARCH_FIELDS_KANBAN={'projet':'projet__icontains',
-					'personnes':'intervenant',
+SEARCH_FIELDS_KANBAN={'projet':'projet_id__in',
+					'intervenant':'intervenant_id__in',
+					'client':'client',
 					}
 SEARCH_TERMS_PROJETS={'num_armoire':'num_armoire__icontains',
 			'nom':'client__nom__icontains',
@@ -717,6 +719,7 @@ def clients_sort(request):
 def accueil_search(request):
 	r=request.POST.copy()
 	filtre=filter_construct(request.POST,SEARCH_FIELDS_KANBAN)
+	print(filtre)
 	echangesAll=Echange.objects.all()
 	tachesAll=Tache.objects.all()
 	prestationsAll=Prestation.objects.all()
@@ -766,13 +769,18 @@ def add(request):
 		queryset=Contact.objects.filter(client=projet.client.id,type_projet=projet.type_projet.id).order_by('nom')
 		form.fields['contact'].queryset=queryset
 	try:
-		value=r['client']
+		type_projet=r['type_projet']
 	except Exception:
-		value=''
+		type_projet=""
+	try:
+		client=r['client']
+	except Exception:
+		client=''
 		
 	datas={"id":"",
 			"id_projet":r['projet'],
-			"id_client":value,
+			"id_type_projet":type_projet,
+			"id_client":client,
 			"objet":r['objet'],
 			"form":form.as_p()
 			}
@@ -800,8 +808,28 @@ def save(request):
 		form=mask['form'](r)
 	if form.is_valid():
 		form.save()
-		return HttpResponseRedirect('/projet/'+r['projet']+'/')
+		
+		datas={'result':'done',
+				'content':'/projet/'+r['projet']+'/'
+				}
 	else:
-		return render(request,'dashboard/forms/form.html',{'form':form.as_p()})
-
+		try:
+			type_projet=r['type_projet']
+		except Exception:
+			type_projet=""
+		try:
+			client=r['client']
+		except Exception:
+			client=''
+		rendu = render_to_string('dashboard/forms/form.html',{"id":r['id'],
+															"id_projet":r['projet'],
+															"id_type_projet":type_projet,
+															"id_client":client,
+															"objet":r['objet'],
+															"form":form.as_p()
+														})
+		datas= {'result':'fail',
+				'content':rendu
+				}
+	return HttpResponse(json.dumps(datas))
 

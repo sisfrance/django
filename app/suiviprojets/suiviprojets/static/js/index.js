@@ -303,6 +303,34 @@ $(function(){
      /****
 	 * 3-Traitement des formulaires 
 	 * **/
+	 let submit = function(event){
+		 			event.preventDefault();
+					event.stopPropagation();
+					var datas=parseDatas("#objetForm");
+					datas["csrfmiddlewaretoken"]=$("input[name=csrfmiddlewaretoken]").val();
+					datas["objet"]=$("#objet").val();
+					datas["projet"]=$("#id_projet").val();
+					datas["client"]=$("#id_client").val();
+					/*datas["type_projet"]=$("#type_projet").val();*/
+					$.post("/save/",datas)
+					.done(function(response){
+						var json=JSON.parse(response);
+						console.log(json.result);
+						if(json.result == "fail"){
+							$("#window-content").empty().html(json.content);
+							$("#submitForm").on("click",function(event){
+								submit(event);
+							});
+						}else{
+							popup.hide();
+							document.location.href=json.content;
+							
+						}
+					})
+					.fail(function(error){
+						console.log(error);
+					});	
+				}
 	 $("#add-contact,#add-echange,#add-prestation,#add-tache").on("click",function(event){
 		event.preventDefault();
 		event.stopPropagation();
@@ -316,17 +344,8 @@ $(function(){
 		$.post("/add/",datas).done(function(response){
 			popup.show(response);
 			$("#submitForm").on("click",function(event){
-			event.preventDefault();
-			event.stopPropagation();
-			var datas=parseDatas("#objetForm");
-			datas["csrfmiddlewaretoken"]=$("input[name=csrfmiddlewaretoken]").val();
-			datas["objet"]=$("#objet").val();
-			datas["type_projet"]=$("#type_projet").val();
-			$.post("/save/",datas)
-			.done(function(response){
-					popup.hide();
-			});	
-		});
+				submit(event);
+			});
 			
 		});
 		 
@@ -348,20 +367,8 @@ $(function(){
 		$.post("/edit/",datas).done(function(response){
 			popup.show(response);
 			$("#submitForm").on("click",function(event){
-			event.preventDefault();
-			event.stopPropagation();
-			var datas=parseDatas("#objetForm");
-			/*datas["type_projet"]=$("#type_projet").val();*/
-			datas["csrfmiddlewaretoken"]=$("input[name=csrfmiddlewaretoken]").val();
-			datas["objet"]=$("#objet").val();
-			datas["projet"]=$("#id_projet").val();
-			datas["client"]=$("#id_client").val();
-			datas["id"]=$("#id").val();
-			$.post("/save/",datas)
-			.done(function(response){
-					popup.hide();
-			});	
-		});
+				submit(event);
+			});
 			
 		});
 	});
@@ -426,6 +433,15 @@ $(function(){
     /****
      * 4-Fin-Calendrier
      * **/
-	
+	$("#kanban-btn").on("click",(event)=>{
+		console.log("coucou");
+		let datas=parseDatas("#filtre-kanban");
+		datas["csrfmiddlewaretoken"]=$("input[name=csrfmiddlewaretoken]").val(),
+		$.post("/kanban/search",datas)
+		.done((response)=>{
+			console.log(response);
+		});
+		
+	});
 	
 });

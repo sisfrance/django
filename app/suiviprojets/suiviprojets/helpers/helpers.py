@@ -92,8 +92,9 @@ def filter_construct(requete,terms):
     filtreQ=[]
     filtres={}
     for key in requete:
-        if key != 'csrfmiddlewaretoken' and key != 'nozeros' and terms[key] != None:
-            print(terms[key])
+        print(key)
+        if key != 'csrfmiddlewaretoken' and key != 'nozeros' and requete[key] != None:
+            
             if re.match("^(\w+)(\[\])$",key):
                 filtres[terms[key.replace("[]","")]]=requete.getlist(key)
             elif isinstance(terms[key],Q):
