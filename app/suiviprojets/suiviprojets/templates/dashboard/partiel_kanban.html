@@ -1,0 +1,89 @@
+<div class="titre-action row">
+		<div class="col-12">
+			<h1>Echanges</h1>
+		</div>
+	</div>
+    <div class="row echanges" style="display:flex;">
+		{% for state,kanban_echanges in kanban.echanges.items %}
+			<div class="col-3 echange radius" style="display:vertical;">
+				<p class="titre-accueil ">{{state}}</p>
+				{% for echange in kanban_echanges %}
+				<div class="carte">
+					{% with param=echange objet="echange" %}
+						{% include 'carte.html' %}
+					{% endwith %}
+				</div>
+				{% endfor %}
+			</div>
+		{% endfor %}
+    </div>
+    <div class="titre-action row">
+		<div class="col-12">
+			<h1>Taches</h1>
+		</div>
+	</div>
+     <div class="row taches" style="display:flex;">
+		{% for state,kanban_taches in kanban.taches.items %}
+			<div class="col-3 tache radius" style="display:vertical;">
+				<p class="titre-accueil">{{state}}</p>
+				{% for tache in kanban_taches %}
+					{% with param=tache objet="tache" %}
+					<div class="carte">
+						{% include 'carte.html' %}
+					</div>
+					{% endwith %}
+				{% endfor %}
+			</div>
+		{% endfor %}
+    </div>
+    <div class="titre-action row">
+		<div class="col-12">
+			<h1>Prestations</h1>
+		</div>
+	</div>
+     <div class="row prestations" style="display:flex;">
+		{% for state,kanban_prestas in kanban.prestations.items %}
+			<div class="col-3 prestation radius" style="display:vertical;">
+				<p class="titre-accueil">{{state}}</p>
+				{% with param=prestation objet="prestation" %}
+				<div class="carte">
+					{% include 'carte.html' %}
+				</div>
+				{% endwith %}
+			</div>
+		{% endfor %}
+    </div>
+    <div class="row">
+		<div class="col-3">
+			<h3 class="titre-accueil">Tâches à programmer/en attente</h3>
+			<div id="toprogram_tasks" class="paragraph-accueil">
+				<ul>
+				{% for task in toprogram_tasks %}
+					<li class="li-tache"><a href="/admin/dashboard/tache/{{task.id}}/change">{{task.projet__client__nom}}-{{task.nom}}</a></li>
+				{% endfor %}
+				</ul>
+			</div>
+		</div>
+		<div class="col-3">
+			<h3 class="titre-accueil">Prestations à programmer/en attente</h3>
+			<div id="toprogram_prestations" class="paragraph-accueil">
+				<ul>
+				{% for prestation in toprogram_prestations %}
+					<li class="li-prestation"><a href="/admin/dashboard/prestation/{{prestation.id}}/change">{{prestation.projet__client__nom}}-{{prestation.type_prestation__type_prestation}}</a></li>
+				{% endfor %}
+				</ul>
+			</div>
+		</div>
+		<div class="col-3">
+			<h3 class="titre-accueil">Prochains échanges</h3>
+			<div id="next_conversations" class="paragraph-accueil">
+				<ul>
+				{% for echange in next_echanges %}
+					<li class="li-conversation"><a href="/admin/dashboard/echange/{{echange.id}}/change">{{echange.contact__nom}}-{{echange.date}}:{{echange.heure}}</a></li>
+				{% endfor %}
+				</ul>
+			</div>
+		</div>
+		
+	</div>
+

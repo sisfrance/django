@@ -434,12 +434,14 @@ $(function(){
      * 4-Fin-Calendrier
      * **/
 	$("#kanban-btn").on("click",(event)=>{
-		console.log("coucou");
+		
 		let datas=parseDatas("#filtre-kanban");
-		datas["csrfmiddlewaretoken"]=$("input[name=csrfmiddlewaretoken]").val(),
+		
+		datas["csrfmiddlewaretoken"]=$("input[name=csrfmiddlewaretoken]").val();
+		
 		$.post("/kanban/search",datas)
 		.done((response)=>{
-			console.log(response);
+			$("#kanban-content").empty().html(response);
 		});
 		
 	});

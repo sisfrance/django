@@ -20,4 +20,3 @@ app/suiviprojets/suiviprojets/dashboard/migrations
 app/suiviprojets/suiviprojets/settings.py
 app/suiviprojets/*.sql
 app/suiviprojets/*.json
-.gitignore

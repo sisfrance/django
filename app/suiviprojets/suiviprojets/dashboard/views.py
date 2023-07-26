@@ -39,9 +39,10 @@ BASE_FIELDS_CLIENTS={'id':'id',
 			'nom':'nom',
 			'ville':'ville',
 			}
-SEARCH_FIELDS_KANBAN={'projet':'projet_id__in',
-					'intervenant':'intervenant_id__in',
+SEARCH_FIELDS_KANBAN={'projet':'projet__in',
+					'intervenant':'intervenant__in',
 					'client':'client',
+					'statut':'statut__in',
 					}
 SEARCH_TERMS_PROJETS={'num_armoire':'num_armoire__icontains',
 			'nom':'client__nom__icontains',
@@ -308,8 +309,10 @@ def client_compose_detail(c):
    *************************/"""
    
 def index(request):
+	
+	statuts=StatutTache.objects.all().order_by('statut')
 	filtres={'intervenants':Intervenant.objects.all().order_by('nom','prenom'),
-			'projets':Projet.objects.all().order_by('client'),
+			'projets':Projet.objects.all().order_by('client'),'statuts':statuts,
 			}
 	"""if request.session.get('filtres') == None:
 		request.session['sort']={'field':'date','sens':'desc'}
@@ -320,11 +323,11 @@ def index(request):
 		
 	""" Préparation du kanban """
 	
-	statuts=StatutTache.objects.all()
 	""" Préparation des taches ou prestation à effectuer """
 	echanges={}
 	taches={}
 	prestations={}
+	
 	for s in statuts :
 		echanges[s.statut]=Echange.objects.filter(statut=s.id).order_by('-date')
 		taches[s.statut]=Tache.objects.filter(statut=s.id).order_by('-date_programmee')
@@ -719,13 +722,36 @@ def clients_sort(request):
 def accueil_search(request):
 	r=request.POST.copy()
 	filtre=filter_construct(request.POST,SEARCH_FIELDS_KANBAN)
-	print(filtre)
-	echangesAll=Echange.objects.all()
-	tachesAll=Tache.objects.all()
-	prestationsAll=Prestation.objects.all()
-	items=apply_filter(echangesAll,filtre)
-	print(items)
-	return HttpResponse("Coucou")
+	
+	statuts=StatutTache.objects.all()
+
+	try:
+		statuts=statuts.filter(id__in=r.getlist('statut[]'))
+	except Exception as error:
+		statuts=statuts.exclude(id__in=[4])
+	
+	echs=apply_filter(Echange.objects.all(),filtre)
+	prests=apply_filter(Prestation.objects.all(),filtre)
+	tachs=apply_filter(Tache.objects.all(),filtre)
+	
+	echanges={}
+	taches={}
+	prestations={}
+	"""statuts=StatutTache.objects.all()"""
+	
+	for s in statuts :
+		echanges[s.statut]=echs.filter(statut=s.id).order_by('-date')
+		taches[s.statut]=tachs.filter(statut=s.id).order_by('-date_programmee')
+		prestations[s.statut]=prests.filter(statut=s.id).order_by('-date_programmee')
+		
+	datas={'partial':'dashboard/kanban.html',
+			'status':statuts,
+			'kanban':{'echanges':echanges,
+						'prestations':prestations,
+						'taches':taches,
+						}
+			}
+	return render(request,'partiel_kanban.html',datas)
 	
 
 def create_model_mask(objet):

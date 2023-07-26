@@ -21,7 +21,18 @@
                             {% endfor %}
                     </select>
                 </div>
-            <div id="line-1-bloc-3" class="col-3">
+           
+            <div id="line-1-bloc-3" class="col-2">
+				<div class="d-wrapper">
+                    <div class="control-label label-info">Statuts : </div>
+	                    <select id="statut" name="statut" class="change form-control" multiple="multiple" >
+                            {% for statut in filtres.statuts %}
+                                <option value="{{statut.id}}">{{statut.statut}}</option>
+                            {% endfor %}
+                    </select>
+				</div>
+		     </div><!--separateur-->
+			<div id="line-1-bloc-3" class="col-2">
 				<div class="d-wrapper">
                     <div class="control-label label-info">Client : </div>
 	                    <div class="col-12 input-group">
@@ -29,9 +40,6 @@
 	                     </div>
 				</div>
             </div>
-            <div id="line-1-bloc-3" class="col-1">
-		     </div><!--separateur-->
-
         </div>
 
     </div>
