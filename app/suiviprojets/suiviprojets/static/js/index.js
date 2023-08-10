@@ -433,7 +433,11 @@ $(function(){
     /****
      * 4-Fin-Calendrier
      * **/
-	$("#kanban-btn").on("click",(event)=>{
+   
+/*******
+ * 5- KANBAN FILTRES
+ * ****/
+$("#kanban-btn").on("click",(event)=>{
 		
 		let datas=parseDatas("#filtre-kanban");
 		
@@ -445,5 +449,8 @@ $(function(){
 		});
 		
 	});
-	
+/******
+ * 5-FIN KANBAN
+ * ***/
+ 
 });

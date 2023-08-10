@@ -5,87 +5,104 @@
 {% block content %}
 <body>
 <section id="global-content">
-  	<div class="row main-title">
-  		<div id="main-title" class="col-12 text-center">
+  	<div class="row main-title" >
+  		<div id="titre-page" class="col-12 text-center">
   				<h2>D&eacute;tails du projet n°{{projet.num_armoire}} Client {{projet.client.nom}}</h2>
   				<input type="hidden" id="id_projet" value="{{projet.id}}">
   				<input type="hidden" id="id_type_projet" value="{{projet.type_projet.id}}">
   				<input type="hidden" id="id_client" value="{{projet.client.id}}">
   		</div>
   	</div>
-  	<div class="row">
+  	<div class="row" data-tag="row1">
+		<div class="col-8" data-tag="col1">
 		{% csrf_token %}
-		<div class="col-2" id="resume">
-			<h3>Résumé :</h3>
-			<div id="resume">
-				<p class="ligne"><label id="type_projet">Type de projet : </label><span>{{projet.type_projet.type_projet}}</span></p>
-				<p class="ligne"><label id="forfait" class="label">Forfait : </label><span>{{projet.forfait.categorie_forfait}}</span></p>
-				<p class="ligne"><label id="date_commande" class="label">Date de commande : </label><span>{{projet.forfait.date_commande}}</span></p>
+			<div class="row" data-tag="row111">
+				<div class="col-3" id="client" data-tag="col111">
+					<h3>Client :</h3>
+					<div id="client-resume">
+						<p class="ligne"><label id="client-nom" class="label">Nom&nbsp;:&nbsp;</label><span>{{projet.client.nom}}</span></p>
+						<p class="ligne"><label id="client-adresse1" class="label">Adresse&nbsp;:&nbsp;</label><span>{{projet.client.adresse1}}</span></p>
+						{% if projet.client.addresse2 %}
+							<p class="ligne"><label id="client-adresse2" class="label">&nbsp;&nbsp;</label><span>{{projet.client.adresse2}}</span></p>
+						{% endif %}
+						<p class="ligne"><label id="client-adresse2" class="label">Ville&nbsp;:&nbsp;</label><span>{{projet.client.code_postal}}&nbsp;{{projet.client.ville}}</span></p>
+					</div>
+					<h3>Résumé projet:</h3>
+					<div id="resume">
+						<p class="ligne"><label id="numero_armoire">Référence&nbsp;:&nbsp;</label><span>{{projet.num_armoire}}</span></p>
+						<p class="ligne"><label id="type_projet">Type de projet&nbsp;:&nbsp;</label><span>{{projet.type_projet.type_projet}}</span></p>
+						<p class="ligne"><label id="forfait" class="label">Forfait&nbsp;:&nbsp;</label><span>{{projet.forfait.categorie_forfait}}</span></p>
+						<p class="ligne"><label id="date_commande" class="label">Date de commande&nbsp;:&nbsp;</label><span>{{projet.forfait.date_commande}}</span></p>
+					</div>
+				</div>
+				
+				<div class="col-6" id="contacts" data-tag="col113">
+					<div class="row">
+						<div class="col-12 text-left">
+							<h3>Contacts : </h3>
+						</div>
+
+					</div>
+					<div class="row">
+						<div class="col-12 partiel_contacts">
+							{% include 'partiel_contact.html' %}
+						</div>
+					</div>
+				</div>
+				
+				<div class="col-3" id="actions" data-tag="col112">
+					<div class="filtre btn-group-vertical">
+						<br>
+						<br>
+						<br>
+						<a id="add-contact" data-client="{{projet.client.id}}" data-type_projet="{{projet.type_projet.id}}" data-projet="{{projet.id}}" data-objet="contact" class="btn btn-secondary" href='/admin/dashboard/contact/add/'>Ajouter contact</a>
+			            <br>
+			            <a id="add-tache" class="btn btn-secondary" data-projet="{{projet.id}}" data-objet="tache" href='/admin/dashboard/tache/add/'>Ajouter tâche</a>
+			            <br>
+			            <a id="add-echange" data-projet="{{projet.id}}" data-objet="echange" class="btn btn-secondary" href='/admin/dashboard/echange/add/'>Ajouter échange</a>
+			            <br>
+			            <a id="add-prestation" class="btn btn-secondary" data-projet="{{projet.id}}" data-objet="prestation" href='/admin/dashboard/prestation/add/'>Ajouter prestation</a>
+					</div><!-- /group-vertical -->
+				</div>
+			</div><!-- fin row111-->
+			<hr>
+			<div class="row" data-tag="row112">
+				<div class="row">
+					<div class="col-12">
+						<h3>Filtres kanban </h3>
+					</div>
+				</div>
+				<div id="filtre-kanban" class="col-12">
+					<div class="row">
+						<hr>
+						<div class="col-3">
+							<input type="hidden" id="projet_id" name="projet_id" value="{{projet.id}}"/>
+						</div>
+						<div class="d-wrapper col-3">
+		                    <div class="control-label label-info">Statuts : </div>
+			                <select id="statut" name="statut" class="change form-control" multiple="multiple" >
+		                    {% for statut in filtres.statuts %}
+		                       <option value="{{statut.id}}">{{statut.statut}}</option>
+		                    {% endfor %}
+							</select>
+						</div>
+						<div class="d-wrapper col-3">
+		                    <div class="control-label label-info">Intervenants : </div>
+			                <select id="intervenant" name="intervenant" class="change form-control" multiple="multiple" >
+		                    {% for intervenant in filtres.intervenants %}
+		                       <option value="{{intervenant.id}}">{{intervenant.nom}}&nbsp;{{intervenant.prenom}}</option>
+		                    {% endfor %}
+							</select>
+						</div>
+						<div class="col-3 text-left">
+							<input id="kanban-btn" class="btn btn-secondary" type="button" name="kanban-btn" value="Rechercher"/>
+						</div>
+					</div>
+				</div>
+				
 			</div>
-		</div>
-		<div class="col-5" id="contacts">
-			<div class="row">
-				<div class="col-8 text-left">
-					<h3>Contacts : </h3>
-				</div>
-				<div class="col-4 text-right">
-					<a id="add-contact" data-client="{{projet.client.id}}" data-type_projet="{{projet.type_projet.id}}" data-projet="{{projet.id}}" data-objet="contact" class="btn btn-secondary" href='/admin/dashboard/contact/add/'>Ajouter contact</a>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-12 partiel_contacts">
-					{% include 'partiel_contact.html' %}
-				</div>
-			</div>
-		</div>
-		<div class="col-5" id="echanges">
-			<div class="row">
-				<div class="col-8 text-left">
-					<h3>Echanges : </h3>
-				</div>
-				<div class="col-4 text-right">
-					<a id="add-echange" data-projet="{{projet.id}}" data-objet="echange" class="btn btn-secondary" href='/admin/dashboard/echange/add/'>Ajouter échange</a>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-12 partiel_echanges">
-					{% include 'partiel_echange.html' %}
-				</div>
-			</div>
-  	</div>
-  </div>
-	<div class="row">
-		<div class="col-6">
-			<div class="row">
-				<div class="col-8 text-left">
-					<h3>Prestations & D&eacute;veloppements Sp&eacute;cifiques :</h3>
-				</div>
-				<div class="col-4 text-right">
-					<a id="add-prestation" class="btn btn-secondary" data-projet="{{projet.id}}" data-objet="prestation" href='/admin/dashboard/prestation/add/'>Ajouter prestation</a>
-				</div>
-			</div>
-			<div id="prestations" class="partiel_prestation">
-				{% include 'partiel_prestation.html' %}
-			</div>
-		</div><!--fin col-6-->
-		<!-- autre colonne -->
-	    <div class="col-6">
-			<div class="row">
-				<div class="col-9 text-left">
-					<h3>Etat des tâches :</h3>
-				</div>
-				<!--<div class="col-1"></div>-->
-				<div class="col-3 text-right">
-					<a id="add-tache" class="btn btn-secondary" data-projet="{{projet.id}}" data-objet="tache" href='/admin/dashboard/tache/add/'>Ajouter tâche</a>
-				</div>
-			</div>
-			<div id="taches" class="partiel_taches">
-				{% include 'partiel_tache.html' %}
-			</div>
-	    </div>
-	</div><!-- fin row interne-->
-	<div class="row">
-		<div class="col-12">
+		</div><!--fin col-11 -->
+		<div class="col-3" data-tag="col12">
 			<script>
 				var eventsct={{client.eventsct|safe|default:'[]'}};
 				var eventscp={{client.eventscp|safe|default:'[]'}};
@@ -93,11 +110,27 @@
 			</script>
 			<div id="calendar"></div>
 		</div>
-	</div>
-
 		
-
-  </body>
+	</div><!-- fin row interne-->
+	<hr>
+	
+	<div id="kanban-content">
+		{% include "partiel_kanban.html" %}
+	</div>
+	
+		
+		<div id="myTimeline" class="col-12">
+			<ul class="timeline-events">
+			<li data-timeline-node="{ start:'2023-05-28 10:00',end:'2023-05-30 13:00',content:'Event Here' }">1</li>
+			<li data-timeline-node="{ start:'2023-09-29 23:10',end:'2023-10-29 1:30',content:'<p>Attention</p>' }">2</li>
+		</ul>
+		<div class="timeline-event-view"></div>
+		</div>
+		
+	</div>
+		
 </section>
+</body>
+
 {% endblock %}
 

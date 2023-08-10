@@ -1,15 +1,12 @@
 <div class="content-carte">
-	<h4 class="title-carte">{{param.projet.client}}</h4>
-	{% if objet == "echange" %} 
-		<p class="contact-carte"><label>Nom du contact : </label><span>{{param.contact}}</span></p>
-		<p class="date-programmation-carte"><label>Date programmée :</label><span>{{param.date}}</span></p>
-		<p class="notes-carte"><label>Notes : </label><span>{{ param.notes }}</span></p>
-	{% elif objet == "tache" %}
-		<p class="tech-carte"><label>Responsable : </label><span>{{param.personne_en_charge}}</span></p>
-		<p class="date-programmation-carte"><label>Date programmée :</label><span>{{param.date_programmee}}</span></p>
-	{% elif objet == "prestation" %}
-		<p class="tech-carte"><label>Responsable : </label><span>{{param.personne_en_charge}}</p>
-		<p class="date-programmation-carte"><label>Date programmée :</label><span>{{param.date_programmee}}</span></p>
-		<p class="type-prestation-carte"><label>Type de prestation : </label><span>{{param.type_prestation}}</span></p>
-	{% endif %}
+	<h4 class="title-carte">{{elt.projet.client}}</h4>
+		{% if elt.contact != "" %}
+			<p class="contact"><label>Personne à contacter :</label><span>{{elt.contact}}</span></p>
+		{% endif %}
+		{% if elt.nom != "" %}
+			<p class="nom"><label> :</label><span>{{elt.nom}}</span></p>
+		{% endif %}
+		<p class="date-programmee"><label>Date programmée :</label><span>{{elt.date_programmee}}</span></p>
+		<p class="description"><label>Description : </label><span>{{ elt.description }}</span></p>
+		<p class="tech-carte"><label>Responsable : </label><span>{{elt.intervenant}}</span></p>
 </div>

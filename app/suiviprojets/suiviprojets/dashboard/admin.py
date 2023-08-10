@@ -1,6 +1,7 @@
 from django.contrib import admin
 from suiviprojets.dashboard.models import Projet,TypePrestation,CategorieForfait,Flux,Forfait,TypeEchange,Echange,Contact \
-										,StatutTache, Tache,Consommation,Prestation,Client,Intervenant,Revendeur,TypeProjet
+										,StatutTache, Tache,Consommation,Prestation,Client,Intervenant,Revendeur,TypeProjet \
+										,Task, TaskType
 # Register your models here.
 
 """class SessionAdmin(admin.ModelAdmin):
@@ -36,6 +37,9 @@ class PrestationAdmin(admin.ModelAdmin):
 class TacheAdmin(admin.ModelAdmin):
 	list_display=('date_programmee','projet','nom','date_realisation','statut')
 
+class TaskAdmin(admin.ModelAdmin):
+	list_display=('statut','task_type','id','contact')
+	
 admin.site.register(TypePrestation)
 admin.site.register(CategorieForfait)
 admin.site.register(Flux)
@@ -52,3 +56,5 @@ admin.site.register(Client)
 admin.site.register(Intervenant)
 admin.site.register(Revendeur)
 admin.site.register(TypeProjet)
+admin.site.register(Task,TaskAdmin)
+admin.site.register(TaskType)

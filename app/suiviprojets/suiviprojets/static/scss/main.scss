@@ -16,7 +16,7 @@ h1{
 	padding: 1.5em 0;
 }
 .main-title{
-	padding: 1.5em 0;
+	padding: 1em 0 2.5em;
 	font-size:1.3em;
 }
 h2{
@@ -182,7 +182,7 @@ table td, .table td {
 	margin:0;
 }
 .projet{
-	.taches,.prestations,.echanges{
+	.kanban-wrapper{
 		overflow-y:scroll;
 		height:70px;
 	}
@@ -351,7 +351,7 @@ span.statut{
 	font-weight:600;
 	text-align:center;
 }
-.echanges, .taches, .prestations{
+.kanban-wrapper{
 	overflow-x:hidden;
 	overflow-y:scroll;
 	height:520px;
@@ -364,24 +364,16 @@ span.statut{
 	overflow:hidden;
 	
 }
-.echange,.tache,.prestation{
+.kanban-wrapper{
 	padding:0 5px;
 	border:solid $white 5px;
+	background-color:$gray-300;
 
 }
 .radius{
 	border-radius: $border-radius-col;
 }
-.echange{
-	background-color:$orange;
-	
-}
-.tache{
-	background-color:$teal;
-}
-.prestation{
-	background-color:$yellow;
-}
+
 .content-carte{
 	padding:2px;
 	font-size:0.8em;

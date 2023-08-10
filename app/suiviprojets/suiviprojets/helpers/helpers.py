@@ -87,13 +87,16 @@ def apply_filter(items,filtre):
    * @portee publique
    **************************"""
 
-def filter_construct(requete,terms):
+def filter_construct(requete,terms,exclude_keys=[]):
 
     filtreQ=[]
     filtres={}
+    base_criterias=['csrfmiddlewaretoken','nozeros']
+    criterias=[*base_criterias,*exclude_keys]
+    print(criterias)
+    
     for key in requete:
-        print(key)
-        if key != 'csrfmiddlewaretoken' and key != 'nozeros' and requete[key] != None:
+        if key not in criterias and requete[key] != None:
             
             if re.match("^(\w+)(\[\])$",key):
                 filtres[terms[key.replace("[]","")]]=requete.getlist(key)

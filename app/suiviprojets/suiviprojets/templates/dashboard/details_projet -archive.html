@@ -1,0 +1,103 @@
+
+
+   
+<!-- Page d'index -->
+{% block content %}
+<body>
+<section id="global-content">
+  	<div class="row main-title">
+  		<div id="main-title" class="col-12 text-center">
+  				<h2>D&eacute;tails du projet n°{{projet.num_armoire}} Client {{projet.client.nom}}</h2>
+  				<input type="hidden" id="id_projet" value="{{projet.id}}">
+  				<input type="hidden" id="id_type_projet" value="{{projet.type_projet.id}}">
+  				<input type="hidden" id="id_client" value="{{projet.client.id}}">
+  		</div>
+  	</div>
+  	<div class="row">
+		{% csrf_token %}
+		<div class="col-2" id="resume">
+			<h3>Résumé :</h3>
+			<div id="resume">
+				<p class="ligne"><label id="type_projet">Type de projet : </label><span>{{projet.type_projet.type_projet}}</span></p>
+				<p class="ligne"><label id="forfait" class="label">Forfait : </label><span>{{projet.forfait.categorie_forfait}}</span></p>
+				<p class="ligne"><label id="date_commande" class="label">Date de commande : </label><span>{{projet.forfait.date_commande}}</span></p>
+			</div>
+		</div>
+		<div class="col-5" id="contacts">
+			<div class="row">
+				<div class="col-8 text-left">
+					<h3>Contacts : </h3>
+				</div>
+				<div class="col-4 text-right">
+					<a id="add-contact" data-client="{{projet.client.id}}" data-type_projet="{{projet.type_projet.id}}" data-projet="{{projet.id}}" data-objet="contact" class="btn btn-secondary" href='/admin/dashboard/contact/add/'>Ajouter contact</a>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12 partiel_contacts">
+					{% include 'partiel_contact.html' %}
+				</div>
+			</div>
+		</div>
+		<div class="col-5" id="echanges">
+			<div class="row">
+				<div class="col-8 text-left">
+					<h3>Echanges : </h3>
+				</div>
+				<div class="col-4 text-right">
+					<a id="add-echange" data-projet="{{projet.id}}" data-objet="echange" class="btn btn-secondary" href='/admin/dashboard/echange/add/'>Ajouter échange</a>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12 partiel_echanges">
+					{% include 'partiel_echange.html' %}
+				</div>
+			</div>
+  	</div>
+  </div>
+	<div class="row">
+		<div class="col-6">
+			<div class="row">
+				<div class="col-8 text-left">
+					<h3>Prestations & D&eacute;veloppements Sp&eacute;cifiques :</h3>
+				</div>
+				<div class="col-4 text-right">
+					<a id="add-prestation" class="btn btn-secondary" data-projet="{{projet.id}}" data-objet="prestation" href='/admin/dashboard/prestation/add/'>Ajouter prestation</a>
+				</div>
+			</div>
+			<div id="prestations" class="partiel_prestation">
+				{% include 'partiel_prestation.html' %}
+			</div>
+		</div><!--fin col-6-->
+		<!-- autre colonne -->
+	    <div class="col-6">
+			<div class="row">
+				<div class="col-9 text-left">
+					<h3>Etat des tâches :</h3>
+				</div>
+				<!--<div class="col-1"></div>-->
+				<div class="col-3 text-right">
+					<a id="add-tache" class="btn btn-secondary" data-projet="{{projet.id}}" data-objet="tache" href='/admin/dashboard/tache/add/'>Ajouter tâche</a>
+				</div>
+			</div>
+			<div id="taches" class="partiel_taches">
+				{% include 'partiel_tache.html' %}
+			</div>
+	    </div>
+	</div><!-- fin row interne-->
+	<div class="row">
+		<div class="col-12">
+			<script>
+				var eventsct={{client.eventsct|safe|default:'[]'}};
+				var eventscp={{client.eventscp|safe|default:'[]'}};
+				var eventsce={{client.eventsce|safe|default:'[]'}};
+			</script>
+			<div id="calendar"></div>
+		</div>
+	</div>
+
+		
+
+  </body>
+</section>
+{% endblock %}
+
