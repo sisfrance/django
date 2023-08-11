@@ -38,7 +38,7 @@ class TacheAdmin(admin.ModelAdmin):
 	list_display=('date_programmee','projet','nom','date_realisation','statut')
 
 class TaskAdmin(admin.ModelAdmin):
-	list_display=('statut','task_type','id','contact')
+	list_display=('date_programmee','date_echeance','projet','statut','task_type','id')
 	
 admin.site.register(TypePrestation)
 admin.site.register(CategorieForfait)

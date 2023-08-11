@@ -452,5 +452,6 @@ $("#kanban-btn").on("click",(event)=>{
 /******
  * 5-FIN KANBAN
  * ***/
- 
+ 	
+	
 });

@@ -16,7 +16,7 @@ from django.shortcuts import render, get_object_or_404
 from django.db.models import Count, Sum,Q
 from django.db.models.functions import ExtractMonth, ExtractYear
 from django.forms.models import model_to_dict
-from suiviprojets.dashboard.models import Projet,TypeProjet,TypePrestation,CategorieForfait,Flux,Forfait,TypeEchange,Echange,Contact,Task,TaskType \
+from suiviprojets.dashboard.models import TaskType, Projet,TypeProjet,TypePrestation,CategorieForfait,Flux,Forfait,TypeEchange,Echange,Contact,Task,TaskType \
                                             ,StatutTache, Tache,Consommation,Prestation,Client, Intervenant
 from suiviprojets.dashboard.forms import ContactForm,PrestationForm,TacheForm,EchangeForm
 from suiviprojets.helpers.helpers import apply_filter, filter_construct, Pager,ZeepClient
@@ -211,6 +211,8 @@ def projet_compose_details(id):
 	
 	instance_projet=Projet.objects.get(pk=id)
 	projet={"id":instance_projet.id,
+			"date_creation":instance_projet.date_creation.strftime("%Y-%m-%d"),
+			"date_fin_programmee":instance_projet.date_fin_programmee.strftime("%Y-%m-%d"),
 			"client":{"id":instance_projet.client.id, \
 					"nom":instance_projet.client.nom, \
 					"adresse1":instance_projet.client.adresse1, \
@@ -407,16 +409,27 @@ def details_projet(request,id):
 		largeur_col=0
 		largeur_separateur=6
 	projet=projet_compose_details(id)
+	tasks=Task.objects.filter(projet=id)
+	events=[{'start':(t.date_programmee != None) and t.date_programmee.strftime('%Y-%m-%d') or "",
+			'end':(t.date_echeance != None) and t.date_echeance.strftime('%Y-%m-%d') or "",
+			'notes':t.description,
+			'nom':t.nom,
+			'row':t.task_type.id,
+			'bgColor':t.task_type.color,
+			} for t in tasks]
+	
 	datas={'partial':'dashboard/details_projet.html',
 			'projet':projet,
-			'kanban':kanban_construct(Task.objects.filter(projet=id),statuts),
+			'kanban':kanban_construct(tasks,statuts),
 			'filtres':{'statuts':StatutTache.objects.all().order_by('id'),
 						'intervenants':Intervenant.objects.all().order_by('nom','prenom'),
 						},
 			'largeur_col':largeur_col,
+			'nb_lignes':len(tasks),
+			'events':events,
 			'largeur_separateur':largeur_separateur,
 			'styles':['js/jquery.timeline-master/dist/jquery.timeline.min.css']+STYLES,
-			'scripts':SCRIPTS+['jquery.timeline-master/dist/jquery.timeline.min','timeline'],
+			'scripts':SCRIPTS+['jquery.timeline-master/dist/jquery.timeline.min'],
 			}
 	return render(request,"index.html",datas)
 
@@ -810,15 +823,15 @@ def create_model_mask(objet):
 															'model':TypeProjet
 															}]}
 	elif objet=='echange':
-		mask = {'model':Echange,'form':EchangeForm,'template':'partiel_echange','fields':[{'field':'projet',
+		mask = {'model':Task,'form':EchangeForm,'template':'partiel_echange','fields':[{'field':'projet',
 															'model':Projet
 															}]}
 	elif objet=='prestation':
-		mask = {'model':Prestation,'form':PrestationForm,'template':'partiel_prestation','fields':[{'field':'projet',
+		mask = {'model':Task,'form':PrestationForm,'template':'partiel_prestation','fields':[{'field':'projet',
 																	'model':Projet
 																	}]}
 	elif objet=='tache':
-		mask = {'model':Tache,'form':TacheForm,'template':'partiel_tache','fields':[{'field':'projet',
+		mask = {'model':Task,'form':TacheForm,'template':'partiel_tache','fields':[{'field':'projet',
 														'model':Projet
 														}]}
 	else:
@@ -837,6 +850,7 @@ def add(request):
 		print(args)
 	new_instance=mask['model'](**args)
 	form=mask['form'](instance=new_instance)
+	
 	if r['objet']== 'echange':
 		projet=Projet.objects.get(pk=r['projet'])
 		queryset=Contact.objects.filter(client=projet.client.id,type_projet=projet.type_projet.id).order_by('nom')
@@ -855,6 +869,7 @@ def add(request):
 			"id_type_projet":type_projet,
 			"id_client":client,
 			"objet":r['objet'],
+			"type_task":type_task,
 			"form":form.as_p()
 			}
 	return render(request,'dashboard/forms/form.html',datas)
@@ -874,10 +889,13 @@ def edit(request):
 def save(request):
 	r=request.POST.copy()
 	mask=create_model_mask(r['objet'])
+	type_task=TaskType.objects.get(type_task=r['objet'])
 	if r['id'] != '-1':
 		instance=mask['model'].objects.get(pk=r['id'])
 		form=mask['form'](request.POST,instance=instance)
 	else:
+		
+		r['task_type']=[str(type_task.id)]
 		form=mask['form'](r)
 	if form.is_valid():
 		form.save()

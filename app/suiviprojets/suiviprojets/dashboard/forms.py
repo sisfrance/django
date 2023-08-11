@@ -4,7 +4,7 @@ import re
 from django import forms
 from django.forms import fields,widgets
 from django.contrib import admin
-from suiviprojets.dashboard.models import Tache,Prestation,Echange,Contact,Projet
+from suiviprojets.dashboard.models import Task,Tache,Prestation,Echange,Contact,Projet
 
 class ProjetForm(forms.ModelForm):
 	class Meta:
@@ -12,23 +12,28 @@ class ProjetForm(forms.ModelForm):
 		fields='__all__'
 
 class TacheForm(forms.ModelForm):
+	type_task=forms.HiddenField()
 	class Meta:
-		model=Tache
-		fields='__all__'
+	class Meta:
+		model=Task
+		fields=['projet','nom','date_programmee','date_echeance','date_realisation','statut','temps_passe','description','intervenant','notes']
 
 class PrestationForm(forms.ModelForm):
+	type_task=forms.HiddenField()
 	class Meta:
-		model=Prestation
-		fields='__all__'
+	class Meta:
+		model=Task
+		fields=['projet','nom','date_programmee','date_echeance','date_realisation','statut','temps_passe','description','intervenant','notes']
 
 class EchangeForm(forms.ModelForm):
+	type_task=forms.HiddenField()
 	class Meta:
-		model=Echange
-		fields='__all__'
+		model=Task
+		fields=['projet','nom','date_programmee','heure','statut','temps_passe','description','intervenant','contact','notes']
 		
 class ContactForm(forms.ModelForm):
 	email=forms.CharField(widget=forms.TextInput)
 	class Meta:
 		model=Contact
 		fields='__all__'
-		
+

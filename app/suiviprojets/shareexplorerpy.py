@@ -1,9 +1,23 @@
 import sharepy as share
 import json
-from suiviprojets.dashboard.models import Tache, Prestation, Echange, Task, TaskType, Intervenant
+import datetime
+from django.conf import settings
+import suiviprojets.dashboard.models as m
+
+
 URL='https://sisfranceeu0.sharepoint.com'
 USER_NAME='connect@sisfranceeu0.onmicrosoft.com'
 PASSWD='C0n33!#Mt'    
+
+def set_date_start():
+	projets=m.Projet.objects.all()
+	for p in projets:
+		date_creation = m.Forfait.objects.filter(projet=p.id)[0].date_commande
+		date_fin_programmee = date_creation + datetime.timedelta(days=180)
+		p.date_creation=date_creation
+		p.date_fin_programmee=date_fin_programmee
+		p.save()
+		print(str(date_creation) + "/" +str(date_fin_programmee))
 
 def convert_echanges():
 	echanges=Echange.objects.all()

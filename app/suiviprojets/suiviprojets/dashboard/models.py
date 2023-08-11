@@ -59,6 +59,8 @@ class TypeProjet(models.Model):
 
 class Projet(models.Model):
     id=models.AutoField(primary_key=True)
+    date_creation=models.DateField(null=True,blank=True)
+    date_fin_programmee=models.DateField(null=True,blank=True)
     client=models.ForeignKey(Client,on_delete=models.SET_NULL,null=True,blank=True)
     type_projet=models.ForeignKey(TypeProjet,on_delete=models.SET_NULL,null=True,blank=True)
     num_armoire=models.CharField(max_length=125,null=True,blank=True)
