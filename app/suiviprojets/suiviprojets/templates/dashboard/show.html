@@ -1,0 +1,27 @@
+<div id="content-show">
+	<h2 class="title-show"> <strong>{{task.projet}}</strong>&nbsp;&nbsp;{{task.task_type|capfirst}}
+		{% if task.nom != None %}
+			&nbsp;|&nbsp;{{task.nom}}
+		{% endif %}
+	</h2>
+	<br>
+	{% if task.contact != None %}
+		<p class="contact"><label><strong><u>Personne à contacter :</u></strong></label><span>{{ task.contact|default:"" }}</span></p>
+	{% endif %}
+	{% if task.heure != None %}
+		<p class="heure"><label><strong><u>Heure :</u></strong></label><span>{{ task.heure }}</span></p>
+	{% endif %}
+	<br>
+	<p class="date-programmee"><label><strong><u>Date programm&eacute;e :</u></strong></label> <span>{{ task.date_programmee|date:"d/m/Y" }}</span></p>
+	<br>
+	<p class="date-echeance"><label><strong><u>Date d'&eacute;ch&eacute;ance :</u></strong></label> <span>{{task.date_echeance|date:"d/m/Y" }}</span></p>
+	<br>
+	<p class="description"><label><strong><u>Description : </u></strong></label><div>{{ task.description }}</div></p>
+	<br>
+	<p class="intervenants"><label><strong><u>Responsables : </u></strong></label><br>
+	{% for i in task.intervenant.all %}
+		<p class="ligne"><span>{{i.nom}}&nbsp;{{i.prenom}}</span></p>
+		<br>
+	{% endfor %}
+		
+</div>

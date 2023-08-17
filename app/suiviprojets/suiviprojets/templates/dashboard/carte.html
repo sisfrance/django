@@ -1,12 +1,15 @@
 <div class="content-carte">
-	<h4 class="title-carte">{{elt.projet.client}}</h4>
-		{% if elt.contact != "" %}
-			<p class="contact"><label>Personne à contacter :</label><span>{{elt.contact}}</span></p>
-		{% endif %}
-		{% if elt.nom != "" %}
-			<p class="nom"><label> :</label><span>{{elt.nom}}</span></p>
-		{% endif %}
-		<p class="date-programmee"><label>Date programmée :</label><span>{{elt.date_programmee}}</span></p>
-		<p class="description"><label>Description : </label><span>{{ elt.description }}</span></p>
-		<p class="tech-carte"><label>Responsable : </label><span>{{elt.intervenant}}</span></p>
+	<h4 class="title-carte"><a id="projet-link-{{elt.projet.id}}" class="projet-link" href="/projet/{{elt.projet.id}}">{{elt.projet}}</a></h4>
+		<div id="task-link-{{elt.id}}" data-id="{{elt.id}}" class="task-link">
+			{% if elt.contact != "" %}
+				<p class="contact"><label>Personne à contacter :</label><span>{{elt.contact}}</span></p>
+			{% endif %}
+			{% if elt.nom != "" %}
+				<p class="nom"><label> :</label><span>{{elt.nom}}</span></p>
+			{% endif %}
+			<p class="date-programmee"><label>Date programmée :</label><span>{{elt.date_programmee}}</span></p>
+			<p class="description"><label>Description : </label><span>{{ elt.description }}</span></p>
+			<p class="tech-carte"><label>Responsable : </label><span>{{elt.intervenant}}</span></p>
+		</div>
+		<a id="{{elt.task_type}}-{{elt.id}}-edit" class="edit" data-objet="{{elt.task_type}}" data-projet="{{elt.projet.id}}" data-client="{{elt.projet.client.id}}" data-id="{{elt.id}}">Edit</a>
 </div>

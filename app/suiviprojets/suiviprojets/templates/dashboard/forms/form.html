@@ -1,5 +1,5 @@
 <section id="formulaire">
-	<h1>Ajout {{objet}}</h1>
+	<h1>Modification {{objet}}</h1>
 	<form id="objetForm" action="javascript:void(0);" method="POST">
 		{% csrf_token %}
 		<input type="hidden" id="id" name="id" value="{{id|default:-1}}" />

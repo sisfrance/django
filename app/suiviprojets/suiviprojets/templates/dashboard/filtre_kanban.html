@@ -32,7 +32,17 @@
                     </select>
 				</div>
 		     </div><!--separateur-->
-			<div id="line-1-bloc-3" class="col-2">
+		      <div id="line-1-bloc-4" class="col-2">
+				<div class="d-wrapper">
+                    <div class="control-label label-info">Type de tâche : </div>
+	                    <select id="task_type" name="task_type" class="change form-control" multiple="multiple" >
+                            {% for t in filtres.tasks_types %}
+                                <option value="{{t.id}}">{{t.type_task}}</option>
+                            {% endfor %}
+                    </select>
+				</div>
+		     </div><!--separateur-->
+			<div id="line-1-bloc-5" class="col-2">
 				<div class="d-wrapper">
                     <div class="control-label label-info">Client : </div>
 	                    <div class="col-12 input-group">

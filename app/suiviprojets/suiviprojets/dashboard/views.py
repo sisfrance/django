@@ -44,10 +44,12 @@ SEARCH_FIELDS_KANBAN={'projet':'projet__in',
 					'intervenant':'intervenant__in',
 					'client':'client',
 					'statut':'statut__in',
+					'task_type':'task_type__in',
 					}
 					
 SEARCH_FIELDS_KANBAN_PROJET={'statut':'statut__in',
 							'intervenant':'intervenant__in',
+							'task_type':'task_type__in',
 							}
 SEARCH_TERMS_PROJETS={'num_armoire':'num_armoire__icontains',
 			'nom':'client__nom__icontains',
@@ -146,8 +148,6 @@ def calcul_consommation(id_projet):
 	def define_alert(conso,conso_jours,seuil_forfait,seuil_compare):
 		if (float(conso) > float(seuil_forfait)) or (float(conso_jours) > float(seuil_compare)) or (float(conso) / float(conso_jours) > float(seuil_compare)):
 			alert="red"
-			print(conso)
-			print(conso_jours)
 		elif float(conso) /float(conso_jours) > 1:
 			alert="yellow"
 		else:
@@ -250,7 +250,7 @@ def projet_compose_details(id):
 		color
 		background-color"""
 	
-	tasks=Tache.objects.filter(projet_id=id,statut__statut__in=["à programmer","en attente","en cours"])
+	"""tasks=Tache.objects.filter(projet_id=id,statut__statut__in=["à programmer","en attente","en cours"])
 	tasks_events={'events':[{'title':t.nom,'start':str(t.date_programmee),'statut':t.statut.color,'description':t.description} for t in tasks],'color':'green','textColor':'white'}
 	
 	prestations=Prestation.objects.filter(projet_id=id,statut__statut__in=["en attente","à programmer","en cours"])
@@ -261,7 +261,7 @@ def projet_compose_details(id):
 	
 	projet['eventsct']=json.dumps(tasks_events)
 	projet['eventscp']=json.dumps(prestations_events)
-	projet['eventsce']=json.dumps(echanges_events)
+	projet['eventsce']=json.dumps(echanges_events)"""
 
 	return projet
 	
@@ -335,6 +335,7 @@ def index(request):
 	statuts=StatutTache.objects.exclude(id__in=[4]).order_by('statut')
 	filtres={'intervenants':Intervenant.objects.all().order_by('nom','prenom'),
 			'projets':Projet.objects.all().order_by('client'),'statuts':StatutTache.objects.all().order_by('statut'),
+			'tasks_types':TaskType.objects.all().order_by('type_task'),
 			}
 	"""if request.session.get('filtres') == None:
 		request.session['sort']={'field':'date','sens':'desc'}
@@ -409,30 +410,47 @@ def details_projet(request,id):
 		largeur_col=0
 		largeur_separateur=6
 	projet=projet_compose_details(id)
+	
+	tasks_events=Task.objects.filter(projet=id,date_programmee__isnull=False,date_echeance__isnull=False)
+	tasks_dates=Task.objects.filter(projet=id,date_programmee__isnull=False)
 	tasks=Task.objects.filter(projet=id)
+	
+	""" events s'affiche dans la timeline du bas """
 	events=[{'start':(t.date_programmee != None) and t.date_programmee.strftime('%Y-%m-%d') or "",
 			'end':(t.date_echeance != None) and t.date_echeance.strftime('%Y-%m-%d') or "",
 			'notes':t.description,
 			'nom':t.nom,
 			'row':t.task_type.id,
 			'bgColor':t.task_type.color,
-			} for t in tasks]
+			} for t in tasks_events]
+	""" dates s'affichent dans le calendrier """
+	dates={'events':[{'title':td.nom,'statut':td.statut.color,'start':str(td.date_programmee),'description':td.description ,'color':td.task_type.color} for td in tasks_dates]  ,'textColor': 'white' }
 	
 	datas={'partial':'dashboard/details_projet.html',
 			'projet':projet,
 			'kanban':kanban_construct(tasks,statuts),
 			'filtres':{'statuts':StatutTache.objects.all().order_by('id'),
 						'intervenants':Intervenant.objects.all().order_by('nom','prenom'),
+						'tasks_types':TaskType.objects.all().order_by('type_task'),
 						},
 			'largeur_col':largeur_col,
-			'nb_lignes':len(tasks),
+			'temps_passe':determineTempsPasse(id),
+			'nb_lignes':len(tasks_events),
 			'events':events,
+			'dates':json.dumps(dates),
 			'largeur_separateur':largeur_separateur,
 			'styles':['js/jquery.timeline-master/dist/jquery.timeline.min.css']+STYLES,
 			'scripts':SCRIPTS+['jquery.timeline-master/dist/jquery.timeline.min'],
 			}
 	return render(request,"index.html",datas)
-
+	
+def tache_show(request,id):
+	task=Task.objects.get(pk=id)
+	datas={
+			'task':task,
+			}
+	return render(request,'dashboard/show.html',datas)
+	
 def clients(request):
 	
 	request.session['sort']={'field':'nom','sens':'desc'}
@@ -847,14 +865,14 @@ def add(request):
 	for f in mask['fields']:
 		if r[f['field']] != '':
 			args[f['field']]=f['model'].objects.get(pk=r[f['field']])
-		print(args)
+
 	new_instance=mask['model'](**args)
 	form=mask['form'](instance=new_instance)
-	
 	if r['objet']== 'echange':
 		projet=Projet.objects.get(pk=r['projet'])
 		queryset=Contact.objects.filter(client=projet.client.id,type_projet=projet.type_projet.id).order_by('nom')
 		form.fields['contact'].queryset=queryset
+	
 	try:
 		type_projet=r['type_projet']
 	except Exception:
@@ -869,7 +887,6 @@ def add(request):
 			"id_type_projet":type_projet,
 			"id_client":client,
 			"objet":r['objet'],
-			"type_task":type_task,
 			"form":form.as_p()
 			}
 	return render(request,'dashboard/forms/form.html',datas)
@@ -889,17 +906,17 @@ def edit(request):
 def save(request):
 	r=request.POST.copy()
 	mask=create_model_mask(r['objet'])
-	type_task=TaskType.objects.get(type_task=r['objet'])
+
 	if r['id'] != '-1':
 		instance=mask['model'].objects.get(pk=r['id'])
-		form=mask['form'](request.POST,instance=instance)
+		form=mask['form'](r,instance=instance)
 	else:
-		
-		r['task_type']=[str(type_task.id)]
-		form=mask['form'](r)
+		if r['objet'] != 'contact':
+			instance=mask['model'](task_type=TaskType.objects.get(type_task=r['objet']))
+		form=mask['form'](r,instance=instance)
 	if form.is_valid():
 		form.save()
-		
+		print(r)
 		datas={'result':'done',
 				'content':'/projet/'+r['projet']+'/'
 				}

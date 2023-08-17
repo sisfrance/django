@@ -361,8 +361,8 @@ $(function(){
 			csrfmiddlewaretoken:$("input[name=csrfmiddlewaretoken]").val(),/*projet     :$(event.target).attr("data-projet"),*/
 			objet      :$(event.target).attr("data-objet"),
 			id         :$(event.target).attr("data-id"),
-			projet     :$("#id_projet").val(),
-			client     :$("#id_client").val()
+			projet     :$(event.target).attr("data-projet"),
+			client     :$(event.target).attr("data-client")
 		};
 		$.post("/edit/",datas).done(function(response){
 			popup.show(response);
@@ -410,7 +410,7 @@ $(function(){
 																				contentHeight:110,
 																				aspectRatio:0.5,
 																				expandRows:true,
-																				eventSources:[eventscp,eventsct,eventsce],
+																				eventSources:[events],
 																				initialView:'dayGridMonth',
 																				eventContent:function(arg){
 																						let statut_marker=document.createElement("span");
@@ -452,6 +452,21 @@ $("#kanban-btn").on("click",(event)=>{
 /******
  * 5-FIN KANBAN
  * ***/
- 	
+ /****
+  * 6 - FONCTION SHOW
+  * ***/
+  $(".task-link").on("click",(event)=>{
+	  event.preventDefault();
+	  event.stopPropagation();
+	  
+	  let id=$(event.target).parent().attr("data-id");
+	  
+	  $.get(`/show/${id}`)
+	  .done((response)=>{
+		popup.show(response);
+	  });
+	  
+	  
+	});
 	
 });

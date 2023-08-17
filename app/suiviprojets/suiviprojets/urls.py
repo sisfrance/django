@@ -42,4 +42,5 @@ urlpatterns = [
     path(r'add/',views.add),
     path(r'edit/',views.edit),
     path(r'save/',views.save),
+    path(r'show/<str:id>/',views.tache_show),
 ]

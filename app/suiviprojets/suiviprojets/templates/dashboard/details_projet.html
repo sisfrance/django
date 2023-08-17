@@ -33,6 +33,7 @@
 						<p class="ligne"><label id="type_projet">Type de projet&nbsp;:&nbsp;</label><span>{{projet.type_projet.type_projet}}</span></p>
 						<p class="ligne"><label id="forfait" class="label">Forfait&nbsp;:&nbsp;</label><span>{{projet.forfait.categorie_forfait}}</span></p>
 						<p class="ligne"><label id="date_commande" class="label">Date de commande&nbsp;:&nbsp;</label><span>{{projet.forfait.date_commande}}</span></p>
+						<p class="ligne"><label id="temps-passe" class="label">Temps pass&eacute; sur le projet&nbsp;:&nbsp;</label><span>{{temps_passe}}</span></p>
 					</div>
 				</div>
 				
@@ -75,9 +76,16 @@
 				<div id="filtre-kanban" class="col-12">
 					<div class="row">
 						<hr>
+				    
 						<div class="col-3">
 							<input type="hidden" id="projet_id" name="projet_id" value="{{projet.id}}"/>
-						</div>
+							<div class="control-label label-info">Type de tâche : </div>
+			                    <select id="task_type" name="task_type" class="change form-control" multiple="multiple" >
+		                            {% for t in filtres.tasks_types %}
+		                                <option value="{{t.id}}">{{t.type_task}}</option>
+		                            {% endfor %}
+								</select>
+		                  </div>
 						<div class="d-wrapper col-3">
 		                    <div class="control-label label-info">Statuts : </div>
 			                <select id="statut" name="statut" class="change form-control" multiple="multiple" >
@@ -104,9 +112,7 @@
 		</div><!--fin col-11 -->
 		<div class="col-3" data-tag="col12">
 			<script>
-				var eventsct={{client.eventsct|safe|default:'[]'}};
-				var eventscp={{client.eventscp|safe|default:'[]'}};
-				var eventsce={{client.eventsce|safe|default:'[]'}};
+				var events={{dates|safe|default:'[]'}};
 			</script>
 			<div id="calendar"></div>
 		</div>
