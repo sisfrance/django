@@ -28,11 +28,11 @@ def convert_echanges():
 				'date_programmee':e.date,
 				'contact':e.contact,
 				'heure':e.heure,
-				'task_type':TaskType.objects.get(pk=3),
+				'task_type':m.TaskType.objects.get(pk=3),
 				'statut':e.statut,
 				'temps_passe':e.temps_passe,
 				'description':e.notes,}
-		tache=Task(**datas)
+		tache=m.Task(**datas)
 		tache.save()
 		i+=1
 	print(str(i)+" echanges ont été convertis")
@@ -46,13 +46,13 @@ def convert_taches():
 			'date_programmee':t.date_programmee,
 			'date_echeance':t.date_echeance,
 			'date_realisation':t.date_realisation,
-			'task_type':TaskType.objects.get(pk=2),
+			'task_type':m.TaskType.objects.get(pk=2),
 			'statut':t.statut,
 			'temps_passe':t.temps_passe,
 			'description':t.description,}
 		intervenants_id=[i.id for i in t.intervenant.all()]
 		print(intervenants_id)
-		intervenants=Intervenant.objects.filter(id__in=intervenants_id)
+		intervenants=m.Intervenant.objects.filter(id__in=intervenants_id)
 		tache=Task(**datas)
 		tache.save()
 		tache.intervenant.set(t.intervenant.all())
@@ -68,10 +68,10 @@ def convert_prestations():
 				'projet':p.projet,
 				'date_programmee':p.date_programmee,
 				'date_realisation':p.date_realisation,
-				'task_type':TaskType.objects.get(pk=1),
+				'task_type':m.TaskType.objects.get(pk=1),
 				'statut':p.statut,
 				'notes':p.notes,}
-		tache=Task(**datas)
+		tache=m.Task(**datas)
 		tache.save()
 		i+=1
 	print(str(i)+" prestations ont été converties")
