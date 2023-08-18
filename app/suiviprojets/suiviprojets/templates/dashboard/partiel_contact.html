@@ -13,7 +13,7 @@
 				<td class="contact-prenom">{{contact.prenom}}</td>
 				<td class="contact-email">{{contact.email}}</td>
 				<td class="contact-tel">{{contact.tel}}</td>
-				<td class="contact-edit"><a id="contact-{{contact.id}}-edit" class="edit" data-objet="contact" data-id="{{contact.id}}" href='/admin/dashboard/contact/{{contact.id}}/change/'>Edit</a></td>
+				<td class="contact-edit"><a id="contact-{{contact.id}}-edit" class="edit" data-objet="contact" data-projet="{{projet.id}}" data-id="{{contact.id}}" href='/admin/dashboard/contact/{{contact.id}}/change/'>Edit</a></td>
 			</tr>
 			{% endfor %}
 		</tbody>
