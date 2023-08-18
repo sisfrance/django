@@ -1,4 +1,4 @@
-import sharepy as share
+"""import sharepy as share"""
 import json
 import datetime
 from django.conf import settings
@@ -13,14 +13,14 @@ def set_date_start():
 	projets=m.Projet.objects.all()
 	for p in projets:
 		date_creation = m.Forfait.objects.filter(projet=p.id)[0].date_commande
-		date_fin_programmee = date_creation + datetime.timedelta(days=180)
+		date_fin_programmee = date_creation + datetime.timedelta(days=360)
 		p.date_creation=date_creation
 		p.date_fin_programmee=date_fin_programmee
 		p.save()
 		print(str(date_creation) + "/" +str(date_fin_programmee))
 
 def convert_echanges():
-	echanges=Echange.objects.all()
+	echanges=m.Echange.objects.all()
 	i=0
 	for e in echanges:
 		datas={'nom':str(e.type_echange)+":"+str(e.contact)+":"+str(e.date),
@@ -38,7 +38,7 @@ def convert_echanges():
 	print(str(i)+" echanges ont été convertis")
 
 def convert_taches():
-	taches=Tache.objects.all()
+	taches=m.Tache.objects.all()
 	i=0
 	for t in taches:
 		datas={'nom':t.nom,
@@ -62,7 +62,7 @@ def convert_taches():
 	
 def convert_prestations():
 	i=0
-	prestations=Prestation.objects.all()
+	prestations=m.Prestation.objects.all()
 	for p in prestations:
 		datas={'nom':str(p.type_prestation)+":"+str(p.projet),
 				'projet':p.projet,
@@ -76,7 +76,7 @@ def convert_prestations():
 		i+=1
 	print(str(i)+" prestations ont été converties")
 	
-class SharePointExplorer:
+"""class SharePointExplorer:
 	
 	def __init__(self,site):
 		self.session=self.connecting()
@@ -113,7 +113,7 @@ class SharePointExplorer:
 			url=URL+"/_api/web/getfolderbyserverrelativeurl('/sites/"+self.site+"/')/Files/add(url='"+filename+"',overwrite=true)"
 			print(url)
 			p = self.session.post(url, data=content, headers=headers)
-			"""p =zeen.session.post("https://sisfranceeu0.sharepoint.com/sites/Zeendoc/_api/web/GetFoldersByServerRelativeUrl('/sites/Zeendoc/documents%20partages/')/Files/add(url='toto.txt',overwrite=true)",data=content,headers=headers)"""
+			p =zeen.session.post("https://sisfranceeu0.sharepoint.com/sites/Zeendoc/_api/web/GetFoldersByServerRelativeUrl('/sites/Zeendoc/documents%20partages/')/Files/add(url='toto.txt',overwrite=true)",data=content,headers=headers)"""
 
 if __name__=="__main__":
 	"""cd=SharePointExplorer('Zeendoc')
@@ -123,4 +123,5 @@ if __name__=="__main__":
 	convert_echanges()
 	convert_taches()
 	convert_prestations()
+	set_date_start()
 	
