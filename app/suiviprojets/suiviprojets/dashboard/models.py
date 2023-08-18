@@ -177,6 +177,7 @@ class Echange(models.Model):
 class TaskType(models.Model):
 	id=models.AutoField(primary_key=True)
 	type_task=models.CharField(max_length=150)
+	tag=models.CharField(max_length=15,null=True,blank=True)
 	color=models.CharField(max_length=8,null=True,blank=True)
 	
 	def __str__(self):
