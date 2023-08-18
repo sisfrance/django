@@ -446,6 +446,19 @@ $("#kanban-btn").on("click",(event)=>{
 		$.post("/kanban/search",datas)
 		.done((response)=>{
 			$("#kanban-content").empty().html(response);
+			$(".task-link").on("click",(event)=>{
+				  event.preventDefault();
+				  event.stopPropagation();
+				  
+				  let id=$(event.target).parent().attr("data-id");
+				  
+				  $.get(`/show/${id}`)
+				  .done((response)=>{
+					popup.show(response);
+				  });
+	  
+	  
+			});
 		});
 		
 	});

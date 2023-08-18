@@ -2,7 +2,7 @@
 	<h4 class="title-carte"><a id="projet-link-{{elt.projet.id}}" class="projet-link" href="/projet/{{elt.projet.id}}">{{elt.projet}}</a></h4>
 		<div id="task-link-{{elt.id}}" data-id="{{elt.id}}" class="task-link">
 			{% if elt.contact != "" %}
-				<p class="contact"><label>Personne à contacter :</label><span>{{elt.contact}}</span></p>
+				<p class="contact"><label>Personne à contacter :</label><span>{{elt.contact|default:""}}</span></p>
 			{% endif %}
 			{% if elt.nom != "" %}
 				<p class="nom"><label> :</label><span>{{elt.nom}}</span></p>

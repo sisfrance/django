@@ -424,7 +424,7 @@ def details_projet(request,id):
 			'bgColor':t.task_type.color,
 			} for t in tasks_events]
 	""" dates s'affichent dans le calendrier """
-	dates={'events':[{'title':td.nom,'statut':td.statut.color,'start':str(td.date_programmee),'description':td.description ,'color':td.task_type.color} for td in tasks_dates]  ,'textColor': 'white' }
+	dates={'events':[{'title':td.nom,'statut':td.statut.color,'start':str(td.date_programmee),'row':td.task_type.id,'description':td.description ,'color':td.task_type.color} for td in tasks_dates]  ,'textColor': 'white' }
 	
 	datas={'partial':'dashboard/details_projet.html',
 			'projet':projet,
@@ -435,7 +435,7 @@ def details_projet(request,id):
 						},
 			'largeur_col':largeur_col,
 			'temps_passe':determineTempsPasse(id),
-			'nb_lignes':len(tasks_events),
+			'nb_lignes':len(TaskType.objects.all()),
 			'events':events,
 			'dates':json.dumps(dates),
 			'largeur_separateur':largeur_separateur,
@@ -913,10 +913,12 @@ def save(request):
 	else:
 		if r['objet'] != 'contact':
 			instance=mask['model'](task_type=TaskType.objects.get(type_task=r['objet']))
-		form=mask['form'](r,instance=instance)
+			form=mask['form'](r,instance=instance)
+		else:
+			form=mask['form'](r)
 	if form.is_valid():
 		form.save()
-		print(r)
+
 		datas={'result':'done',
 				'content':'/projet/'+r['projet']+'/'
 				}
