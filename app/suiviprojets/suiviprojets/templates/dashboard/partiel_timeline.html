@@ -2,7 +2,7 @@
 	<div id="myTimeline" class="timeline-content">
 				<ul class="timeline-events">
 					{% for event in events %}
-						<li data-timeline-node="{ start:'{{event.start}} 10:00',end:'{{event.end}} 10:00', row:'{{event.row}}',content:'Création classeur Ec\'lient / factures\r\nMise en place des listes comptables dans les champs index\r\nMise en place de la liste des utilisateurs.',bgColor:'{{event.bgColor}}' }">{{event.nom}}</li>
+						<li data-timeline-node="{ start:'{{event.start}} 10:00',end:'{{event.end}} 10:00', row:'{{event.row}}',content:'{{event.content}}',bgColor:'{{event.bgColor}}' }">{{event.nom}}</li>
 					{% endfor %}
 				</ul>
 				<div class="timeline-event-view"></div>

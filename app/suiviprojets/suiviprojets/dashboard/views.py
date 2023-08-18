@@ -226,12 +226,12 @@ def projet_compose_details(id):
 			}
 	"""client=instance_projet.client"""
 	projet['forfait']=Forfait.objects.filter(projet=id).order_by('-date_commande')[0]
-	
+	projet['contacts']=Contact.objects.filter(client=instance_projet.client.id,type_projet=instance_projet.type_projet.id).order_by("nom","prenom")
 	
 	"""taches=Tache.objects.filter(projet_id=id)
 	echanges=Echange.objects.filter(contact__client_id=client.id).order_by('-date')
 	prestations=Prestation.objects.filter(projet=id)
-	contacts=Contact.objects.filter(client=instance_projet.client.id,type_projet=instance_projet.type_projet.id).order_by("nom")
+	
 	
 	projet['taches']=taches
 	projet['contacts']=contacts
