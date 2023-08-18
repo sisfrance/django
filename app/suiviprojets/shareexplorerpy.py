@@ -53,7 +53,7 @@ def convert_taches():
 		intervenants_id=[i.id for i in t.intervenant.all()]
 		print(intervenants_id)
 		intervenants=m.Intervenant.objects.filter(id__in=intervenants_id)
-		tache=Task(**datas)
+		tache=m.Task(**datas)
 		tache.save()
 		tache.intervenant.set(t.intervenant.all())
 		
