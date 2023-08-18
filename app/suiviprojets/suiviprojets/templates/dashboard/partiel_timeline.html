@@ -14,7 +14,7 @@
 				  type            : "bar",
 				
 				  // "years" or "months" or "days"
-				  scale           : "days", 
+				  scale           : "months", 
 				
 				  // start <a href="https://www.jqueryscript.net/time-clock/">date</a> time
 				  startDatetime   : "{{projet.date_creation}}",
@@ -40,7 +40,7 @@
 				  // displays ruler
 				  ruler           : {
 				    top         : {
-				      lines      : ['year','month','day'],
+				      lines      : ['year','month'],
 				      height     : 30,
 				      fontSize   : 14,
 				      color      : "#777777",
@@ -64,7 +64,7 @@
 				
 				  // displays event meta
 				  eventMeta       : {
-				    display     : true,
+				    display     : false,
 				    scale       : "day",
 				    locale      : "fr-FR",
 				    format      : { hour12: false },
@@ -72,7 +72,7 @@
 				  },
 				
 				  // event data
-				  eventData       : [],
+				  eventData       : {{events|safe}},
 				
 				  // enables/disables effects
 				  effects         : {
@@ -147,7 +147,7 @@
 				  disableLimitter : false,
 				
 				  // debug mode
-				  debug           : false
+				  debug           : true
 		  });
 	
 		$("#myTimeline").Timeline('alignment','event');
