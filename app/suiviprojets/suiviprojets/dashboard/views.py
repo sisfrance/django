@@ -71,8 +71,8 @@ def kanban_construct(elements,status):
 	return {s:elements.filter(statut=s.id).order_by('-date_programmee')for s in status}
 	
 def determineTempsPasse(id_projet):
-	tp_ech=Echange.objects.filter(projet=id_projet).aggregate(Sum('temps_passe'))
-	tp_tac=Tache.objects.filter(projet=id_projet).aggregate(Sum('temps_passe'))
+	tp_ech=Task.objects.filter(projet=id_projet,task_type=3).aggregate(Sum('temps_passe'))
+	tp_tac=Task.objects.filter(projet=id_projet,task_type=2).aggregate(Sum('temps_passe'))
 	temps_echanges=transformToDays(tp_ech['temps_passe__sum'])
 	temps_installation=transformToDays(tp_tac['temps_passe__sum'])
 	print("%s jours echanges, %s jours installation" % (temps_echanges,temps_installation))
@@ -331,10 +331,11 @@ def client_compose_detail(c):
    *************************/"""
 
 def index(request):
-	
+	request.session['espace']='accueil'
 	statuts=StatutTache.objects.exclude(id__in=[4]).order_by('statut')
 	filtres={'intervenants':Intervenant.objects.all().order_by('nom','prenom'),
-			'projets':Projet.objects.all().order_by('client'),'statuts':StatutTache.objects.all().order_by('statut'),
+			'projets':Projet.objects.all().order_by('client__nom'),
+			'statuts':StatutTache.objects.all().order_by('statut'),
 			'tasks_types':TaskType.objects.all().order_by('type_task'),
 			}
 	"""if request.session.get('filtres') == None:
@@ -352,9 +353,9 @@ def index(request):
 	kanban=kanban_construct(Task.objects.all(),statuts)
 	largeur_col=math.floor(12/len(statuts))-1
 	largeur_separateur=math.floor((12-len(statuts)*largeur_col)/2)
-	toprogram_prestations=Prestation.objects.filter(Q(statut__statut__in=["en attente","à programmer"])|Q(date_programmee__isnull=True)).values('projet__client__nom','type_prestation__type_prestation','id')
-	toprogram_tasks=Tache.objects.filter(Q(statut__statut__in=["en attente","à programmer"]) | Q(date_programmee__isnull=True)).values('projet__client__nom','nom','id')
-	next_echanges=Echange.objects.filter(statut__statut__in=["en attente","à programmer"]).values('contact__nom','contact__prenom','date','heure','type_echange__type_echange','id')
+	toprogram_prestations=Task.objects.filter(Q(task_type=1) & Q(statut__statut__in=["en attente","à programmer"])|Q(date_programmee__isnull=True)).values('projet__client__nom','nom','id')
+	toprogram_tasks=Task.objects.filter(Q(task_type=2) & Q(statut__statut__in=["en attente","à programmer"]) | Q(date_programmee__isnull=True)).values('projet__client__nom','nom','id')
+	next_echanges=Task.objects.filter(Q(task_type=3) & Q(statut__statut__in=["en attente","à programmer"])).values('contact__nom','contact__prenom','date_programmee','heure','nom','id')
 	
 	clients=[]
 	
@@ -385,6 +386,7 @@ def projets(request):
 	request.session['filtres']=[{}]
 	request.session['message']=""
 	request.session['actions']=[]
+	request.session['espace']='projets'
 
 			
 	projets=__order_by(Projet.objects.all(),request.session['sort'])
@@ -458,6 +460,7 @@ def clients(request):
 	request.session['filtres']=[{}]
 	request.session['message']=""
 	request.session['actions']=[]
+	request.session['espace']='clients'
 	
 	clients=Client.objects.all().order_by('nom')
 	pagination=Pager(clients,"clients").paginate()
@@ -510,8 +513,8 @@ def temps_passe(request):
 	projets=[{"id":p.id,"client":p.client.nom,"revendeur":p.revendeur.nom } for p in Projet.objects.all()]
 	
 	for p in projets:
-		tp_ech=Echange.objects.filter(projet=p["id"]).aggregate(Sum('temps_passe'))
-		tp_tac=Tache.objects.filter(projet=p["id"]).aggregate(Sum('temps_passe'))
+		tp_ech=Task.objects.filter(projet=p["id"],type_task='3').aggregate(Sum('temps_passe'))
+		tp_tac=Task.objects.filter(projet=p["id"],type_task='2').aggregate(Sum('temps_passe'))
 		p['temps échanges']=tp_ech['temps_passe__sum']
 		p['temps installation']=tp_tac['temps_passe__sum']
 		
@@ -557,46 +560,86 @@ def noms_domaines(request):
 	response['Content-Disposition']='attachment; filename='+filec.name
 	os.remove(tempfile)
 	return response
-    
+	
+def __parse_items(espace,items):
+	lines=[]
+	if espace == 'accueil':
+		projets=items.values('projet').distinct()
+		print(espace)
+		for p in Projet.objects.filter(id__in=projets):
+			next_echange=Task.objects.filter(projet=p.id,task_type=1,statut__statut='en cours').last()
+			lines.append({"nom":p.client.nom,
+						"num_armoire":p.num_armoire,
+						"temps_passe":determineTempsPasse(p.id),
+						"taches_en_cours":"\n".join(["-".join([t.date_programmee.strftime("%d/%m/%Y"),t.description]) for t in items.filter(projet=p.id,task_type=2,statut__statut='en cours').order_by('date_programmee')]),
+						"taches_realisees":"\n".join(["-".join([t.date_programmee.strftime("%d/%m/%Y"),t.description]) for t in items.filter(projet=p.id,task_type=2,statut__statut='réalisée').order_by('date_realisation')]),
+						"taches_en_attente":"\n".join([t.description for t in items.filter(projet=p.id,task_type=2,statut__statut__in=['en attente','à programmer']).order_by('date_echeance')]),
+						"prestations_en_cours":"\n".join(["-".join([t.date_programmee.strftime("%d/%m/%Y"),t.description]) for t in items.filter(projet=p.id,task_type=1,statut__statut__in='en cours').order_by('date_echeance')]),
+						"prestations_realisees":"\n".join(["-".join([t.date_programmee.strftime("%d/%m/%Y"),t.description]) for t in items.filter(projet=p.id,task_type=1,statut__statut__in='réalisée').order_by('date_echeance')]),
+						"prochain_echange": next_echange and " - ".join([next_echange.date_programmee.strftime("%d/%m/%Y"),next_echange.description]) or "",
+						"forfait":str(Forfait.objects.filter(projet=p.id).last().categorie_forfait),
+						})
+		labels=['nom','num_armoire','temps_passe','taches_en_cours','taches_realisees','taches_en_attente','prestations_en_cours','prestations_realisees','prochain_echange','forfait']
+	elif espace =='clients':
+		pass
+	elif espace =='projets':
+		pass
+	else:
+		labels=['nom','date','num_armoire','adresse1','adresse2','code_postal','ville','revendeur','forfait']
+		
+	return (labels,lines)
+	
 def download(request):
 
-    """filtre=request.session['filtres']
-    sessions=Session.objects.all()
-    filtered_items=apply_filter(sessions,filtre)
-    items=filtered_items.order_by('date','sport_type')
-    lines=__parse_items(items)"""
-    
-    forfaits=Forfait.objects.all()
-    lines=[]
-    i=0
-    for f in Forfait.objects.all().order_by('id'):
-        i+=1
+	filtre=request.session['filtres']
+	espace=request.session['espace']
+	if espace == 'accueil':
+		modele=Task
+	elif espace == 'clients':
+		modele=Client
+	elif espace == 'projets':
+		modele=Projet
+	else:
+		modele=Forfait
+		
+	elements=modele.objects.all()
+	filtered_items=apply_filter(elements,filtre)
+	its=__parse_items(espace,filtered_items)
+	labels=its[0]
+	lines=its[1]
+	
+	
+	"""lines=[]
+	i=0
+	for f in Forfait.objects.all().order_by('id'):
+		i+=1
 
-        lines.append({'nom':f.projet.client.nom,'date':f.date_commande,'num_armoire':f.projet.num_armoire,'adresse1':f.projet.client.adresse1,'adresse2':f.projet.client.adresse2,'code_postal':f.projet.client.code_postal,\
-        'ville':f.projet.client.ville,'revendeur':f.projet.revendeur.nom,'forfait':f.categorie_forfait})
-    
-    
-    """lines=[{'nom':f.client.nom,'date':f.date_commande,'num_armoire':f.client.num_armoire,'adresse1':f.client.adresse1,'adresse2':f.client.adresse2,'code_postal':f.client.code_postal,\
-    'ville':f.client.ville,'revendeur':f.client.revendeur.nom,'forfait':f.categorie_forfait} for f in Forfait.objects.all().order_by('client__num_armoire')]"""
-    
-    labels=['nom','date','num_armoire','adresse1','adresse2','code_postal','ville','revendeur','forfait']
+		lines.append({'nom':f.projet.client.nom,'date':f.date_commande,'num_armoire':f.projet.num_armoire,'adresse1':f.projet.client.adresse1,'adresse2':f.projet.client.adresse2,'code_postal':f.projet.client.code_postal,\
+		'ville':f.projet.client.ville,'revendeur':f.projet.revendeur.nom,'forfait':f.categorie_forfait})"""
+	
+	
+	"""lines=[{'nom':f.client.nom,'date':f.date_commande,'num_armoire':f.client.num_armoire,'adresse1':f.client.adresse1,'adresse2':f.client.adresse2,'code_postal':f.client.code_postal,\
+	'ville':f.client.ville,'revendeur':f.client.revendeur.nom,'forfait':f.categorie_forfait} for f in Forfait.objects.all().order_by('client__num_armoire')]"""
+	
+	"""labels=['nom','date','num_armoire','adresse1','adresse2','code_postal','ville','revendeur','forfait']"""
 
-    tempfile="/".join([settings.TMP_ROOT,"datastmp.csv"])
+	"""tempfile="/".join([settings.TMP_ROOT,"datastmp.csv"])"""
+	tempfile="-".join(['datas-projets',espace,datetime.now().strftime("%Y%m%d%H%M"),".csv"])
 
-    with open(tempfile,"a") as fich:
-        writer=csv.DictWriter(fich,fieldnames=labels,delimiter=";",dialect='excel')
-        writer.writeheader()
-        for line in lines:
-            writer.writerow(line)
-        fich.close()
+	with open(tempfile,"a",encoding='utf-8-sig') as fich:
+		writer=csv.DictWriter(fich,fieldnames=labels,delimiter=";",dialect='excel')
+		writer.writeheader()
+		for line in lines:
+			writer.writerow(line)
+		fich.close()
 
-    filec=open(tempfile,"r")
+	filec=open(tempfile,"r")
 
-    response=HttpResponse(FileWrapper(filec),content_type=mimetypes.guess_type(filec.name)[0])
-    response['Content-Disposition']='attachment; filename='+filec.name
-    os.remove(tempfile)
+	response=HttpResponse(FileWrapper(filec),content_type=mimetypes.guess_type(filec.name)[0])
+	response['Content-Disposition']='attachment; filename='+filec.name
+	os.remove(tempfile)
 
-    return response
+	return response
 """/************************
 	* Fonction __order_by
 	* fonction interne
@@ -666,6 +709,7 @@ def projets_search(request):
 	request.session['filtres']=[{}]
 	filtre=filter_construct(request.POST,SEARCH_TERMS_PROJETS)
 	request.session['filtres']=filtre
+	request.session['espace']='projets'
 	items=Projet.objects.all()
 	filtered_items=apply_filter(items,filtre)
 	items=filtered_items.order_by('-id')
@@ -746,6 +790,7 @@ def clients_search(request):
 	request.session['filtres']=[{}]
 	filtre=filter_construct(request.POST,SEARCH_TERMS_CLIENTS)
 	request.session['filtres']=filtre
+	request.session['espace']='clients'
 	items=Client.objects.all()
 	filtered_items=apply_filter(items,filtre)
 	items=filtered_items.order_by('-id')
@@ -788,7 +833,8 @@ def accueil_search(request):
 	
 	
 	filtre=filter_construct(request.POST,modele_filtre,exclude_keys)
-	
+	request.session['filtres']=filtre
+	request.session['espace']='accueil'
 	statuts=StatutTache.objects.all()
 	
 	try:
